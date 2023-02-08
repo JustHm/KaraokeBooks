@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501192993EA4E00677964 /* AppDelegate.swift */; };
+		22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011B2993EA4E00677964 /* SceneDelegate.swift */; };
+		22B5011E2993EA4E00677964 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011D2993EA4E00677964 /* ViewController.swift */; };
+		22B501212993EA4E00677964 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B5011F2993EA4E00677964 /* Main.storyboard */; };
+		22B501232993EA4E00677964 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B501222993EA4E00677964 /* Assets.xcassets */; };
+		22B501262993EA4E00677964 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B501242993EA4E00677964 /* LaunchScreen.storyboard */; };
+		22B501312993EA4F00677964 /* KaraokeBooksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501302993EA4F00677964 /* KaraokeBooksTests.swift */; };
+		22B5013B2993EA4F00677964 /* KaraokeBooksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5013A2993EA4F00677964 /* KaraokeBooksUITests.swift */; };
+		22B5013D2993EA4F00677964 /* KaraokeBooksUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5013C2993EA4F00677964 /* KaraokeBooksUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		22B5012D2993EA4F00677964 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22B5010E2993EA4E00677964 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22B501152993EA4E00677964;
+			remoteInfo = KaraokeBooks;
+		};
+		22B501372993EA4F00677964 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22B5010E2993EA4E00677964 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22B501152993EA4E00677964;
+			remoteInfo = KaraokeBooks;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		22B501162993EA4E00677964 /* KaraokeBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaraokeBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22B501192993EA4E00677964 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		22B5011B2993EA4E00677964 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		22B5011D2993EA4E00677964 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		22B501202993EA4E00677964 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		22B501222993EA4E00677964 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		22B501252993EA4E00677964 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		22B501272993EA4E00677964 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22B5012C2993EA4F00677964 /* KaraokeBooksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaraokeBooksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		22B501302993EA4F00677964 /* KaraokeBooksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeBooksTests.swift; sourceTree = "<group>"; };
+		22B501362993EA4F00677964 /* KaraokeBooksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaraokeBooksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		22B5013A2993EA4F00677964 /* KaraokeBooksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeBooksUITests.swift; sourceTree = "<group>"; };
+		22B5013C2993EA4F00677964 /* KaraokeBooksUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeBooksUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		22B501132993EA4E00677964 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B501292993EA4F00677964 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B501332993EA4F00677964 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		22B5010D2993EA4E00677964 = {
+			isa = PBXGroup;
+			children = (
+				22B501182993EA4E00677964 /* KaraokeBooks */,
+				22B5012F2993EA4F00677964 /* KaraokeBooksTests */,
+				22B501392993EA4F00677964 /* KaraokeBooksUITests */,
+				22B501172993EA4E00677964 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		22B501172993EA4E00677964 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				22B501162993EA4E00677964 /* KaraokeBooks.app */,
+				22B5012C2993EA4F00677964 /* KaraokeBooksTests.xctest */,
+				22B501362993EA4F00677964 /* KaraokeBooksUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		22B501182993EA4E00677964 /* KaraokeBooks */ = {
+			isa = PBXGroup;
+			children = (
+				22B501192993EA4E00677964 /* AppDelegate.swift */,
+				22B5011B2993EA4E00677964 /* SceneDelegate.swift */,
+				22B5011D2993EA4E00677964 /* ViewController.swift */,
+				22B5011F2993EA4E00677964 /* Main.storyboard */,
+				22B501222993EA4E00677964 /* Assets.xcassets */,
+				22B501242993EA4E00677964 /* LaunchScreen.storyboard */,
+				22B501272993EA4E00677964 /* Info.plist */,
+			);
+			path = KaraokeBooks;
+			sourceTree = "<group>";
+		};
+		22B5012F2993EA4F00677964 /* KaraokeBooksTests */ = {
+			isa = PBXGroup;
+			children = (
+				22B501302993EA4F00677964 /* KaraokeBooksTests.swift */,
+			);
+			path = KaraokeBooksTests;
+			sourceTree = "<group>";
+		};
+		22B501392993EA4F00677964 /* KaraokeBooksUITests */ = {
+			isa = PBXGroup;
+			children = (
+				22B5013A2993EA4F00677964 /* KaraokeBooksUITests.swift */,
+				22B5013C2993EA4F00677964 /* KaraokeBooksUITestsLaunchTests.swift */,
+			);
+			path = KaraokeBooksUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		22B501152993EA4E00677964 /* KaraokeBooks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22B501402993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooks" */;
+			buildPhases = (
+				22B501122993EA4E00677964 /* Sources */,
+				22B501132993EA4E00677964 /* Frameworks */,
+				22B501142993EA4E00677964 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KaraokeBooks;
+			productName = KaraokeBooks;
+			productReference = 22B501162993EA4E00677964 /* KaraokeBooks.app */;
+			productType = "com.apple.product-type.application";
+		};
+		22B5012B2993EA4F00677964 /* KaraokeBooksTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22B501432993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooksTests" */;
+			buildPhases = (
+				22B501282993EA4F00677964 /* Sources */,
+				22B501292993EA4F00677964 /* Frameworks */,
+				22B5012A2993EA4F00677964 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				22B5012E2993EA4F00677964 /* PBXTargetDependency */,
+			);
+			name = KaraokeBooksTests;
+			productName = KaraokeBooksTests;
+			productReference = 22B5012C2993EA4F00677964 /* KaraokeBooksTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		22B501352993EA4F00677964 /* KaraokeBooksUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22B501462993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooksUITests" */;
+			buildPhases = (
+				22B501322993EA4F00677964 /* Sources */,
+				22B501332993EA4F00677964 /* Frameworks */,
+				22B501342993EA4F00677964 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				22B501382993EA4F00677964 /* PBXTargetDependency */,
+			);
+			name = KaraokeBooksUITests;
+			productName = KaraokeBooksUITests;
+			productReference = 22B501362993EA4F00677964 /* KaraokeBooksUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		22B5010E2993EA4E00677964 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					22B501152993EA4E00677964 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					22B5012B2993EA4F00677964 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 22B501152993EA4E00677964;
+					};
+					22B501352993EA4F00677964 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 22B501152993EA4E00677964;
+					};
+				};
+			};
+			buildConfigurationList = 22B501112993EA4E00677964 /* Build configuration list for PBXProject "KaraokeBooks" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 22B5010D2993EA4E00677964;
+			productRefGroup = 22B501172993EA4E00677964 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				22B501152993EA4E00677964 /* KaraokeBooks */,
+				22B5012B2993EA4F00677964 /* KaraokeBooksTests */,
+				22B501352993EA4F00677964 /* KaraokeBooksUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		22B501142993EA4E00677964 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B501262993EA4E00677964 /* LaunchScreen.storyboard in Resources */,
+				22B501232993EA4E00677964 /* Assets.xcassets in Resources */,
+				22B501212993EA4E00677964 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B5012A2993EA4F00677964 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B501342993EA4F00677964 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		22B501122993EA4E00677964 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B5011E2993EA4E00677964 /* ViewController.swift in Sources */,
+				22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */,
+				22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B501282993EA4F00677964 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B501312993EA4F00677964 /* KaraokeBooksTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22B501322993EA4F00677964 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22B5013D2993EA4F00677964 /* KaraokeBooksUITestsLaunchTests.swift in Sources */,
+				22B5013B2993EA4F00677964 /* KaraokeBooksUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		22B5012E2993EA4F00677964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22B501152993EA4E00677964 /* KaraokeBooks */;
+			targetProxy = 22B5012D2993EA4F00677964 /* PBXContainerItemProxy */;
+		};
+		22B501382993EA4F00677964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22B501152993EA4E00677964 /* KaraokeBooks */;
+			targetProxy = 22B501372993EA4F00677964 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		22B5011F2993EA4E00677964 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				22B501202993EA4E00677964 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		22B501242993EA4E00677964 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				22B501252993EA4E00677964 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		22B5013E2993EA4F00677964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		22B5013F2993EA4F00677964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		22B501412993EA4F00677964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KaraokeBooks/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		22B501422993EA4F00677964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KaraokeBooks/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		22B501442993EA4F00677964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KaraokeBooks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KaraokeBooks";
+			};
+			name = Debug;
+		};
+		22B501452993EA4F00677964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KaraokeBooks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KaraokeBooks";
+			};
+			name = Release;
+		};
+		22B501472993EA4F00677964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KaraokeBooks;
+			};
+			name = Debug;
+		};
+		22B501482993EA4F00677964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KaraokeBooks;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		22B501112993EA4E00677964 /* Build configuration list for PBXProject "KaraokeBooks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B5013E2993EA4F00677964 /* Debug */,
+				22B5013F2993EA4F00677964 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		22B501402993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B501412993EA4F00677964 /* Debug */,
+				22B501422993EA4F00677964 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		22B501432993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooksTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B501442993EA4F00677964 /* Debug */,
+				22B501452993EA4F00677964 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		22B501462993EA4F00677964 /* Build configuration list for PBXNativeTarget "KaraokeBooksUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22B501472993EA4F00677964 /* Debug */,
+				22B501482993EA4F00677964 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 22B5010E2993EA4E00677964 /* Project object */;
+}
