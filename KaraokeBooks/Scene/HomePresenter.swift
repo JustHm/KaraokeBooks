@@ -20,7 +20,6 @@ final class HomePresenter: NSObject {
     var brandSelected: BrandType  = BrandType.allCases[0]
     var dateSelected: RankDateType = RankDateType.allCases[0]
     
-    
     init(
         viewController: HomeProtocol,
         searchManager: KaraokeSearchManagerProtocol = KaraokeSearchManager()
@@ -56,16 +55,16 @@ final class HomePresenter: NSObject {
 extension HomePresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //Home에 인기차트는 5개만 뿌리고 자세히 보기 누르면 다 보여주게유
-        return songs.count >= 5 ? 5 : 0
+        songs.count//return songs.count >= 5 ? 5 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: RankTableViewCell.identifier,
+            withIdentifier: SongTableViewCell.identifier,
             for: indexPath
-        ) as? RankTableViewCell
+        ) as? SongTableViewCell
         let song = songs[indexPath.row]
-        cell?.setup(song: song)
+        cell?.setup(rank: indexPath.row, song: song)
         return cell ?? UITableViewCell()
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -77,4 +76,26 @@ extension HomePresenter: UITableViewDataSource {
         return header
     }
 }
-extension HomePresenter: UITableViewDelegate {}
+extension HomePresenter: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        <#code#>
+//    }
+}
+
+extension HomePresenter: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        HomeList.allCases.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier, for: indexPath) as? CollectionViewCell
+        let title = HomeList.allCases[indexPath.row].rawValue
+        cell?.setup(title: title)
+        return cell ?? UICollectionViewCell()
+    }
+    
+    
+}
+
+extension HomePresenter: UICollectionViewDelegate {
+}

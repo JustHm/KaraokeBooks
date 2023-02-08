@@ -41,6 +41,8 @@ enum BrandType: String, CaseIterable, Codable {
             return "KY"
         }
     }
+    
+    static var currentBrand: BrandType = .tj
 }
 
 enum RankDateType: String, CaseIterable {
