@@ -77,9 +77,9 @@ extension HomePresenter: UITableViewDataSource {
     }
 }
 extension HomePresenter: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        50.0
+    }
 }
 
 extension HomePresenter: UICollectionViewDataSource {
@@ -97,5 +97,11 @@ extension HomePresenter: UICollectionViewDataSource {
     
 }
 
-extension HomePresenter: UICollectionViewDelegate {
+extension HomePresenter: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 100.0, height: 100.0)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        .init(top: 8.0, left: 16.0, bottom: 0.0, right: 16.0)
+    }
 }

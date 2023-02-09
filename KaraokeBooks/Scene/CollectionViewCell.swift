@@ -25,8 +25,10 @@ final class CollectionViewCell: UICollectionViewCell {
 
 private extension CollectionViewCell {
     func setupLayout() {
-        layer.cornerRadius = 12
-        backgroundColor = .lightGray
+        contentView.layer.cornerRadius = 15.0
+        contentView.layer.shadowOpacity = 0.1
+        contentView.layer.shadowRadius = 4.0
+        contentView.backgroundColor = .secondarySystemFill
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()

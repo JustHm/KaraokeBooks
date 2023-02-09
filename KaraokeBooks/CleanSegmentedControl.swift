@@ -43,5 +43,30 @@ final class ClearSegmentedControl: UISegmentedControl {
             UIGraphicsEndImageContext();
             return image!
         }
+    
+    private lazy var underlineView: UIView = {
+        
+        let width = self.bounds.size.width / CGFloat(self.numberOfSegments)
+        let height = 2.0
+        let xPosition = CGFloat(self.selectedSegmentIndex * Int(width))
+        let yPosition = self.bounds.size.height - 1.0
+        let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        let view = UIView(frame: frame)
+        view.backgroundColor = .red
+        self.addSubview(view)
+        return view
+      }()
+      
+      override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
+        UIView.animate(
+          withDuration: 0.1,
+          animations: {
+            self.underlineView.frame.origin.x = underlineFinalXPosition
+          }
+        )
+      }
 }
 

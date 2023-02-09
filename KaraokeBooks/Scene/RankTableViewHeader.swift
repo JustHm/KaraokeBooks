@@ -43,7 +43,7 @@ final class RankTableViewHeader: UITableViewHeaderFooterView {
         }
         titleLabel.snp.makeConstraints {
             $0.left.equalToSuperview().inset(16.0)
-            $0.top.bottom.equalToSuperview()
+            $0.top.bottom.equalToSuperview().inset(8.0)
         }
         dateSegmentedControl.snp.makeConstraints {
             $0.right.equalToSuperview().inset(8.0)

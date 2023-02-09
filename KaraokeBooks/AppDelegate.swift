@@ -10,10 +10,18 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let appearance = UINavigationBarAppearance ()
+        appearance.backgroundColor = .systemBackground.withAlphaComponent(0.5)
+//        navigationAppearance.configureWithDefaultBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .prominent)
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18.0, weight: .bold)
+        ]
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         return true
     }
 

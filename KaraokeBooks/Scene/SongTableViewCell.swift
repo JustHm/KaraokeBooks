@@ -30,7 +30,9 @@ final class SongTableViewCell: UITableViewCell {
         titleLabel.text = song.title
         singerLabel.text = song.singer
         numberLabel.text = "No.\(song.no)"
-        selectionStyle = .none
+        //        selectionStyle = .none
+        
+        
         setupViews()
     }
     
