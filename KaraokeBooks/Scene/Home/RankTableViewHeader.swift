@@ -8,8 +8,13 @@
 import UIKit
 import SnapKit
 
+protocol NewsListTableViewHeaderDelegate: AnyObject {
+    func didSelectTag(_ selectedBrand: RankDateType)
+}
+
 final class RankTableViewHeader: UITableViewHeaderFooterView {
     static let identifier = "RankTableViewHeader"
+    private weak var delegate: NewsListTableViewHeaderDelegate?
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18.0, weight: .bold)
@@ -26,14 +31,15 @@ final class RankTableViewHeader: UITableViewHeaderFooterView {
                     animated: false)
             }
         segmentedControl.selectedSegmentIndex = 0;
-//        segmentedControl.addTarget(
-//            self,
-//            action: #selector(valueChangedDateSegmentedControl),
-//            for: .valueChanged)
+        segmentedControl.addTarget(
+            self,
+            action: #selector(valueChangedDateSegmentedControl),
+            for: .valueChanged)
         return segmentedControl
     }()
     
-    func setup() {
+    func setup(delegate: NewsListTableViewHeaderDelegate) {
+        self.delegate = delegate
         setupViews()
     }
     
@@ -49,5 +55,11 @@ final class RankTableViewHeader: UITableViewHeaderFooterView {
             $0.right.equalToSuperview().inset(8.0)
             $0.top.bottom.equalTo(titleLabel)
         }
+    }
+    @objc private func valueChangedDateSegmentedControl(_ sender: UISegmentedControl) {
+        let selectedIndex = sender.selectedSegmentIndex
+        let date = RankDateType.allCases[selectedIndex]
+        delegate?.didSelectTag(date)
+
     }
 }

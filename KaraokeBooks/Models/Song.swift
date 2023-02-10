@@ -18,8 +18,8 @@ struct Song: Codable {
 }
 
 enum SearchType: String {
-    case song, singer, no
-    case release, popular
+    case song, singer, popular
+    case release//, no
 }
 
 struct KaraokeRequestModel: Codable {

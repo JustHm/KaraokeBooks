@@ -10,12 +10,14 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     private lazy var presenter = HomePresenter(viewController: self)
-    private lazy var brandSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
+    private lazy var brandSegmentedControl: ClearSegmentedControl = {
+        let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
-            segmentedControl.insertSegment(withTitle: value.replace, at: index, animated: true)
+            segmentedControl.insertSegment(
+                withTitle: value.replace,
+                at: index,
+                animated: false)
         }
-        segmentedControl.sizeToFit()
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(
             self,
@@ -69,22 +71,24 @@ extension HomeViewController: HomeProtocol {
         }
         
         brandSegmentedControl.snp.makeConstraints {
-            $0.left.right.equalToSuperview().inset(16.0)
-            $0.top.equalTo(homeItemCollectionView.snp.bottom).offset(8.0)
+            $0.left.right.equalToSuperview().inset(32.0)
+            $0.top.equalTo(homeItemCollectionView.snp.bottom)
         }
         
         tableView.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(16.0)
-            $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(16.0)
+            $0.top.equalTo(brandSegmentedControl.snp.bottom)
             $0.bottom.equalToSuperview()
         }
     }
     
     func setupNavigationBar() {
         navigationItem.title = "노래방 책"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "titleIcon"), style: .plain, target: nil, action: nil)
         let searchCon = UISearchController()
-        self.navigationItem.searchController = searchCon
+        navigationItem.searchController = searchCon
         searchCon.searchBar.placeholder = "노래,가수,번호로 검색"
+        searchCon.searchResultsController
     }
     
 }
@@ -93,11 +97,7 @@ private extension HomeViewController {
     @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
-        presenter.brandSelected = brand
+        presenter.rankRequest(brand: brand)
     }
-    @objc func valueChangedDateSegmentedControl(_ sender: UISegmentedControl) {
-        let selectedIndex = sender.selectedSegmentIndex
-        let date = RankDateType.allCases[selectedIndex]
-        presenter.dateSelected = date
-    }
+
 }

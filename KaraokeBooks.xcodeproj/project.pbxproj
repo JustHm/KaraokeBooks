@@ -152,12 +152,8 @@
 		22B5014D2993EAA500677964 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				22B501662993F40F00677964 /* HomeList.swift */,
-				22B501492993EA7900677964 /* HomeViewController.swift */,
-				22B5014B2993EA9C00677964 /* HomePresenter.swift */,
-				22B501572993EB1A00677964 /* RankTableViewHeader.swift */,
 				22B501552993EB0E00677964 /* SongTableViewCell.swift */,
-				22B501642993F30F00677964 /* CollectionViewCell.swift */,
+				22B501682995DD0300677964 /* Home */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -175,8 +171,20 @@
 			isa = PBXGroup;
 			children = (
 				22B501592993EB4F00677964 /* Song.swift */,
+				22B501662993F40F00677964 /* HomeList.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		22B501682995DD0300677964 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				22B501492993EA7900677964 /* HomeViewController.swift */,
+				22B5014B2993EA9C00677964 /* HomePresenter.swift */,
+				22B501572993EB1A00677964 /* RankTableViewHeader.swift */,
+				22B501642993F30F00677964 /* CollectionViewCell.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

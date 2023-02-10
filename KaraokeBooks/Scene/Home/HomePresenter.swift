@@ -17,8 +17,8 @@ final class HomePresenter: NSObject {
     private let searchManager: KaraokeSearchManagerProtocol!
     
     private var songs: [Song] = []
-    var brandSelected: BrandType  = BrandType.allCases[0]
-    var dateSelected: RankDateType = RankDateType.allCases[0]
+    private var brandSelected: BrandType = BrandType.allCases[0]
+    private var dateSelected: RankDateType = RankDateType.allCases[0]
     
     init(
         viewController: HomeProtocol,
@@ -30,7 +30,7 @@ final class HomePresenter: NSObject {
     func viewDidLoad() {
         viewController?.setupViews()
         viewController?.setupNavigationBar()
-        rankRequest()
+        rankRequest(brand: BrandType.allCases[0])
     }
     func searchRequest(brand: BrandType, query: String, searchType: SearchType) {
         searchManager.searchRequest(
@@ -41,7 +41,8 @@ final class HomePresenter: NSObject {
             self?.songs = songs
         }
     }
-    func rankRequest() {
+    func rankRequest(brand: BrandType) {
+        brandSelected = brand
         searchManager.rankRequest(
             brand: brandSelected,
             date: dateSelected
@@ -54,10 +55,8 @@ final class HomePresenter: NSObject {
 
 extension HomePresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //Home에 인기차트는 5개만 뿌리고 자세히 보기 누르면 다 보여주게유
-        songs.count//return songs.count >= 5 ? 5 : 0
+        songs.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: SongTableViewCell.identifier,
@@ -72,7 +71,7 @@ extension HomePresenter: UITableViewDataSource {
             .dequeueReusableHeaderFooterView(
                 withIdentifier: RankTableViewHeader.identifier
             ) as? RankTableViewHeader
-        header?.setup()
+        header?.setup(delegate: self)
         return header
     }
 }
@@ -104,4 +103,12 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         .init(top: 8.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
+}
+
+extension HomePresenter: NewsListTableViewHeaderDelegate {
+    func didSelectTag(_ selectedBrand: RankDateType) {
+        dateSelected = selectedBrand
+        self.rankRequest(brand: brandSelected)
+    }
+    
 }
