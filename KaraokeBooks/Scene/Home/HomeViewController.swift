@@ -32,7 +32,7 @@ class HomeViewController: UIViewController {
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifier)
-        collectionView.backgroundColor = .systemGroupedBackground
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
     private lazy var tableView: UITableView = {
@@ -55,6 +55,13 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeProtocol {
+    func moveToDetailViewController(song: Song) {
+        let viewController = SongDetailViewController()
+        viewController.setup(song: song)
+//        viewController.modalPresentationStyle = 
+        present(viewController, animated: true)
+    }
+    
     func reloadTableView() {
         tableView.reloadData()
     }
@@ -88,9 +95,7 @@ extension HomeViewController: HomeProtocol {
         let searchCon = UISearchController()
         navigationItem.searchController = searchCon
         searchCon.searchBar.placeholder = "노래,가수,번호로 검색"
-        searchCon.searchResultsController
     }
-    
 }
 
 private extension HomeViewController {
@@ -99,5 +104,4 @@ private extension HomeViewController {
         let brand = BrandType.allCases[selectedIndex]
         presenter.rankRequest(brand: brand)
     }
-
 }

@@ -12,3 +12,5 @@ enum HomeList: String, CaseIterable {
     case newSong = "신곡"
     case random = "랜덤"
 }
+
+

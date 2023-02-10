@@ -17,44 +17,5 @@ struct Song: Codable {
     let release: String
 }
 
-enum SearchType: String {
-    case song, singer, popular
-    case release//, no
-}
 
-struct KaraokeRequestModel: Codable {
-    let brand: String
-}
 
-enum BrandType: String, CaseIterable, Codable {
-    case tj
-    case kumyoung
-    //case joysound
-    //case dam
-    //case uga
-    
-    var replace: String {
-        switch self {
-        case .tj:
-            return "TJ"
-        case .kumyoung:
-            return "KY"
-        }
-    }
-    
-    static var currentBrand: BrandType = .tj
-}
-
-enum RankDateType: String, CaseIterable {
-    case daily, weekly, monthly
-    var replace: String {
-        switch self {
-        case .daily:
-            return "일간"
-        case .weekly:
-            return "주간"
-        case .monthly:
-            return "월간"
-        }
-    }
-}

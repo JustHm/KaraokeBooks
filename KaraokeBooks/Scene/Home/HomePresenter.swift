@@ -10,6 +10,7 @@ protocol HomeProtocol: AnyObject {
     func setupViews()
     func setupNavigationBar()
     func reloadTableView()
+    func moveToDetailViewController(song: Song)
 }
 
 final class HomePresenter: NSObject {
@@ -79,6 +80,11 @@ extension HomePresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         50.0
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = songs[indexPath.row]
+        viewController?.moveToDetailViewController(song: song)
+    }
+    
 }
 
 extension HomePresenter: UICollectionViewDataSource {
@@ -102,6 +108,9 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         .init(top: 8.0, left: 16.0, bottom: 0.0, right: 16.0)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
     }
 }
 

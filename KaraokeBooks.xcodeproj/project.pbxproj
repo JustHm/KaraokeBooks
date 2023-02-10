@@ -26,6 +26,12 @@
 		22B501602993EBA300677964 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 22B5015F2993EBA300677964 /* Alamofire */; };
 		22B501652993F30F00677964 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501642993F30F00677964 /* CollectionViewCell.swift */; };
 		22B501672993F40F00677964 /* HomeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501662993F40F00677964 /* HomeList.swift */; };
+		22B5016A2995E2AB00677964 /* SongDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501692995E2AB00677964 /* SongDetailViewController.swift */; };
+		22B5016C2995E2B500677964 /* SongDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5016B2995E2B500677964 /* SongDetailPresenter.swift */; };
+		22B5016F29963AEE00677964 /* SongDetailStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5016E29963AEE00677964 /* SongDetailStackView.swift */; };
+		22B501712996868300677964 /* KaraokeRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501702996868300677964 /* KaraokeRequestModel.swift */; };
+		22B501732996869E00677964 /* BrandType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501722996869E00677964 /* BrandType.swift */; };
+		22B50175299686B000677964 /* RankDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B50174299686B000677964 /* RankDataType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +73,12 @@
 		22B501592993EB4F00677964 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		22B501642993F30F00677964 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		22B501662993F40F00677964 /* HomeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeList.swift; sourceTree = "<group>"; };
+		22B501692995E2AB00677964 /* SongDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailViewController.swift; sourceTree = "<group>"; };
+		22B5016B2995E2B500677964 /* SongDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailPresenter.swift; sourceTree = "<group>"; };
+		22B5016E29963AEE00677964 /* SongDetailStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailStackView.swift; sourceTree = "<group>"; };
+		22B501702996868300677964 /* KaraokeRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeRequestModel.swift; sourceTree = "<group>"; };
+		22B501722996869E00677964 /* BrandType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandType.swift; sourceTree = "<group>"; };
+		22B50174299686B000677964 /* RankDataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankDataType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +166,7 @@
 			children = (
 				22B501552993EB0E00677964 /* SongTableViewCell.swift */,
 				22B501682995DD0300677964 /* Home */,
+				22B5016D2995E2B900677964 /* SongDetail */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -171,6 +184,9 @@
 			isa = PBXGroup;
 			children = (
 				22B501592993EB4F00677964 /* Song.swift */,
+				22B50174299686B000677964 /* RankDataType.swift */,
+				22B501722996869E00677964 /* BrandType.swift */,
+				22B501702996868300677964 /* KaraokeRequestModel.swift */,
 				22B501662993F40F00677964 /* HomeList.swift */,
 			);
 			path = Models;
@@ -185,6 +201,16 @@
 				22B501642993F30F00677964 /* CollectionViewCell.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		22B5016D2995E2B900677964 /* SongDetail */ = {
+			isa = PBXGroup;
+			children = (
+				22B501692995E2AB00677964 /* SongDetailViewController.swift */,
+				22B5016B2995E2B500677964 /* SongDetailPresenter.swift */,
+				22B5016E29963AEE00677964 /* SongDetailStackView.swift */,
+			);
+			path = SongDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,10 +356,16 @@
 				22B5014F2993EABA00677964 /* KaraokeSearchManager.swift in Sources */,
 				22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */,
 				22B5015A2993EB4F00677964 /* Song.swift in Sources */,
+				22B5016F29963AEE00677964 /* SongDetailStackView.swift in Sources */,
+				22B501732996869E00677964 /* BrandType.swift in Sources */,
+				22B50175299686B000677964 /* RankDataType.swift in Sources */,
 				22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */,
+				22B5016C2995E2B500677964 /* SongDetailPresenter.swift in Sources */,
 				22B501672993F40F00677964 /* HomeList.swift in Sources */,
+				22B5016A2995E2AB00677964 /* SongDetailViewController.swift in Sources */,
 				22B501582993EB1A00677964 /* RankTableViewHeader.swift in Sources */,
 				22B5014C2993EA9C00677964 /* HomePresenter.swift in Sources */,
+				22B501712996868300677964 /* KaraokeRequestModel.swift in Sources */,
 				22B501542993EAF600677964 /* CleanSegmentedControl.swift in Sources */,
 				22B5014A2993EA7900677964 /* HomeViewController.swift in Sources */,
 				22B501652993F30F00677964 /* CollectionViewCell.swift in Sources */,
