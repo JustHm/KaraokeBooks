@@ -58,7 +58,8 @@ extension HomeViewController: HomeProtocol {
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController()
         viewController.setup(song: song)
-//        viewController.modalPresentationStyle = 
+        viewController.modalPresentationStyle = .pageSheet
+//        viewController.sheetPresentationController
         present(viewController, animated: true)
     }
     

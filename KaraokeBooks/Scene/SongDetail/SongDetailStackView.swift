@@ -11,11 +11,13 @@ final class SongDetailStackView: UIStackView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
         return label
     }()
     private lazy var singerLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
         return label
     }()
     private lazy var numberLabel: UILabel = {
@@ -26,11 +28,13 @@ final class SongDetailStackView: UIStackView {
     private lazy var composerLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
         return label
     }()
     private lazy var lyricistLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
+        label.numberOfLines = 0
         return label
     }()
     
@@ -46,6 +50,13 @@ final class SongDetailStackView: UIStackView {
             addArrangedSubview($0)
             $0.text = "1111 1111"
         }
+    }
+    func setupLabelText(song: Song) {
+        titleLabel.text = "제목: \(song.title)"
+        singerLabel.text = "가수: \(song.singer)"
+        numberLabel.text = "번호: \(song.no)"
+        composerLabel.text = "작곡: \(song.composer)"
+        lyricistLabel.text = "작사: \(song.lyricist)"
     }
     
     required init(coder: NSCoder) {

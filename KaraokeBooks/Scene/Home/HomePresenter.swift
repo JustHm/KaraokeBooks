@@ -83,6 +83,7 @@ extension HomePresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = songs[indexPath.row]
         viewController?.moveToDetailViewController(song: song)
+        tableView.cellForRow(at: indexPath)?.isSelected = false
     }
     
 }

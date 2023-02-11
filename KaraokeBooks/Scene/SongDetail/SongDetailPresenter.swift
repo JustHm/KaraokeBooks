@@ -9,6 +9,7 @@ import Foundation
 
 protocol SongDetailProtocol: AnyObject {
     func setupViews()
+    func setupViewHeight()
 }
 
 final class SongDetailPresenter {
@@ -19,5 +20,9 @@ final class SongDetailPresenter {
     }
     func viewDidLoad() {
         viewController?.setupViews()
+        viewController?.setupViewHeight()
+    }
+    func updateViewConstraints() {
+        viewController?.setupViewHeight()
     }
 }
