@@ -12,27 +12,27 @@ final class SongTableViewCell: UITableViewCell {
     static let identifier = "SongTableViewCell"
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .customPrimaryText
         return label
     }()
     private lazy var singerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .medium)
-        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 12, weight: .medium)
+        label.textColor = .customSecondaryText
         return label
     }()
     private lazy var numberLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .bold)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .customPrimaryText
         return label
     }()
     func setup(rank: Int, song: Song) {
         titleLabel.text = song.title
         singerLabel.text = song.singer
         numberLabel.text = "No.\(song.no)"
-        //        selectionStyle = .none
-        
-        
+        backgroundColor = .customForeground
         setupViews()
     }
     

@@ -15,6 +15,10 @@ struct Song: Codable {
     let composer: String
     let lyricist: String
     let release: String
+    var isStar: Bool = false
+    enum CodingKeys: String, CodingKey {
+        case brand, no, title, singer, composer, lyricist, release
+    }
 }
 
 

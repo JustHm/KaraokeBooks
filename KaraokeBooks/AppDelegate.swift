@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let appearance = UINavigationBarAppearance ()
-        appearance.backgroundColor = .systemBackground.withAlphaComponent(0.5)
+        appearance.backgroundColor = .customForeground
 //        navigationAppearance.configureWithDefaultBackground()
         appearance.backgroundEffect = UIBlurEffect(style: .prominent)
         appearance.shadowColor = nil

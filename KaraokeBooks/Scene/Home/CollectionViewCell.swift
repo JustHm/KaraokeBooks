@@ -11,9 +11,8 @@ final class CollectionViewCell: UICollectionViewCell {
     static let identifier = "CollectionViewCell"
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "HELLO"
-        label.numberOfLines = 0
         label.font = .systemFont(ofSize: 15.0, weight: .bold)
+        label.textColor = .customPrimaryText
         return label
     }()
     
@@ -28,7 +27,7 @@ private extension CollectionViewCell {
         contentView.layer.cornerRadius = 15.0
         contentView.layer.shadowOpacity = 0.1
         contentView.layer.shadowRadius = 4.0
-        contentView.backgroundColor = .secondarySystemFill
+        contentView.backgroundColor = .customForeground2
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()

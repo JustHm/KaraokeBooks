@@ -8,9 +8,9 @@
 import Foundation
 
 enum HomeList: String, CaseIterable {
-    case favourite = "애창곡 리스트"
-    case newSong = "신곡"
-    case random = "랜덤"
+    case favourite = "애창곡"
+    case newSong = "최신곡"
+    case random = "복불복"
 }
 
 

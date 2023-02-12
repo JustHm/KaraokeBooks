@@ -11,12 +11,13 @@ protocol HomeProtocol: AnyObject {
     func setupNavigationBar()
     func reloadTableView()
     func moveToDetailViewController(song: Song)
+    func moveToFavoriteViewController()
+    func activeIndicator(isStart: Bool)
 }
 
 final class HomePresenter: NSObject {
     private weak var viewController: HomeProtocol?
     private let searchManager: KaraokeSearchManagerProtocol!
-    
     private var songs: [Song] = []
     private var brandSelected: BrandType = BrandType.allCases[0]
     private var dateSelected: RankDateType = RankDateType.allCases[0]
@@ -44,12 +45,14 @@ final class HomePresenter: NSObject {
     }
     func rankRequest(brand: BrandType) {
         brandSelected = brand
+        viewController?.activeIndicator(isStart: true)
         searchManager.rankRequest(
             brand: brandSelected,
             date: dateSelected
         ) { [weak self] songs in
             self?.songs = songs
             self?.viewController?.reloadTableView()
+            self?.viewController?.activeIndicator(isStart: false)
         }
     }
 }
@@ -99,8 +102,6 @@ extension HomePresenter: UICollectionViewDataSource {
         cell?.setup(title: title)
         return cell ?? UICollectionViewCell()
     }
-    
-    
 }
 
 extension HomePresenter: UICollectionViewDelegateFlowLayout {
@@ -111,7 +112,14 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         .init(top: 8.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        switch HomeList.allCases[indexPath.row] {
+        case .favourite:
+            viewController?.moveToFavoriteViewController()
+        case .newSong:
+            break
+        case .random:
+            break
+        }
     }
 }
 

@@ -10,6 +10,11 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     private lazy var presenter = HomePresenter(viewController: self)
+    private lazy var loadIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.isHidden = true
+        return indicator
+    }()
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
@@ -32,7 +37,7 @@ class HomeViewController: UIViewController {
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifier)
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .customBackground
         return collectionView
     }()
     private lazy var tableView: UITableView = {
@@ -45,6 +50,7 @@ class HomeViewController: UIViewController {
         tableView.sectionHeaderTopPadding = 0
         tableView.layer.cornerRadius = 15.0
         tableView.clipsToBounds = true
+        tableView.backgroundColor = .customForeground2
         return tableView
     }()
     
@@ -55,11 +61,23 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeProtocol {
+    func moveToFavoriteViewController() {
+        let viewController = FavoriteSongViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func activeIndicator(isStart: Bool) {
+        loadIndicator.isHidden = !isStart
+        if isStart {
+            loadIndicator.startAnimating()
+        } else {
+            loadIndicator.stopAnimating()
+        }
+    }
+    
     func moveToDetailViewController(song: Song) {
-        let viewController = SongDetailViewController()
-        viewController.setup(song: song)
+        let viewController = SongDetailViewController(song: song)
         viewController.modalPresentationStyle = .pageSheet
-//        viewController.sheetPresentationController
         present(viewController, animated: true)
     }
     
@@ -68,7 +86,7 @@ extension HomeViewController: HomeProtocol {
     }
     
     func setupViews() {
-        [homeItemCollectionView, brandSegmentedControl,  tableView].forEach {
+        [homeItemCollectionView, brandSegmentedControl, tableView, loadIndicator].forEach {
             view.addSubview($0)
         }
         
@@ -87,6 +105,9 @@ extension HomeViewController: HomeProtocol {
             $0.left.right.equalToSuperview().inset(16.0)
             $0.top.equalTo(brandSegmentedControl.snp.bottom)
             $0.bottom.equalToSuperview()
+        }
+        loadIndicator.snp.makeConstraints {
+            $0.center.equalTo(tableView)
         }
     }
     

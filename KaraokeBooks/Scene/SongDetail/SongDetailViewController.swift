@@ -10,7 +10,7 @@ import SnapKit
 import SafariServices
 
 final class SongDetailViewController: UIViewController {
-    private lazy var presenter = SongDetailPresenter(viewController: self)
+    private var presenter: SongDetailPresenter!
     private var youtubeURL: URL?
     private lazy var brandImage: UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +19,7 @@ final class SongDetailViewController: UIViewController {
         imageView.clipsToBounds = true
         return imageView
     }()
-    private lazy var titleLabel: SongDetailStackView = {
+    private lazy var descriptionStackView: SongDetailStackView = {
         let stackView = SongDetailStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
@@ -45,7 +45,7 @@ final class SongDetailViewController: UIViewController {
         button.tintColor = .systemYellow
         button.addTarget(
             self,
-            action: #selector(didTapStarkButton),
+            action: #selector(didTapStarButton),
             for: .touchUpInside
         )
         return button
@@ -54,7 +54,6 @@ final class SongDetailViewController: UIViewController {
         let button = UIButton()
         button.setTitle("확인", for: .normal)
         button.setTitleColor(.tintColor, for: .normal)
-//        button.titleLabel?.font = .systemFont(ofSize: 13.0)
         button.addTarget(
             self,
             action: #selector(didTapCloseButton),
@@ -71,27 +70,24 @@ final class SongDetailViewController: UIViewController {
         stackView.spacing = 20.0
         return stackView
     }()
+    
+    init(song: Song) {
+        super.init(nibName: nil, bundle: nil)
+        presenter = SongDetailPresenter(viewController: self, song: song)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
-//    override func updateViewConstraints() {
-//        presenter.updateViewConstraints()
-//        super.updateViewConstraints()
-//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter.updateViewConstraints()
     }
-    func setup(song: Song) {
-        switch song.brand {
-        case .kumyoung:
-            youtubeURL = URL(string: "https://m.youtube.com/@KARAOKEKY/search?query=\(song.no)")
-        case .tj:
-            youtubeURL = URL(string: "https://m.youtube.com/user/ziller/search?query=\(song.no)")
-        }
-        titleLabel.setupLabelText(song: song)
-    }
+    
 }
 
 extension SongDetailViewController: SongDetailProtocol {
@@ -101,20 +97,19 @@ extension SongDetailViewController: SongDetailProtocol {
         let TOP_CARD_DISTANCE: CGFloat = 40.0
         //SnapKit으로 레이아웃이 잡혀도 각 뷰에 constraints값은 변경이 안되어 있다. 근데 왜 배치는 잘됨?
         //그래서 layoutIfNeeded를 호출해서 뷰를 다시 계산하면 변경된 값이 나온다.
-        titleLabel.layoutIfNeeded()
-        let viewHeight: CGFloat = titleLabel.frame.height + (titleLabel.frame.maxY * 2)
+        descriptionStackView.layoutIfNeeded()
+        let viewHeight: CGFloat = descriptionStackView.frame.height + (descriptionStackView.frame.maxY * 2)
         view.frame.size.height = viewHeight
         // reposition the view (if not it will be near the top)
         view.frame.origin.y = UIScreen.main.bounds.height - viewHeight - TOP_CARD_DISTANCE
         view.layoutIfNeeded()
     }
-    
     func setupViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
         view.layer.cornerRadius = 15.0
         [
             brandImage,
-            titleLabel,
+            descriptionStackView,
             buttonStackView
         ].forEach {
             view.addSubview($0)
@@ -126,38 +121,45 @@ extension SongDetailViewController: SongDetailProtocol {
         buttonStackView.snp.makeConstraints {
             $0.top.right.equalToSuperview().inset(16.0)
         }
-        titleLabel.snp.makeConstraints {
+        descriptionStackView.snp.makeConstraints {
             $0.top.equalTo(buttonStackView.snp.bottom).offset(16.0)
             $0.left.right.equalToSuperview().inset(16.0)
         }
-        
+    }
+    func setupLinkURL(song: Song) {
+        switch song.brand {
+        case .kumyoung:
+            youtubeURL = URL(string: "https://m.youtube.com/@KARAOKEKY/search?query=\(song.no)")
+        case .tj:
+            youtubeURL = URL(string: "https://m.youtube.com/user/ziller/search?query=\(song.no)")
+        }
+        descriptionStackView.setupLabelText(song: song)
+    }
+    func setupStarButton(isStar: Bool) {
+        if isStar {
+            starButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            starButton.setImage(UIImage(systemName: "star"), for: .normal)
+        }
+    }
+    func dismiss() {
+        dismiss(animated: true)
+    }
+    func moveToYoutube() {
+        guard let url = youtubeURL else { return }
+        let viewController = SFSafariViewController(url: url.absoluteURL)
+        present(viewController, animated: true)
     }
 }
 
 private extension SongDetailViewController {
     @objc func didTapYoutubeLinkButton() {
-        guard let url = youtubeURL else {
-            return
-        }
-        print(url)
-        let viewController = SFSafariViewController(url: url.absoluteURL)
-        present(viewController, animated: true)
+        presenter.didTapYoutubeLinkButton()
     }
-    @objc func didTapStarkButton() {
-        print("Star!!!1")
+    @objc func didTapStarButton() {
+        presenter.didTapStarButton()
     }
     @objc func didTapCloseButton() {
-        dismiss(animated: true)
+        presenter.didTapCloseButton()
     }
 }
-
-
-//struct Song: Codable {
-//    let brand: BrandType
-//    let no: String
-//    let title: String
-//    let singer: String
-//    let composer: String
-//    let lyricist: String
-//    let release: String
-//}
