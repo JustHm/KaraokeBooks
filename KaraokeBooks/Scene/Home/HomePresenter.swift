@@ -21,8 +21,8 @@ final class HomePresenter: NSObject {
     private weak var viewController: HomeProtocol?
     private let searchManager: KaraokeSearchManagerProtocol!
     private var songs: [Song] = []
-    private var brandSelected: BrandType = BrandType.allCases[0]
-    private var dateSelected: RankDateType = RankDateType.allCases[0]
+    private var currentBrand: BrandType = BrandType.allCases[0]
+    private var currentDate: RankDateType = RankDateType.allCases[0]
     
     init(
         viewController: HomeProtocol,
@@ -46,11 +46,11 @@ final class HomePresenter: NSObject {
         }
     }
     func rankRequest(brand: BrandType) {
-        brandSelected = brand
+        currentBrand = brand
         viewController?.activeIndicator(isStart: true)
         searchManager.rankRequest(
-            brand: brandSelected,
-            date: dateSelected
+            brand: currentBrand,
+            date: currentDate
         ) { [weak self] songs in
             self?.songs = songs
             self?.viewController?.reloadTableView()
@@ -107,7 +107,11 @@ extension HomePresenter: UICollectionViewDataSource {
 
 extension HomePresenter: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 100.0, height: 100.0)
+        let mainWidth = collectionView.frame.width
+        let mainHeight = collectionView.frame.height
+        let width: CGFloat = (mainWidth / 2.0) - 32.0
+        let height: CGFloat = mainHeight - 16.0
+        return CGSize(width: width, height: height)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         .init(top: 8.0, left: 16.0, bottom: 0.0, right: 16.0)
@@ -119,16 +123,14 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         case .newSong:
             viewController?.moveToRecentSongViewController()
             break
-        case .random:
-            break
         }
     }
 }
 
 extension HomePresenter: NewsListTableViewHeaderDelegate {
     func didSelectTag(_ selectedBrand: RankDateType) {
-        dateSelected = selectedBrand
-        self.rankRequest(brand: brandSelected)
+        currentDate = selectedBrand
+        self.rankRequest(brand: currentBrand)
     }
     
 }
