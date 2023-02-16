@@ -10,9 +10,11 @@ protocol HomeProtocol: AnyObject {
     func setupViews()
     func setupNavigationBar()
     func reloadTableView()
+    func activeIndicator(isStart: Bool)
     func moveToDetailViewController(song: Song)
     func moveToFavoriteViewController()
-    func activeIndicator(isStart: Bool)
+    func moveToRecentSongViewController()
+    func moveToRandomSongViewController()
 }
 
 final class HomePresenter: NSObject {
@@ -88,7 +90,6 @@ extension HomePresenter: UITableViewDelegate {
         viewController?.moveToDetailViewController(song: song)
         tableView.cellForRow(at: indexPath)?.isSelected = false
     }
-    
 }
 
 extension HomePresenter: UICollectionViewDataSource {
@@ -116,6 +117,7 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         case .favourite:
             viewController?.moveToFavoriteViewController()
         case .newSong:
+            viewController?.moveToRecentSongViewController()
             break
         case .random:
             break

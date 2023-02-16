@@ -1,5 +1,5 @@
 //
-//  FavoriteSongViewController.swift
+//  RecentSongViewController.swift
 //  KaraokeBooks
 //
 //  Created by 안정흠 on 2023/02/12.
@@ -8,16 +8,16 @@
 import UIKit
 import SnapKit
 
-final class FavoriteSongViewController: UIViewController {
-    private lazy var presenter = FavoriteSongPresenter(viewController: self)
-    private lazy var editBarButtonItem: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(
-            title: "Edit",
-            style: .plain,
-            target: self,
-            action: #selector(didTapEditButton)
-        )
-        return barButtonItem
+final class RecentSongViewController: UIViewController {
+    private lazy var presenter = RecentSongPresenter(viewController: self)
+    private lazy var currentDatePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.locale = Locale(identifier: "ko_KR")
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.maximumDate = Date()
+        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        return datePicker
     }()
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
@@ -41,30 +41,23 @@ final class FavoriteSongViewController: UIViewController {
         tableView.dataSource = presenter
         tableView.delegate = presenter
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = .customForeground2
+        tableView.backgroundColor = .customBackground
         return tableView
-    }()
-    private lazy var warningText: UILabel = {
-        let label = UILabel()
-        label.text = "저장한 애창곡이 없습니다."
-        label.font = .systemFont(ofSize: 16.0, weight: .medium)
-        label.textColor = .customPrimaryText
-        label.isHidden = true
-        return label
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
-    
 }
 
-extension FavoriteSongViewController: FavoriteSongProtocol {
+extension RecentSongViewController: RecentSongProtocol {
+    func reloadTableView() {
+        tableView.reloadData()
+    }
     func setupViews() {
         view.backgroundColor = .customBackground
-        navigationItem.title = HomeList.favourite.rawValue
-//        navigationItem.rightBarButtonItem = editBarButtonItem
-        [tableView, brandSegmentedControl, warningText].forEach {
+        navigationItem.titleView = currentDatePicker
+        [tableView, brandSegmentedControl].forEach {
             view.addSubview($0)
         }
         brandSegmentedControl.snp.makeConstraints {
@@ -75,15 +68,6 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalTo(brandSegmentedControl.snp.bottom)
         }
-        warningText.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
-    }
-    func isEmptyTableView(isEmpty: Bool) {
-        warningText.isHidden = isEmpty
-    }
-    func reloadTableView() {
-        tableView.reloadData()
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
@@ -91,13 +75,15 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
         present(viewController, animated: true)
     }
 }
-private extension FavoriteSongViewController {
-    @objc func didTapEditButton() {
-        presenter.didTapEditButton()
-    }
+
+private extension RecentSongViewController {
     @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
-//        presenter.rankRequest(brand: brand)
+        presenter.valueChangedBrandSegmentedControl(brand: brand)
+    }
+    @objc func dateChanged(sender: UIDatePicker) {
+        let date = sender.date
+        presenter.dateChanged(date: date)
     }
 }

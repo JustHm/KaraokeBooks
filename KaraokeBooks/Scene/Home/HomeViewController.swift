@@ -61,11 +61,6 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeProtocol {
-    func moveToFavoriteViewController() {
-        let viewController = FavoriteSongViewController()
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-    
     func activeIndicator(isStart: Bool) {
         loadIndicator.isHidden = !isStart
         if isStart {
@@ -73,12 +68,6 @@ extension HomeViewController: HomeProtocol {
         } else {
             loadIndicator.stopAnimating()
         }
-    }
-    
-    func moveToDetailViewController(song: Song) {
-        let viewController = SongDetailViewController(song: song)
-        viewController.modalPresentationStyle = .pageSheet
-        present(viewController, animated: true)
     }
     
     func reloadTableView() {
@@ -114,9 +103,27 @@ extension HomeViewController: HomeProtocol {
     func setupNavigationBar() {
         navigationItem.title = "노래방 책"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "titleIcon"), style: .plain, target: nil, action: nil)
-        let searchCon = UISearchController()
-        navigationItem.searchController = searchCon
-        searchCon.searchBar.placeholder = "노래,가수,번호로 검색"
+        let searchController = UISearchController()
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.placeholder = "노래,가수,번호로 검색"
+    }
+    func moveToDetailViewController(song: Song) {
+        let viewController = SongDetailViewController(song: song)
+        viewController.modalPresentationStyle = .pageSheet
+        present(viewController, animated: true)
+    }
+    func moveToFavoriteViewController() {
+        let viewController = FavoriteSongViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    func moveToRecentSongViewController() {
+        let viewController = RecentSongViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    func moveToRandomSongViewController() {
+        let viewController = FavoriteSongViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

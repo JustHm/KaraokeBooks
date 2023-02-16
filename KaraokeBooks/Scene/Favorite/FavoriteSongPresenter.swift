@@ -10,6 +10,8 @@ import UIKit
 protocol FavoriteSongProtocol: AnyObject {
     func setupViews()
     func reloadTableView()
+    func isEmptyTableView(isEmpty: Bool)
+    func moveToDetailViewController(song: Song)
 }
 
 final class FavoriteSongPresenter: NSObject {
@@ -27,7 +29,7 @@ final class FavoriteSongPresenter: NSObject {
     func viewDidLoad() {
         favoriteSongs = userDefaults.getFavoriteSong()
         viewController?.setupViews()
-        viewController?.reloadTableView()
+        viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
     }
     func didTapEditButton() {
         
@@ -51,7 +53,21 @@ extension FavoriteSongPresenter: UITableViewDataSource {
     
 }
 extension FavoriteSongPresenter: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        true
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle {
+        case .delete:
+            let song = favoriteSongs[indexPath.row]
+            favoriteSongs.remove(at: indexPath.row)
+            userDefaults.deleteFavoriteSong(song)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
+        default:
+            break
+        }
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = favoriteSongs[indexPath.row]
+        viewController?.moveToDetailViewController(song: song)
+        tableView.cellForRow(at: indexPath)?.isSelected = false
     }
 }
