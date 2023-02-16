@@ -10,15 +10,6 @@ import SnapKit
 
 final class FavoriteSongViewController: UIViewController {
     private lazy var presenter = FavoriteSongPresenter(viewController: self)
-    private lazy var editBarButtonItem: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(
-            title: "Edit",
-            style: .plain,
-            target: self,
-            action: #selector(didTapEditButton)
-        )
-        return barButtonItem
-    }()
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
@@ -92,12 +83,9 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
     }
 }
 private extension FavoriteSongViewController {
-    @objc func didTapEditButton() {
-        presenter.didTapEditButton()
-    }
     @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
-//        presenter.rankRequest(brand: brand)
+        presenter.valueChangedBrandSegmentedControl(brand: brand)
     }
 }

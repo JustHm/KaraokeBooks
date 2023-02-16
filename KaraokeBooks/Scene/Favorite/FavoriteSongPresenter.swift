@@ -18,21 +18,23 @@ final class FavoriteSongPresenter: NSObject {
     private weak var viewController: FavoriteSongProtocol?
     private let userDefaults: UserDefaultsManagerProtocol!
     private var favoriteSongs: [Song]
+    private var currentBrand: BrandType = .tj
     init(
         viewController: FavoriteSongProtocol,
         userDefaults: UserDefaultsManagerProtocol = UserDefaultsManager()
     ) {
         self.viewController = viewController
         self.userDefaults = userDefaults
-        favoriteSongs = userDefaults.getFavoriteSong()
+        favoriteSongs = userDefaults.getFavoriteSong(brand: currentBrand)
     }
     func viewDidLoad() {
-        favoriteSongs = userDefaults.getFavoriteSong()
         viewController?.setupViews()
         viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
     }
-    func didTapEditButton() {
-        
+    func valueChangedBrandSegmentedControl(brand: BrandType) {
+        favoriteSongs = userDefaults.getFavoriteSong(brand: brand)
+        viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
+        viewController?.reloadTableView()
     }
 }
 
