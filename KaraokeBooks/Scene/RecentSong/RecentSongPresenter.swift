@@ -18,7 +18,7 @@ final class RecentSongPresenter: NSObject {
     private let searchManager: KaraokeSearchManagerProtocol!
 
     private var currentDate: String = "202302"
-    private var currentBrand: BrandType = .tj
+    private var currentBrand: BrandType = BrandType.allCases[0]
     private var tjRecentSongs: [Song] = []
     private var kyRecentSongs: [Song] = []
     init(

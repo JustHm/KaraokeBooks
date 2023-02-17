@@ -14,7 +14,7 @@ protocol HomeProtocol: AnyObject {
     func moveToDetailViewController(song: Song)
     func moveToFavoriteViewController()
     func moveToRecentSongViewController()
-    func moveToRandomSongViewController()
+    func moveToSearchResultViewController()
 }
 
 final class HomePresenter: NSObject {
@@ -56,6 +56,9 @@ final class HomePresenter: NSObject {
             self?.viewController?.reloadTableView()
             self?.viewController?.activeIndicator(isStart: false)
         }
+    }
+    func didTapRightSearchButton() {
+        viewController?.moveToSearchResultViewController()
     }
 }
 

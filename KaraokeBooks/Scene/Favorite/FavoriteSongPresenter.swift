@@ -18,7 +18,7 @@ final class FavoriteSongPresenter: NSObject {
     private weak var viewController: FavoriteSongProtocol?
     private let userDefaults: UserDefaultsManagerProtocol!
     private var favoriteSongs: [Song]
-    private var currentBrand: BrandType = .tj
+    private var currentBrand: BrandType = BrandType.allCases[0]
     init(
         viewController: FavoriteSongProtocol,
         userDefaults: UserDefaultsManagerProtocol = UserDefaultsManager()
@@ -51,8 +51,6 @@ extension FavoriteSongPresenter: UITableViewDataSource {
         cell?.setup(rank: 0, song: song)
         return cell ?? UITableViewCell()
     }
-    
-    
 }
 extension FavoriteSongPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B529990B5E0059222E /* RecentSongViewController.swift */; };
 		2261D7B829990B660059222E /* RecentSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B729990B660059222E /* RecentSongPresenter.swift */; };
+		2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BC299E68BF0059222E /* SearchResultViewController.swift */; };
+		2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BE299E68E80059222E /* SearchResultPresenter.swift */; };
 		22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501192993EA4E00677964 /* AppDelegate.swift */; };
 		22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011B2993EA4E00677964 /* SceneDelegate.swift */; };
 		22B501232993EA4E00677964 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B501222993EA4E00677964 /* Assets.xcassets */; };
@@ -60,6 +62,8 @@
 /* Begin PBXFileReference section */
 		2261D7B529990B5E0059222E /* RecentSongViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongViewController.swift; sourceTree = "<group>"; };
 		2261D7B729990B660059222E /* RecentSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongPresenter.swift; sourceTree = "<group>"; };
+		2261D7BC299E68BF0059222E /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		2261D7BE299E68E80059222E /* SearchResultPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultPresenter.swift; sourceTree = "<group>"; };
 		22B501162993EA4E00677964 /* KaraokeBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaraokeBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B501192993EA4E00677964 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B5011B2993EA4E00677964 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +133,15 @@
 			path = RecentSong;
 			sourceTree = "<group>";
 		};
+		2261D7C0299E690A0059222E /* SearchResult */ = {
+			isa = PBXGroup;
+			children = (
+				2261D7BC299E68BF0059222E /* SearchResultViewController.swift */,
+				2261D7BE299E68E80059222E /* SearchResultPresenter.swift */,
+			);
+			path = SearchResult;
+			sourceTree = "<group>";
+		};
 		22B5010D2993EA4E00677964 = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +205,7 @@
 				22B5016D2995E2B900677964 /* SongDetail */,
 				22B501822998EE6900677964 /* Favorite */,
 				2261D7B929990B6A0059222E /* RecentSong */,
+				2261D7C0299E690A0059222E /* SearchResult */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -404,6 +418,8 @@
 				22B501582993EB1A00677964 /* RankTableViewHeader.swift in Sources */,
 				22B5014C2993EA9C00677964 /* HomePresenter.swift in Sources */,
 				22B50177299790FF00677964 /* UIColor+.swift in Sources */,
+				2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */,
+				2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */,
 				22B501712996868300677964 /* KaraokeRequestModel.swift in Sources */,
 				22B501542993EAF600677964 /* CleanSegmentedControl.swift in Sources */,
 				22B5017F2998EAD100677964 /* FavoriteSongViewController.swift in Sources */,

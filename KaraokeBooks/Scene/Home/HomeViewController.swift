@@ -103,10 +103,7 @@ extension HomeViewController: HomeProtocol {
     func setupNavigationBar() {
         navigationItem.title = "노래방 책"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "titleIcon"), style: .plain, target: nil, action: nil)
-        let searchController = UISearchController()
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.searchBar.placeholder = "노래,가수,번호로 검색"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(didTapRightSearchButton))
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
@@ -125,6 +122,10 @@ extension HomeViewController: HomeProtocol {
         let viewController = FavoriteSongViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
+    func moveToSearchResultViewController() {
+        let viewController = SearchResultViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 private extension HomeViewController {
@@ -132,5 +133,8 @@ private extension HomeViewController {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
         presenter.rankRequest(brand: brand)
+    }
+    @objc func didTapRightSearchButton() {
+        presenter.didTapRightSearchButton()
     }
 }

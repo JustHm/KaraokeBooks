@@ -8,8 +8,8 @@
 import Foundation
 
 enum SearchType: String {
-    case song, singer, popular
-    case release//, no
+    case song, singer
+    case popular, release//, no
 }
 
 struct KaraokeRequestModel: Codable {
