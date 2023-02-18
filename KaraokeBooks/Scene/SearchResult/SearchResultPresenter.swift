@@ -33,22 +33,10 @@ final class SearchResultPresenter: NSObject {
     func viewDidLoad() {
         viewController?.setupViews()
         viewController?.setupNavigationBar()
-        didTapSearchFilterButton(title: "노래 검색")
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
         currentBrand = brand
         searchSongs()
-    }
-    func didTapSearchFilterButton(title: String) {
-        viewController?.setupNavigationTitle(title: title)
-        switch title {
-        case "노래 검색":
-            currentSearchType = .song
-        case "가수 검색":
-            currentSearchType = .singer
-        default:
-            currentSearchType = .song
-        }
     }
     private func searchSongs() {
         searchManager.searchRequest(
@@ -67,6 +55,20 @@ extension SearchResultPresenter: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
         query = text
+        print(query)
+        searchSongs()
+    }
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        guard let title = searchBar.scopeButtonTitles?[selectedScope] else { return }
+        switch title {
+        case "노래 검색":
+            currentSearchType = .song
+        case "가수 검색":
+            currentSearchType = .singer
+        default:
+            currentSearchType = .song
+        }
+        viewController?.setupNavigationTitle(title: title)
         searchSongs()
     }
 }

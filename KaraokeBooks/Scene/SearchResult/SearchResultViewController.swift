@@ -79,18 +79,23 @@ extension SearchResultViewController: SearchResultProtocol {
         }
     }
     func setupNavigationBar() {
+        navigationItem.title = SearchType.song.title
         navigationItem.searchController = searchController
+        searchController.searchBar.placeholder = SearchType.song.title
+        searchController.searchBar.scopeButtonTitles = [SearchType.song.title,
+                                                        SearchType.singer.title]
+        searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationItem.titleMenuProvider = { suggestions in
-            var finalMenuElements = suggestions
-            finalMenuElements.append(UICommand(title: "노래 검색",
-                                               image: UIImage(systemName: "heart"),
-                                               action: #selector(self.didTapSongFilter(_:))))
-            finalMenuElements.append(UICommand(title: "가수 검색",
-                                               image: UIImage(systemName: "message"),
-                                               action: #selector(self.didTapSingerFilter(_:))))
-            return UIMenu(children: finalMenuElements)
-        }
+//        navigationItem.titleMenuProvider = { suggestions in
+//            var finalMenuElements = suggestions
+//            finalMenuElements.append(UICommand(title: "노래 검색",
+//                                               image: UIImage(systemName: "heart"),
+//                                               action: #selector(self.didTapSongFilter(_:))))
+//            finalMenuElements.append(UICommand(title: "가수 검색",
+//                                               image: UIImage(systemName: "message"),
+//                                               action: #selector(self.didTapSingerFilter(_:))))
+//            return UIMenu(children: finalMenuElements)
+//        }
     }
     func reloadTableView() {
         resultTableView.reloadData()
@@ -106,11 +111,5 @@ private extension SearchResultViewController {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
         presenter.valueChangedBrandSegmentedControl(brand: brand)
-    }
-    @objc func didTapSingerFilter(_ sender: UICommand) {
-        presenter.didTapSearchFilterButton(title: sender.title)
-    }
-    @objc func didTapSongFilter(_ sender: UICommand) {
-        presenter.didTapSearchFilterButton(title: sender.title)
     }
 }

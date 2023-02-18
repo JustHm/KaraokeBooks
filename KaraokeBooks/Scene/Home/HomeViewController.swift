@@ -47,7 +47,9 @@ class HomeViewController: UIViewController {
         tableView.dataSource = presenter
         tableView.delegate = presenter
         tableView.showsVerticalScrollIndicator = false
-        tableView.sectionHeaderTopPadding = 0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
         tableView.layer.cornerRadius = 15.0
         tableView.clipsToBounds = true
         tableView.backgroundColor = .customForeground2

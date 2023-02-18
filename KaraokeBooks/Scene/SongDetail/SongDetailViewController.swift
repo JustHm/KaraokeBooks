@@ -31,6 +31,7 @@ final class SongDetailViewController: UIViewController {
         let button = UIButton()
         let image = UIImage(systemName: "link")
         button.setImage(image, for: .normal)
+        button.tintColor = .systemBlue
         button.addTarget(
             self,
             action: #selector(didTapYoutubeLinkButton),
@@ -53,7 +54,7 @@ final class SongDetailViewController: UIViewController {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle("확인", for: .normal)
-        button.setTitleColor(.tintColor, for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
         button.addTarget(
             self,
             action: #selector(didTapCloseButton),
