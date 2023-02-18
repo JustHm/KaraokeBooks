@@ -14,6 +14,7 @@ final class SongDetailViewController: UIViewController {
     private var youtubeURL: URL?
     private lazy var brandImage: UIImageView = {
         let imageView = UIImageView()
+        
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .green
         imageView.clipsToBounds = true
@@ -99,7 +100,7 @@ extension SongDetailViewController: SongDetailProtocol {
         //SnapKit으로 레이아웃이 잡혀도 각 뷰에 constraints값은 변경이 안되어 있다. 근데 왜 배치는 잘됨?
         //그래서 layoutIfNeeded를 호출해서 뷰를 다시 계산하면 변경된 값이 나온다.
         descriptionStackView.layoutIfNeeded()
-        let viewHeight: CGFloat = descriptionStackView.frame.height + (descriptionStackView.frame.maxY * 2)
+        let viewHeight: CGFloat = descriptionStackView.frame.height + (descriptionStackView.frame.maxY * 1.5)
         view.frame.size.height = viewHeight
         // reposition the view (if not it will be near the top)
         view.frame.origin.y = UIScreen.main.bounds.height - viewHeight - TOP_CARD_DISTANCE

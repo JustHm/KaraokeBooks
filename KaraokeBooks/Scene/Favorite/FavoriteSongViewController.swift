@@ -32,7 +32,6 @@ final class FavoriteSongViewController: UIViewController {
         tableView.dataSource = presenter
         tableView.delegate = presenter
         tableView.showsVerticalScrollIndicator = false
-//        tableView.backgroundColor = .customBackground
         return tableView
     }()
     private lazy var warningText: UILabel = {

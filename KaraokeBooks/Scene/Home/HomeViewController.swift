@@ -47,7 +47,7 @@ class HomeViewController: UIViewController {
         tableView.dataSource = presenter
         tableView.delegate = presenter
         tableView.showsVerticalScrollIndicator = false
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0, *) { //ios15 부터 header padding 적용되어서 간격 넓어짐 제거
             tableView.sectionHeaderTopPadding = 0
         }
         tableView.layer.cornerRadius = 15.0

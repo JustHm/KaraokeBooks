@@ -59,7 +59,7 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
                 case .success(let data):
                     completionHandler(data)
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print("error:" + error.localizedDescription)
                     completionHandler([])
                 }
             }
