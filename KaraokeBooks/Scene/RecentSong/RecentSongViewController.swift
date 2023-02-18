@@ -35,7 +35,7 @@ final class RecentSongViewController: UIViewController {
         )
         return segmentedControl
     }()
-    private lazy var tableView: UITableView = {
+    private lazy var recentSongTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
         tableView.dataSource = presenter
@@ -52,19 +52,19 @@ final class RecentSongViewController: UIViewController {
 
 extension RecentSongViewController: RecentSongProtocol {
     func reloadTableView() {
-        tableView.reloadData()
+        recentSongTableView.reloadData()
     }
     func setupViews() {
         view.backgroundColor = .customBackground
         navigationItem.titleView = currentDatePicker
-        [tableView, brandSegmentedControl].forEach {
+        [recentSongTableView, brandSegmentedControl].forEach {
             view.addSubview($0)
         }
         brandSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
             $0.left.right.equalToSuperview().inset(16.0)
         }
-        tableView.snp.makeConstraints {
+        recentSongTableView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalTo(brandSegmentedControl.snp.bottom)
         }

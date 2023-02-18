@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// 노래 검색 종류 (URL에 들어감)
 enum SearchType: String {
     case song, singer
     case popular, release//, no
@@ -21,7 +21,7 @@ enum SearchType: String {
         }
     }
 }
-
+/// 노래 검색 요청 파라미터
 struct KaraokeRequestModel: Codable {
     let brand: String
 }

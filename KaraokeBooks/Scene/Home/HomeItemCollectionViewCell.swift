@@ -1,5 +1,5 @@
 //
-//  CollectionViewCell.swift
+//  HomeItemCollectionViewCell.swift
 //  KaraokeBooks
 //
 //  Created by 안정흠 on 2023/02/09.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-final class CollectionViewCell: UICollectionViewCell {
-    static let identifier = "CollectionViewCell"
+final class HomeItemCollectionViewCell: UICollectionViewCell {
+    static let identifier = "HomeItemCollectionViewCell"
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15.0, weight: .bold)
@@ -22,7 +22,7 @@ final class CollectionViewCell: UICollectionViewCell {
     }
 }
 
-private extension CollectionViewCell {
+private extension HomeItemCollectionViewCell {
     func setupLayout() {
         contentView.layer.cornerRadius = 15.0
         contentView.layer.shadowOpacity = 0.1

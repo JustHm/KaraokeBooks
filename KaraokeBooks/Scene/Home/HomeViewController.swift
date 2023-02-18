@@ -36,11 +36,11 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
-        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifier)
+        collectionView.register(HomeItemCollectionViewCell.self, forCellWithReuseIdentifier: HomeItemCollectionViewCell.identifier)
         collectionView.backgroundColor = .customBackground
         return collectionView
     }()
-    private lazy var tableView: UITableView = {
+    private lazy var rankTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
         tableView.register(RankTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RankTableViewHeader.identifier)
@@ -73,11 +73,11 @@ extension HomeViewController: HomeProtocol {
     }
     
     func reloadTableView() {
-        tableView.reloadData()
+        rankTableView.reloadData()
     }
     
     func setupViews() {
-        [homeItemCollectionView, brandSegmentedControl, tableView, loadIndicator].forEach {
+        [homeItemCollectionView, brandSegmentedControl, rankTableView, loadIndicator].forEach {
             view.addSubview($0)
         }
         
@@ -92,24 +92,33 @@ extension HomeViewController: HomeProtocol {
             $0.top.equalTo(homeItemCollectionView.snp.bottom)
         }
         
-        tableView.snp.makeConstraints {
+        rankTableView.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(16.0)
             $0.top.equalTo(brandSegmentedControl.snp.bottom)
             $0.bottom.equalToSuperview()
         }
         loadIndicator.snp.makeConstraints {
-            $0.center.equalTo(tableView)
+            $0.center.equalTo(rankTableView)
         }
     }
     
     func setupNavigationBar() {
         navigationItem.title = "노래방 책"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "titleIcon"), style: .plain, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(didTapRightSearchButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "music.note.house"),
+            style: .plain,
+            target: nil,
+            action: nil
+        )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapRightSearchButton)
+        )
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
-        viewController.modalPresentationStyle = .pageSheet
         present(viewController, animated: true)
     }
     func moveToFavoriteViewController() {

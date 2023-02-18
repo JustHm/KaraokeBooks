@@ -84,6 +84,7 @@ extension HomePresenter: UITableViewDataSource {
         return header
     }
 }
+// MARK: RankTableView Delegate
 extension HomePresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         50.0
@@ -94,20 +95,20 @@ extension HomePresenter: UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.isSelected = false
     }
 }
-
+// MARK: RankTableView DataSource
 extension HomePresenter: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         HomeList.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier, for: indexPath) as? CollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeItemCollectionViewCell.identifier, for: indexPath) as? HomeItemCollectionViewCell
         let title = HomeList.allCases[indexPath.row].rawValue
         cell?.setup(title: title)
         return cell ?? UICollectionViewCell()
     }
 }
-
+// MARK: HomeItemCollectionView Delegate
 extension HomePresenter: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let mainWidth = collectionView.frame.width
@@ -129,11 +130,10 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         }
     }
 }
-
+// MARK: NewsListTableViewHeaderDelegate
 extension HomePresenter: NewsListTableViewHeaderDelegate {
     func didSelectTag(_ selectedBrand: RankDateType) {
         currentDate = selectedBrand
         self.rankRequest(brand: currentBrand)
     }
-    
 }

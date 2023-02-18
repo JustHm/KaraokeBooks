@@ -39,6 +39,7 @@ final class SearchResultPresenter: NSObject {
         searchSongs()
     }
     private func searchSongs() {
+        guard query != "" else { return }
         searchManager.searchRequest(
             brand: currentBrand,
             query: query,
@@ -50,7 +51,7 @@ final class SearchResultPresenter: NSObject {
         }
     }
 }
-
+// MARK: SearchBar Delegate
 extension SearchResultPresenter: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
@@ -71,7 +72,7 @@ extension SearchResultPresenter: UISearchBarDelegate {
         searchSongs()
     }
 }
-
+// MARK: SearchResultTableView DataSource
 extension SearchResultPresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         result.count
@@ -86,7 +87,7 @@ extension SearchResultPresenter: UITableViewDataSource {
         return cell ?? UITableViewCell()
     }
 }
-
+// MARK: SearchResultTableView Delegate
 extension SearchResultPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = result[indexPath.row]

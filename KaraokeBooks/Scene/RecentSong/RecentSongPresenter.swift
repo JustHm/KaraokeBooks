@@ -64,7 +64,7 @@ final class RecentSongPresenter: NSObject {
         }
     }
 }
-
+// MARK: RecentSongTableView DataSource
 extension RecentSongPresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch currentBrand {
@@ -74,7 +74,6 @@ extension RecentSongPresenter: UITableViewDataSource {
             return kyRecentSongs.count
         }
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: SongTableViewCell.identifier,
@@ -90,6 +89,7 @@ extension RecentSongPresenter: UITableViewDataSource {
         return cell ?? UITableViewCell()
     }
 }
+// MARK: RecentSongTableView Delegate
 extension RecentSongPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var song: Song

@@ -6,14 +6,11 @@
 //
 
 import Foundation
-
+/// 노래 검색시 브랜드 설정  (URL에 들어감)
 enum BrandType: String, CaseIterable, Codable {
     case tj
     case kumyoung
-    //case joysound
-    //case dam
-    //case uga
-    
+    //case joysound, dam, uga
     var replace: String {
         switch self {
         case .tj:

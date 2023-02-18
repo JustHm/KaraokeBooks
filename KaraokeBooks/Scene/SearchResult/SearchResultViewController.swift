@@ -31,7 +31,7 @@ final class SearchResultViewController: UIViewController {
         )
         return segmentedControl
     }()
-    private lazy var resultTableView: UITableView = {
+    private lazy var searchResultTableView: UITableView = {
         let tableView = UITableView()
         tableView.dataSource = presenter
         tableView.delegate = presenter
@@ -63,14 +63,14 @@ extension SearchResultViewController: SearchResultProtocol {
     }
     func setupViews() {
         view.backgroundColor = .customBackground
-        [resultTableView, brandSegmentedControl, warningText].forEach {
+        [searchResultTableView, brandSegmentedControl, warningText].forEach {
             view.addSubview($0)
         }
         brandSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
             $0.left.right.equalToSuperview().inset(16.0)
         }
-        resultTableView.snp.makeConstraints {
+        searchResultTableView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalTo(brandSegmentedControl.snp.bottom)
         }
@@ -86,23 +86,12 @@ extension SearchResultViewController: SearchResultProtocol {
                                                         SearchType.singer.title]
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
-//        navigationItem.titleMenuProvider = { suggestions in
-//            var finalMenuElements = suggestions
-//            finalMenuElements.append(UICommand(title: "노래 검색",
-//                                               image: UIImage(systemName: "heart"),
-//                                               action: #selector(self.didTapSongFilter(_:))))
-//            finalMenuElements.append(UICommand(title: "가수 검색",
-//                                               image: UIImage(systemName: "message"),
-//                                               action: #selector(self.didTapSingerFilter(_:))))
-//            return UIMenu(children: finalMenuElements)
-//        }
     }
     func reloadTableView() {
-        resultTableView.reloadData()
+        searchResultTableView.reloadData()
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
-        viewController.modalPresentationStyle = .pageSheet
         present(viewController, animated: true)
     }
 }

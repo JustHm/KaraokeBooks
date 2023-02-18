@@ -19,6 +19,7 @@ final class ClearSegmentedControl: UISegmentedControl {
         self.addSubview(view)
         return view
     }()
+    
     init() {
         super.init(frame: .zero)
         let selectedColor = UIColor.red
@@ -63,7 +64,7 @@ final class ClearSegmentedControl: UISegmentedControl {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        //underline계산은 LayoutSubViews 에서
+        //underline계산은 LayoutSubViews에서
         let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
         UIView.animate(
             withDuration: 0.1,

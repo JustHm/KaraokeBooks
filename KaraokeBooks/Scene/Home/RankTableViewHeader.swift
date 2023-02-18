@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+/// 일간, 월간, 주간 선택됐는지 처리
 protocol NewsListTableViewHeaderDelegate: AnyObject {
     func didSelectTag(_ selectedBrand: RankDateType)
 }
@@ -60,6 +61,5 @@ final class RankTableViewHeader: UITableViewHeaderFooterView {
         let selectedIndex = sender.selectedSegmentIndex
         let date = RankDateType.allCases[selectedIndex]
         delegate?.didSelectTag(date)
-
     }
 }

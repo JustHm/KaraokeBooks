@@ -1,5 +1,5 @@
 //
-//  SongDetailStackView.swift
+//  SongInfoStackView.swift
 //  KaraokeBooks
 //
 //  Created by 안정흠 on 2023/02/10.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SongDetailStackView: UIStackView {
+final class SongInfoStackView: UIStackView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label

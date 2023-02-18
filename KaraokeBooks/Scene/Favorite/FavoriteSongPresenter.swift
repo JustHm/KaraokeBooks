@@ -37,7 +37,7 @@ final class FavoriteSongPresenter: NSObject {
         viewController?.reloadTableView()
     }
 }
-
+// MARK: FavoriteSongTableView DataSource
 extension FavoriteSongPresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         favoriteSongs.count
@@ -52,6 +52,7 @@ extension FavoriteSongPresenter: UITableViewDataSource {
         return cell ?? UITableViewCell()
     }
 }
+// MARK: FavoriteSongTableView Delegate
 extension FavoriteSongPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {

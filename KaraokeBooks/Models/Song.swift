@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// 노래검색 Response Model
 struct Song: Codable {
     let brand: BrandType
     let no: String
@@ -20,6 +20,3 @@ struct Song: Codable {
         case brand, no, title, singer, composer, lyricist, release
     }
 }
-
-
-

@@ -24,14 +24,14 @@ final class SongTableViewCell: UITableViewCell {
     }()
     private lazy var numberLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.font = .systemFont(ofSize: 16, weight: .bold)
         label.textColor = .customPrimaryText
         return label
     }()
     func setup(rank: Int, song: Song) {
         titleLabel.text = song.title
         singerLabel.text = song.singer
-        numberLabel.text = "No.\(song.no)"
+        numberLabel.text = song.no
         backgroundColor = .customForeground
         setupViews()
     }
@@ -42,7 +42,7 @@ final class SongTableViewCell: UITableViewCell {
         }
         numberLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.width.equalTo(80.0)
+            $0.width.equalTo(70.0)
             $0.left.equalToSuperview().inset(16.0)
         }
         titleLabel.snp.makeConstraints {

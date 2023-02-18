@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// 인기 순위 노래 검색시 날짜 구분 (URL에 들어감)
 enum RankDateType: String, CaseIterable {
     case daily, weekly, monthly
     var replace: String {

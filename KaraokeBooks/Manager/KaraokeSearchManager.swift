@@ -31,7 +31,6 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
         completionHandler: @escaping ([Song]) -> Void
     ) {
         guard let url = searchURL.searchURL(query: query, searchType: searchType) else { return }
-
         let param = KaraokeRequestModel(brand: brand.rawValue)
         
         AF.request(url, method: .get, parameters: param)
