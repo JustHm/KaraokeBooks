@@ -11,10 +11,11 @@ final class HomeItemCollectionViewCell: UICollectionViewCell {
     static let identifier = "HomeItemCollectionViewCell"
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15.0, weight: .bold)
-        label.textColor = .customPrimaryText
+        label.font = .systemFont(ofSize: 16.0, weight: .bold)
+        label.textColor = .white
         return label
     }()
+    private lazy var gradientLayer = CAGradientLayer()
     
     func setup(title: String) {
         titleLabel.text = title
@@ -24,13 +25,23 @@ final class HomeItemCollectionViewCell: UICollectionViewCell {
 
 private extension HomeItemCollectionViewCell {
     func setupLayout() {
+        setupGradientLayer()
+        contentView.layer.addSublayer(gradientLayer)
         contentView.layer.cornerRadius = 15.0
-        contentView.layer.shadowOpacity = 0.1
-        contentView.layer.shadowRadius = 4.0
-        contentView.backgroundColor = .customForeground2
+        contentView.clipsToBounds = true
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
+    }
+    func setupGradientLayer() {
+        gradientLayer.frame = contentView.frame
+        let colors: [CGColor] = [
+            .init(red: 1.00, green: 0.25, blue: 0.42, alpha: 1.00),
+            .init(red: 1.00, green: 0.29, blue: 0.17, alpha: 1.00)
+        ]
+        gradientLayer.colors = colors
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
     }
 }

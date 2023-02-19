@@ -33,11 +33,13 @@ class HomeViewController: UIViewController {
     }()
     private lazy var homeItemCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+//        layout.estimatedItemSize =
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
         collectionView.register(HomeItemCollectionViewCell.self, forCellWithReuseIdentifier: HomeItemCollectionViewCell.identifier)
         collectionView.backgroundColor = .customBackground
+        collectionView.contentMode = .center
         return collectionView
     }()
     private lazy var rankTableView: UITableView = {
@@ -59,6 +61,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+//        print(size)
     }
 }
 
@@ -82,7 +88,7 @@ extension HomeViewController: HomeProtocol {
         }
         
         homeItemCollectionView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()//.inset(16.0)
+            $0.left.right.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
             $0.height.equalTo(120)
         }
