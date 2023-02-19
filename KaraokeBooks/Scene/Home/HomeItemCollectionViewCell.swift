@@ -37,8 +37,9 @@ private extension HomeItemCollectionViewCell {
     func setupGradientLayer() {
         gradientLayer.frame = contentView.frame
         let colors: [CGColor] = [
-            .init(red: 1.00, green: 0.25, blue: 0.42, alpha: 1.00),
-            .init(red: 1.00, green: 0.29, blue: 0.17, alpha: 1.00)
+            .init(red: 0.84, green: 0.05, blue: 0.33, alpha: 1.00), //#D60C55
+            .init(red: 0.71, green: 0.17, blue: 0.48, alpha: 1.00) //#B42B7B
+            //.init(red: 0.52, green: 0.26, blue: 0.55, alpha: 1.00)  //#84438D
         ]
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)

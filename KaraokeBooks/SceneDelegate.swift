@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
         window?.backgroundColor = .customBackground
-        window?.tintColor = .red
+        window?.tintColor = .systemRed
         window?.makeKeyAndVisible()
     }
 }

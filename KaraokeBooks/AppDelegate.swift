@@ -12,12 +12,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // NavigationBar 설정
-        let appearance = UINavigationBarAppearance ()
+        let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .customForeground
-        appearance.backgroundEffect = UIBlurEffect(style: .prominent)
-        appearance.shadowColor = nil
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18.0, weight: .bold)
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18.0, weight: .regular)
         ]
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
