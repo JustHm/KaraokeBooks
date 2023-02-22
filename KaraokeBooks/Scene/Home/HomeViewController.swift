@@ -109,13 +109,7 @@ extension HomeViewController: HomeProtocol {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "노래방 책"
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(
-//            image: UIImage(named: "ClearIcon"),
-//            style: .plain,
-//            target: nil,
-//            action: nil
-//        )
+        navigationItem.title = "노래방Book"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "magnifyingglass"),
             style: .plain,
