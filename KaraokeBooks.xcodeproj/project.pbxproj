@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
 		2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B529990B5E0059222E /* RecentSongViewController.swift */; };
 		2261D7B829990B660059222E /* RecentSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B729990B660059222E /* RecentSongPresenter.swift */; };
 		2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BC299E68BF0059222E /* SearchResultViewController.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22333BE529ADE9A800C0A56D /* KaraokeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeError.swift; sourceTree = "<group>"; };
 		2261D7B529990B5E0059222E /* RecentSongViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongViewController.swift; sourceTree = "<group>"; };
 		2261D7B729990B660059222E /* RecentSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongPresenter.swift; sourceTree = "<group>"; };
 		2261D7BC299E68BF0059222E /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 		22B501612993EBE800677964 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				22333BE529ADE9A800C0A56D /* KaraokeError.swift */,
 				22B501592993EB4F00677964 /* Song.swift */,
 				22B501702996868300677964 /* KaraokeRequestModel.swift */,
 				22B50174299686B000677964 /* RankDataType.swift */,
@@ -247,7 +250,7 @@
 			knownRegions = (
 				en,
 				Base,
-                ko
+				ko,
 			);
 			mainGroup = 22B5010D2993EA4E00677964;
 			packageReferences = (
@@ -291,6 +294,7 @@
 				22B50179299796BC00677964 /* UserDefaultsManager.swift in Sources */,
 				22B501732996869E00677964 /* BrandType.swift in Sources */,
 				22B50175299686B000677964 /* RankDataType.swift in Sources */,
+				22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */,
 				22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */,
 				2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */,
 				22B5016C2995E2B500677964 /* SongDetailPresenter.swift in Sources */,
@@ -459,7 +463,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -491,7 +495,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

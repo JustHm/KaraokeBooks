@@ -49,18 +49,25 @@ final class RecentSongPresenter: NSObject {
         searchRecentSongs(brand: .kumyoung)
     }
     private func searchRecentSongs(brand: BrandType) {
-        searchManager.searchRequest(
-            brand: brand,
-            query: currentDate,
-            searchType: .release
-        ) { [weak self] songs in
-            switch brand {
-            case .tj:
-                self?.tjRecentSongs = songs
-            case .kumyoung:
-                self?.kyRecentSongs = songs
+        Task { [weak self] in
+            do {
+                let songs = try await self?.searchManager.searchReqeust(brand: brand, query: currentDate, searchType: .release)
+                guard let songs else { return }
+                //노래별 저장
+                switch brand {
+                case .tj:
+                    self?.tjRecentSongs = songs
+                case .kumyoung:
+                    self?.kyRecentSongs = songs
+                }
+                
+                await MainActor.run { [weak self] in
+                    self?.viewController?.reloadTableView()
+                }
             }
-            self?.viewController?.reloadTableView()
+            catch {
+                print("RecentSong-ERROR: \(error.localizedDescription)")
+            }
         }
     }
 }

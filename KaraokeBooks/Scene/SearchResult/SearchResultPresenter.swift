@@ -40,14 +40,23 @@ final class SearchResultPresenter: NSObject {
     }
     private func searchSongs() {
         guard query != "" else { return }
-        searchManager.searchRequest(
-            brand: currentBrand,
-            query: query,
-            searchType: currentSearchType
-        ) {[weak self] songs in
-            self?.result = songs
-            self?.viewController?.isEmptyTableView(isEmpty: !songs.isEmpty)
-            self?.viewController?.reloadTableView()
+        Task { [weak self] in
+            do {
+                let songs = try await self?.searchManager.searchReqeust(brand: currentBrand,
+                                                              query: query,
+                                                              searchType: currentSearchType)
+                guard let songs else { return }
+                
+                self?.result = songs
+                await MainActor.run { [weak self] in
+                    print("Run")
+                    self?.viewController?.isEmptyTableView(isEmpty: !songs.isEmpty)
+                    self?.viewController?.reloadTableView()
+                }
+            }
+            catch {
+                print("SearchResult-ERROR: \(error.localizedDescription)")
+            }
         }
     }
 }

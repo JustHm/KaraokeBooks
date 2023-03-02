@@ -36,25 +36,22 @@ final class HomePresenter: NSObject {
         viewController?.setupNavigationBar()
         rankRequest(brand: BrandType.allCases[0])
     }
-    func searchRequest(brand: BrandType, query: String, searchType: SearchType) {
-        searchManager.searchRequest(
-            brand: brand,
-            query: query,
-            searchType: searchType
-        ) { [weak self] songs in
-            self?.songs = songs
-        }
-    }
     func rankRequest(brand: BrandType) {
         currentBrand = brand
         viewController?.activeIndicator(isStart: true)
-        searchManager.rankRequest(
-            brand: currentBrand,
-            date: currentDate
-        ) { [weak self] songs in
-            self?.songs = songs
-            self?.viewController?.reloadTableView()
-            self?.viewController?.activeIndicator(isStart: false)
+        Task { [weak self] in
+            do {
+                let songs = try await self?.searchManager.rankRequest(brand: currentBrand, date: currentDate)
+                guard let songs else { return }
+                self?.songs = songs
+                await MainActor.run { [weak self] in
+                    self?.viewController?.reloadTableView()
+                    self?.viewController?.activeIndicator(isStart: false)
+                }
+            }
+            catch {
+                print("Home-ERROR: \(error.localizedDescription)")
+            }
         }
     }
     func didTapRightSearchButton() {
