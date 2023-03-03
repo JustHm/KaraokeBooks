@@ -45,12 +45,9 @@ final class SearchResultPresenter: NSObject {
                 let songs = try await self?.searchManager.searchReqeust(brand: currentBrand,
                                                               query: query,
                                                               searchType: currentSearchType)
-                guard let songs else { return }
-                
-                self?.result = songs
+                self?.result = songs ?? []
                 await MainActor.run { [weak self] in
-                    print("Run")
-                    self?.viewController?.isEmptyTableView(isEmpty: !songs.isEmpty)
+                    self?.viewController?.isEmptyTableView(isEmpty: !(songs?.isEmpty ?? false))
                     self?.viewController?.reloadTableView()
                 }
             }

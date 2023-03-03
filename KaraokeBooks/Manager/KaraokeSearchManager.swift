@@ -10,7 +10,7 @@ import Alamofire
 
 protocol KaraokeSearchManagerProtocol {
     func rankRequest(brand: BrandType,
-                          date: RankDateType) async throws -> [Song]
+                     date: RankDateType) async throws -> [Song]
     func searchReqeust(brand: BrandType,
                        query: String,
                        searchType: SearchType) async throws -> [Song]
@@ -40,7 +40,7 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
         case .success(let data):
             return data
         case .failure(let error):
-            throw error
+            throw error //AFError
         }
     }
 }

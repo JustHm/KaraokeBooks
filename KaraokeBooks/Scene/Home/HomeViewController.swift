@@ -62,10 +62,6 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-//        print(size)
-    }
 }
 
 extension HomeViewController: HomeProtocol {

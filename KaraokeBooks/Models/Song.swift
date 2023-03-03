@@ -7,7 +7,7 @@
 
 import Foundation
 /// 노래검색 Response Model
-struct Song: Codable {
+struct Song: Codable, Sendable {
     let brand: BrandType
     let no: String
     let title: String

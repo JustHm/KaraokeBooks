@@ -16,7 +16,7 @@ protocol RecentSongProtocol: AnyObject {
 final class RecentSongPresenter: NSObject {
     private weak var viewController: RecentSongProtocol?
     private let searchManager: KaraokeSearchManagerProtocol!
-
+    
     private var currentDate: String = "202302"
     private var currentBrand: BrandType = BrandType.allCases[0]
     private var tjRecentSongs: [Song] = []
@@ -32,7 +32,7 @@ final class RecentSongPresenter: NSObject {
     func viewDidLoad() {
         viewController?.setupViews()
         dateChanged(date: Date())
-        searchRecentSongsAllBrand()
+        searchRecentSongs()
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
         currentBrand = brand
@@ -42,24 +42,21 @@ final class RecentSongPresenter: NSObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMM"
         currentDate = formatter.string(from: date)
-        searchRecentSongsAllBrand()
+        searchRecentSongs()
     }
-    func searchRecentSongsAllBrand() {
-        searchRecentSongs(brand: .tj)
-        searchRecentSongs(brand: .kumyoung)
-    }
-    private func searchRecentSongs(brand: BrandType) {
+    
+    private func searchRecentSongs() {
         Task { [weak self] in
             do {
-                let songs = try await self?.searchManager.searchReqeust(brand: brand, query: currentDate, searchType: .release)
-                guard let songs else { return }
-                //노래별 저장
-                switch brand {
-                case .tj:
-                    self?.tjRecentSongs = songs
-                case .kumyoung:
-                    self?.kyRecentSongs = songs
-                }
+                async let tj = searchManager.searchReqeust(brand: .tj,
+                                                           query: currentDate,
+                                                           searchType: .release)
+                async let ky = searchManager.searchReqeust(brand: .kumyoung,
+                                                           query: currentDate,
+                                                           searchType: .release)
+                let songs = try await [tj, ky]
+                self?.tjRecentSongs = songs[0]
+                self?.kyRecentSongs = songs[1]
                 
                 await MainActor.run { [weak self] in
                     self?.viewController?.reloadTableView()

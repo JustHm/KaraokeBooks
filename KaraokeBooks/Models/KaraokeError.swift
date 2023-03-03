@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum KaraokeError: Error {
-    case invalidURL
+enum KaraokeError: String, Error {
+    case invalidURL = "주소가 유효하지 않습니다."
 }
