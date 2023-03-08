@@ -129,7 +129,7 @@
 				22B50176299790FF00677964 /* UIColor+.swift */,
 				22B501612993EBE800677964 /* Models */,
 				22B501502993EAC300677964 /* Manager */,
-				22B5014D2993EAA500677964 /* Scene */,
+				22B5014D2993EAA500677964 /* Scenes */,
 				22B501222993EA4E00677964 /* Assets.xcassets */,
 				22B501242993EA4E00677964 /* LaunchScreen.storyboard */,
 				22B501272993EA4E00677964 /* Info.plist */,
@@ -137,7 +137,7 @@
 			path = KaraokeBooks;
 			sourceTree = "<group>";
 		};
-		22B5014D2993EAA500677964 /* Scene */ = {
+		22B5014D2993EAA500677964 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
 				22B501662993F40F00677964 /* HomeList.swift */,
@@ -149,7 +149,7 @@
 				2261D7B929990B6A0059222E /* RecentSong */,
 				2261D7C0299E690A0059222E /* SearchResult */,
 			);
-			path = Scene;
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 		22B501502993EAC300677964 /* Manager */ = {
