@@ -12,6 +12,7 @@ class HomeViewController: UIViewController {
     private lazy var presenter = HomePresenter(viewController: self)
     private lazy var loadIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .customPrimaryText
         indicator.isHidden = true
         return indicator
     }()
