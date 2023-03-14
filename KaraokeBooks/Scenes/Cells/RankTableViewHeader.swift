@@ -9,13 +9,13 @@ import UIKit
 import SnapKit
 
 /// 일간, 월간, 주간 선택됐는지 처리
-protocol NewsListTableViewHeaderDelegate: AnyObject {
+protocol RankDateTableViewHeaderDelegate: AnyObject {
     func didSelectTag(_ selectedBrand: RankDateType)
 }
 
 final class RankTableViewHeader: UITableViewHeaderFooterView {
     static let identifier = "RankTableViewHeader"
-    private weak var delegate: NewsListTableViewHeaderDelegate?
+    private weak var delegate: RankDateTableViewHeaderDelegate?
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18.0, weight: .bold)
@@ -39,8 +39,9 @@ final class RankTableViewHeader: UITableViewHeaderFooterView {
         return segmentedControl
     }()
     
-    func setup(delegate: NewsListTableViewHeaderDelegate) {
+    func setup(delegate: RankDateTableViewHeaderDelegate) {
         self.delegate = delegate
+        contentView.backgroundColor = .customForeground2
         setupViews()
     }
     

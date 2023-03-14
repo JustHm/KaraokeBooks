@@ -26,12 +26,12 @@ final class FavoriteSongViewController: UIViewController {
         )
         return segmentedControl
     }()
-    private lazy var favoriteSongTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
+    private lazy var favoriteSongTableView: SongTableView = {
+        let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.dataSource = presenter
         tableView.delegate = presenter
-        tableView.showsVerticalScrollIndicator = false
+        tableView.register(SongTableViewCell.self,
+                           forCellReuseIdentifier: SongTableViewCell.identifier)
         return tableView
     }()
     private lazy var warningText: UILabel = {

@@ -31,8 +31,8 @@ final class SearchResultViewController: UIViewController {
         )
         return segmentedControl
     }()
-    private lazy var searchResultTableView: UITableView = {
-        let tableView = UITableView()
+    private lazy var searchResultTableView: SongTableView = {
+        let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.dataSource = presenter
         tableView.delegate = presenter
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)

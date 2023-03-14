@@ -98,6 +98,6 @@ extension SearchResultPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = result[indexPath.row]
         viewController?.moveToDetailViewController(song: song)
-        tableView.cellForRow(at: indexPath)?.isSelected = false
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

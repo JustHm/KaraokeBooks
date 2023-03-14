@@ -12,6 +12,7 @@
 		2261D7B829990B660059222E /* RecentSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B729990B660059222E /* RecentSongPresenter.swift */; };
 		2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BC299E68BF0059222E /* SearchResultViewController.swift */; };
 		2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BE299E68E80059222E /* SearchResultPresenter.swift */; };
+		227DC65429C0990500AAC9D2 /* SongTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227DC65329C0990500AAC9D2 /* SongTableView.swift */; };
 		22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501192993EA4E00677964 /* AppDelegate.swift */; };
 		22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011B2993EA4E00677964 /* SceneDelegate.swift */; };
 		22B501232993EA4E00677964 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B501222993EA4E00677964 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		2261D7B729990B660059222E /* RecentSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongPresenter.swift; sourceTree = "<group>"; };
 		2261D7BC299E68BF0059222E /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2261D7BE299E68E80059222E /* SearchResultPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultPresenter.swift; sourceTree = "<group>"; };
+		227DC65329C0990500AAC9D2 /* SongTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableView.swift; sourceTree = "<group>"; };
 		22B501162993EA4E00677964 /* KaraokeBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaraokeBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B501192993EA4E00677964 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B5011B2993EA4E00677964 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,51 @@
 			path = SearchResult;
 			sourceTree = "<group>";
 		};
+		227DC64E29C08DB000AAC9D2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				22B501192993EA4E00677964 /* AppDelegate.swift */,
+				22B5011B2993EA4E00677964 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		227DC64F29C08DC300AAC9D2 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				22B501222993EA4E00677964 /* Assets.xcassets */,
+				22B501242993EA4E00677964 /* LaunchScreen.storyboard */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		227DC65029C08DD100AAC9D2 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				22B50176299790FF00677964 /* UIColor+.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		227DC65129C08DEA00AAC9D2 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				22B501502993EAC300677964 /* Manager */,
+				22B501612993EBE800677964 /* Models */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		227DC65229C0975300AAC9D2 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				22B501572993EB1A00677964 /* RankTableViewHeader.swift */,
+				22B501552993EB0E00677964 /* SongTableViewCell.swift */,
+				22B501642993F30F00677964 /* HomeItemCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		22B5010D2993EA4E00677964 = {
 			isa = PBXGroup;
 			children = (
@@ -124,15 +171,12 @@
 		22B501182993EA4E00677964 /* KaraokeBooks */ = {
 			isa = PBXGroup;
 			children = (
-				22B501192993EA4E00677964 /* AppDelegate.swift */,
-				22B5011B2993EA4E00677964 /* SceneDelegate.swift */,
-				22B50176299790FF00677964 /* UIColor+.swift */,
-				22B501612993EBE800677964 /* Models */,
-				22B501502993EAC300677964 /* Manager */,
-				22B5014D2993EAA500677964 /* Scenes */,
-				22B501222993EA4E00677964 /* Assets.xcassets */,
-				22B501242993EA4E00677964 /* LaunchScreen.storyboard */,
 				22B501272993EA4E00677964 /* Info.plist */,
+				227DC64E29C08DB000AAC9D2 /* App */,
+				227DC64F29C08DC300AAC9D2 /* Assets */,
+				227DC65129C08DEA00AAC9D2 /* Domain */,
+				22B5014D2993EAA500677964 /* Scenes */,
+				227DC65029C08DD100AAC9D2 /* Utils */,
 			);
 			path = KaraokeBooks;
 			sourceTree = "<group>";
@@ -140,9 +184,9 @@
 		22B5014D2993EAA500677964 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				22B501662993F40F00677964 /* HomeList.swift */,
+				227DC65229C0975300AAC9D2 /* Cells */,
 				22B501532993EAF600677964 /* CleanSegmentedControl.swift */,
-				22B501552993EB0E00677964 /* SongTableViewCell.swift */,
+				227DC65329C0990500AAC9D2 /* SongTableView.swift */,
 				22B501682995DD0300677964 /* Home */,
 				22B5016D2995E2B900677964 /* SongDetail */,
 				22B501822998EE6900677964 /* Favorite */,
@@ -170,6 +214,7 @@
 				22B501702996868300677964 /* KaraokeRequestModel.swift */,
 				22B50174299686B000677964 /* RankDataType.swift */,
 				22B501722996869E00677964 /* BrandType.swift */,
+				22B501662993F40F00677964 /* HomeList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -179,8 +224,6 @@
 			children = (
 				22B501492993EA7900677964 /* HomeViewController.swift */,
 				22B5014B2993EA9C00677964 /* HomePresenter.swift */,
-				22B501642993F30F00677964 /* HomeItemCollectionViewCell.swift */,
-				22B501572993EB1A00677964 /* RankTableViewHeader.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -295,6 +338,7 @@
 				22B501732996869E00677964 /* BrandType.swift in Sources */,
 				22B50175299686B000677964 /* RankDataType.swift in Sources */,
 				22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */,
+				227DC65429C0990500AAC9D2 /* SongTableView.swift in Sources */,
 				22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */,
 				2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */,
 				22B5016C2995E2B500677964 /* SongDetailPresenter.swift in Sources */,

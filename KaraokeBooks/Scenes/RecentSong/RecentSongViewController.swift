@@ -35,13 +35,12 @@ final class RecentSongViewController: UIViewController {
         )
         return segmentedControl
     }()
-    private lazy var recentSongTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
+    private lazy var recentSongTableView: SongTableView = {
+        let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.dataSource = presenter
         tableView.delegate = presenter
-        tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = .customBackground
+        tableView.register(SongTableViewCell.self,
+                           forCellReuseIdentifier: SongTableViewCell.identifier)
         return tableView
     }()
     override func viewDidLoad() {

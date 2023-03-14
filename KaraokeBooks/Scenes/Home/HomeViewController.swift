@@ -33,7 +33,6 @@ class HomeViewController: UIViewController {
     }()
     private lazy var homeItemCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-//        layout.estimatedItemSize =
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
@@ -42,19 +41,14 @@ class HomeViewController: UIViewController {
         collectionView.contentMode = .center
         return collectionView
     }()
-    private lazy var rankTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
-        tableView.register(RankTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RankTableViewHeader.identifier)
+    private lazy var rankTableView: SongTableView = {
+        let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.dataSource = presenter
         tableView.delegate = presenter
-        tableView.showsVerticalScrollIndicator = false
-        if #available(iOS 15.0, *) { //ios15 부터 header padding 적용되어서 간격 넓어짐 제거
-            tableView.sectionHeaderTopPadding = 0
-        }
-        tableView.layer.cornerRadius = 15.0
-        tableView.clipsToBounds = true
-        tableView.backgroundColor = .customForeground2
+        tableView.register(SongTableViewCell.self,
+                           forCellReuseIdentifier: SongTableViewCell.identifier)
+        tableView.register(RankTableViewHeader.self,
+                           forHeaderFooterViewReuseIdentifier: RankTableViewHeader.identifier)
         return tableView
     }()
     

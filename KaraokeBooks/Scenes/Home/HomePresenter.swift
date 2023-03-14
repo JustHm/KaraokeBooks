@@ -58,7 +58,7 @@ final class HomePresenter: NSObject {
         viewController?.moveToSearchResultViewController()
     }
 }
-
+// MARK: RankTableView DataSource
 extension HomePresenter: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         songs.count
@@ -89,10 +89,10 @@ extension HomePresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = songs[indexPath.row]
         viewController?.moveToDetailViewController(song: song)
-        tableView.cellForRow(at: indexPath)?.isSelected = false
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-// MARK: RankTableView DataSource
+// MARK: HomeItemCollectionView DataSource
 extension HomePresenter: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         HomeList.allCases.count
@@ -127,8 +127,8 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         }
     }
 }
-// MARK: NewsListTableViewHeaderDelegate
-extension HomePresenter: NewsListTableViewHeaderDelegate {
+// MARK: RankDateTableViewHeaderDelegate
+extension HomePresenter: RankDateTableViewHeaderDelegate {
     func didSelectTag(_ selectedBrand: RankDateType) {
         currentDate = selectedBrand
         self.rankRequest(brand: currentBrand)
