@@ -36,6 +36,10 @@ final class FavoriteSongPresenter: NSObject {
         viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
         viewController?.reloadTableView()
     }
+    func reload() {
+        favoriteSongs = userDefaults.getFavoriteSong(brand: currentBrand)
+        viewController?.reloadTableView()
+    }
 }
 // MARK: FavoriteSongTableView DataSource
 extension FavoriteSongPresenter: UITableViewDataSource {

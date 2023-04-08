@@ -7,7 +7,8 @@
 
 import Foundation
 /// 노래검색 Response Model
-struct Song: Codable, Sendable {
+struct Song: Codable, Identifiable {
+    var id: String { return UUID().uuidString }
     let brand: BrandType
     let no: String
     let title: String
@@ -16,6 +17,7 @@ struct Song: Codable, Sendable {
     let lyricist: String
     let release: String
     var isStar: Bool = false
+    
     enum CodingKeys: String, CodingKey {
         case brand, no, title, singer, composer, lyricist, release
     }

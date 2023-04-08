@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     private lazy var presenter = HomePresenter(viewController: self)
     private lazy var loadIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)

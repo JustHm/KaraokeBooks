@@ -45,8 +45,11 @@ final class FavoriteSongViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reload),
+                                               name: Notification.Name("change"),
+                                               object: nil)
     }
-    
 }
 
 extension FavoriteSongViewController: FavoriteSongProtocol {
@@ -80,6 +83,9 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
     }
 }
 private extension FavoriteSongViewController {
+    @objc func reload() {
+        presenter.reload()
+    }
     @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]

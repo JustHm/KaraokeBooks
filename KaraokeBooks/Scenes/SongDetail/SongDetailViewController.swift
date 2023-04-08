@@ -156,6 +156,7 @@ private extension SongDetailViewController {
     }
     @objc func didTapStarButton() {
         presenter.didTapStarButton()
+        NotificationCenter.default.post(name: Notification.Name("change"), object: nil)
     }
     @objc func didTapCloseButton() {
         presenter.didTapCloseButton()
