@@ -2,9 +2,16 @@
 노래방 책자 어플
 TJ, KY 노래방의 곡 정보, 최신곡, 인기차트 등을 확인하고 검색할 수 있는 어플
 
-Swift, UIKit
+자신의 애창곡을 담아 확인 할 수 있다.
 
 [앱스토어](https://apps.apple.com/kr/app/%EB%85%B8%EB%9E%98%EB%B0%A9book/id1672848960)
+
+## Environment
+- MVP Architecture
+- Swift, UIKit
+
+## Skills
+- Swift Concurrency (async/await)
 
 ## Preview
 <div>
