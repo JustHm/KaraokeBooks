@@ -10,10 +10,19 @@ import SnapKit
 
 final class RecentSongViewController: UIViewController {
     private lazy var presenter = RecentSongPresenter(viewController: self)
+    private lazy var dateField: UITextField = {
+        let field = UITextField()
+        field.inputView = currentDatePicker
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월"
+        field.text = formatter.string(from: Date())
+        field.borderStyle = .roundedRect
+        return field
+    }()
     private lazy var currentDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.locale = Locale(identifier: "ko_KR")
-        datePicker.datePickerMode = .date
+        datePicker.datePickerMode = .init(rawValue: 4269) ?? .date //왜 되는거지..?
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.maximumDate = Date()
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
@@ -53,14 +62,32 @@ extension RecentSongViewController: RecentSongProtocol {
     func reloadTableView() {
         recentSongTableView.reloadData()
     }
+    func setupToolBar() {
+        let toolBar = UIToolbar()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonHandeler))
+
+        toolBar.items = [flexibleSpace, doneButton]
+        // 적절한 사이즈로 toolBar의 크기를 만들어 줍니다.
+        toolBar.sizeToFit()
+
+        // textField의 경우 클릭 시 키보드 위에 AccessoryView가 표시된다고 합니다.
+        // 현재 inputView를 datePicker로 만들어 줬으니 datePicker위에 표시되겠죠?
+        dateField.inputAccessoryView = toolBar
+    }
     func setupViews() {
+        setupToolBar()
         view.backgroundColor = .customBackground
-        navigationItem.titleView = currentDatePicker
-        [recentSongTableView, brandSegmentedControl].forEach {
+        navigationItem.title = "최신곡"
+        [dateField, recentSongTableView, brandSegmentedControl].forEach {
             view.addSubview($0)
         }
-        brandSegmentedControl.snp.makeConstraints {
+        dateField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+            $0.right.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        }
+        brandSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(dateField.snp.bottom).offset(16.0)
             $0.left.right.equalToSuperview().inset(16.0)
         }
         recentSongTableView.snp.makeConstraints {
@@ -83,6 +110,19 @@ private extension RecentSongViewController {
     }
     @objc func dateChanged(sender: UIDatePicker) {
         let date = sender.date
-        presenter.dateChanged(date: date)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월"
+        dateField.text = formatter.string(from: date)
+    }
+    @objc func doneButtonHandeler(_ sender: UIBarButtonItem) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월"
+        dateField.text = formatter.string(from: currentDatePicker.date)
+        presenter.dateChanged(date: currentDatePicker.date)
+        print(currentDatePicker.date)
+        // 키보드 내리기
+        dateField.resignFirstResponder()
     }
 }
+
+//https://programmingwithswift.com/add-uidatepicker-in-a-uitextfield-with-swift/

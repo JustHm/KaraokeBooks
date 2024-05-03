@@ -9,6 +9,7 @@ import Foundation
 
 struct SongsResponse: Decodable {
     let data: [Song]
+    let page: Int
 }
 
 /// 노래검색 Response Model

@@ -32,7 +32,6 @@ final class RecentSongPresenter: NSObject {
     func viewDidLoad() {
         viewController?.setupViews()
         dateChanged(date: Date())
-        searchRecentSongs()
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
         currentBrand = brand
@@ -48,16 +47,15 @@ final class RecentSongPresenter: NSObject {
     private func searchRecentSongs() {
         Task { [weak self] in
             do {
-                async let tj = searchManager.searchReqeust(brand: .tj,
+                async let tj = searchManager.recentRequest(brand: .tj,
                                                            query: currentDate,
                                                            searchType: .release)
-                async let ky = searchManager.searchReqeust(brand: .kumyoung,
+                async let ky = searchManager.recentRequest(brand: .kumyoung,
                                                            query: currentDate,
                                                            searchType: .release)
                 let songs = try await [tj, ky]
                 self?.tjRecentSongs = songs[0]
                 self?.kyRecentSongs = songs[1]
-                
                 await MainActor.run { [weak self] in
                     self?.viewController?.reloadTableView()
                 }

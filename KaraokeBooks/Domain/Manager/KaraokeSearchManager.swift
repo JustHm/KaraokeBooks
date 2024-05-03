@@ -14,6 +14,9 @@ protocol KaraokeSearchManagerProtocol {
     func searchReqeust(brand: BrandType,
                        query: String,
                        searchType: SearchType) async throws -> [Song]
+    func recentRequest(brand: BrandType,
+                       query: String,
+                       searchType: SearchType) async throws -> [Song]
 }
 
 struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
@@ -37,7 +40,21 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
         let dataTask = AF.request(url, method: .get).serializingDecodable(SongsResponse.self)
         switch await dataTask.result {
         case .success(let data):
+            print(data.page)
             return data.data
+        case .failure(let error):
+            throw error //AFError
+        }
+    }
+    
+    func recentRequest(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
+        guard let url = searchURL.recentURL(brand: brand, query: query, searchType: searchType) else {
+            throw KaraokeError.invalidURL
+        }
+        let dataTask = AF.request(url, method: .get).serializingDecodable([Song].self)
+        switch await dataTask.result {
+        case .success(let data):
+            return data
         case .failure(let error):
             throw error //AFError
         }

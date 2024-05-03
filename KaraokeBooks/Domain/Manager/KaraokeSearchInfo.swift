@@ -19,6 +19,13 @@ struct KaraokeSearchInfo {
               let url = URL(string: encodedURLStr) else { return nil }
         return url
     }
+    func recentURL(brand: BrandType, query: String, searchType: SearchType) -> URL? {
+        let host = "https://api.manana.kr/karaoke/"
+        let str = host + "release.json?" + "brand=\(brand.rawValue)&" + "\(searchType.rawValue)=\(query)"
+        guard let encodedURLStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedURLStr) else { return nil }
+        return url
+    }
     /// Karaoke API URL Generator (인기순)
     /// - Parameters:
     ///   - brand: 노래방 브랜드(TJ, KY)
