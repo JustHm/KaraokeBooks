@@ -7,14 +7,7 @@
 
 import Foundation
 
-protocol UserDefaultsManagerProtocol {
-    func getFavoriteSong(brand: BrandType) -> [Song]
-    func addFavoriteSong(_ newSong: Song)
-    func deleteFavoriteSong(_ song: Song)
-    func isFavoriteSong(_ song: Song) -> Bool
-}
-
-struct UserDefaultsManager: UserDefaultsManagerProtocol {
+struct UserDefaultsManager {
     enum Key: String {
         case kyFavorite
         case tjFavorite

@@ -35,7 +35,7 @@ class PersistenceManager {
             return []
         }
     }
-    
+    @discardableResult
     func addFavoriteSong(song: Song) -> Bool {
         let entity = NSEntityDescription.entity(forEntityName: "FavoriteSong", in: self.context)
         if let entity {
@@ -62,7 +62,7 @@ class PersistenceManager {
         }
     }
     
-    func getCurrentObject(songID id: String) -> [FavoriteSong]? {
+    func getCurrentObject(songID id: String) -> [FavoriteSong] {
         let context = persistentContainer.viewContext
         let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id)
@@ -73,8 +73,25 @@ class PersistenceManager {
             return []
         }
     }
+    func fetchByBrand(brand: String) -> [FavoriteSong] {
+        let context = persistentContainer.viewContext
+        let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
+        request.predicate = NSPredicate(format: "brand == %@", brand)
+        do {
+            let song = try context.fetch(request)
+            return song
+        } catch {
+            return []
+        }
+    }
     
-    func deleteSong(object: NSManagedObject) -> Bool {
+    @discardableResult
+    func deleteSong(id: String) -> Bool {
+        let data = getCurrentObject(songID: id)
+        guard !data.isEmpty else { return false }
+        
+        let object = data[0] as NSManagedObject
+        
         self.context.delete(object)
         do {
             try self.context.save()

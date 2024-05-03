@@ -18,22 +18,16 @@ protocol SongDetailProtocol: AnyObject {
 
 final class SongDetailPresenter {
     private weak var viewController: SongDetailProtocol?
-    private let userDefaults: UserDefaultsManagerProtocol
     private var currentSong: Song
-    init(
-        viewController: SongDetailProtocol,
-        song: Song,
-        userDefaults: UserDefaultsManagerProtocol = UserDefaultsManager()
-    ) {
+    init(viewController: SongDetailProtocol, song: Song) {
         self.viewController = viewController
-        self.userDefaults = userDefaults
         self.currentSong = song
     }
     func viewDidLoad() {
         viewController?.setupViews()
         viewController?.setupViewHeight()
         viewController?.setupLinkURL(song: currentSong)
-        currentSong.isStar = userDefaults.isFavoriteSong(currentSong)
+        currentSong.isStar = PersistenceManager.shared.isExist(songID: currentSong.id)
         viewController?.setupStarButton(isStar: currentSong.isStar)
     }
     func updateViewConstraints() {
@@ -48,9 +42,9 @@ final class SongDetailPresenter {
     func didTapStarButton() {
         currentSong.isStar.toggle()
         if currentSong.isStar {
-            userDefaults.addFavoriteSong(currentSong)
+            PersistenceManager.shared.addFavoriteSong(song: currentSong)
         } else {
-            userDefaults.deleteFavoriteSong(currentSong)
+            PersistenceManager.shared.deleteSong(id: currentSong.id)
         }
         viewController?.setupStarButton(isStar: currentSong.isStar)
     }

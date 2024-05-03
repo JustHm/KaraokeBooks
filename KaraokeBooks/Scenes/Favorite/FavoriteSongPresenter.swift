@@ -16,28 +16,53 @@ protocol FavoriteSongProtocol: AnyObject {
 
 final class FavoriteSongPresenter: NSObject {
     private weak var viewController: FavoriteSongProtocol?
-    private let userDefaults: UserDefaultsManagerProtocol!
     private var favoriteSongs: [Song]
     private var currentBrand: BrandType = BrandType.allCases[0]
-    init(
-        viewController: FavoriteSongProtocol,
-        userDefaults: UserDefaultsManagerProtocol = UserDefaultsManager()
-    ) {
+    init(viewController: FavoriteSongProtocol) {
         self.viewController = viewController
-        self.userDefaults = userDefaults
-        favoriteSongs = userDefaults.getFavoriteSong(brand: currentBrand)
+        favoriteSongs = PersistenceManager.shared.fetchData().map({
+            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
+            return Song(brand: brand,
+                        no: $0.number!,
+                        title: $0.title!,
+                        singer: $0.singer!,
+                        composer: $0.composer!,
+                        lyricist: $0.lyricist!,
+                        release: "",
+                        isStar: true)
+        })
     }
     func viewDidLoad() {
         viewController?.setupViews()
         viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
-        favoriteSongs = userDefaults.getFavoriteSong(brand: brand)
+        favoriteSongs = PersistenceManager.shared.fetchByBrand(brand: brand.name).map({
+            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
+            return Song(brand: brand,
+                        no: $0.number!,
+                        title: $0.title!,
+                        singer: $0.singer!,
+                        composer: $0.composer!,
+                        lyricist: $0.lyricist!,
+                        release: "",
+                        isStar: true)
+        })
         viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
         viewController?.reloadTableView()
     }
     func reload() {
-        favoriteSongs = userDefaults.getFavoriteSong(brand: currentBrand)
+        favoriteSongs = PersistenceManager.shared.fetchByBrand(brand: currentBrand.name).map({
+            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
+            return Song(brand: brand,
+                        no: $0.number!,
+                        title: $0.title!,
+                        singer: $0.singer!,
+                        composer: $0.composer!,
+                        lyricist: $0.lyricist!,
+                        release: "",
+                        isStar: true)
+        })
         viewController?.reloadTableView()
     }
 }
@@ -63,7 +88,7 @@ extension FavoriteSongPresenter: UITableViewDelegate {
         case .delete:
             let song = favoriteSongs[indexPath.row]
             favoriteSongs.remove(at: indexPath.row)
-            userDefaults.deleteFavoriteSong(song)
+            PersistenceManager.shared.deleteSong(id: song.id)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
         default:
