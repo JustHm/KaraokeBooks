@@ -8,11 +8,11 @@
 import Foundation
 /// 노래 검색 종류 (URL에 들어감)
 enum SearchType: String {
-    case song, singer
+    case title, singer
     case popular, release//, no
     var title: String {
         switch self {
-        case .song:
+        case .title:
             return "노래 검색"
         case .singer:
             return "가수 검색"

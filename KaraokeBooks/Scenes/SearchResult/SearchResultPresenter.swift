@@ -20,7 +20,7 @@ final class SearchResultPresenter: NSObject {
     private weak var viewController: SearchResultViewController?
     private let searchManager: KaraokeSearchManagerProtocol!
     private var currentBrand: BrandType = BrandType.allCases[0]
-    private var currentSearchType: SearchType = .song
+    private var currentSearchType: SearchType = .title
     private var query: String = ""
     private var result: [Song] = []
     init(
@@ -68,11 +68,11 @@ extension SearchResultPresenter: UISearchBarDelegate {
         guard let title = searchBar.scopeButtonTitles?[selectedScope] else { return }
         switch title {
         case "노래 검색":
-            currentSearchType = .song
+            currentSearchType = .title
         case "가수 검색":
             currentSearchType = .singer
         default:
-            currentSearchType = .song
+            currentSearchType = .title
         }
         viewController?.setupNavigationTitle(title: title)
         searchSongs()

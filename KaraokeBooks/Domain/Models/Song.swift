@@ -6,6 +6,11 @@
 //
 
 import Foundation
+
+struct SongsResponse: Decodable {
+    let data: [Song]
+}
+
 /// 노래검색 Response Model
 struct Song: Codable, Identifiable {
     var id: String { return String(brand.name + no) }

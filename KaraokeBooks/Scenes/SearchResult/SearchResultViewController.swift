@@ -79,10 +79,10 @@ extension SearchResultViewController: SearchResultProtocol {
         }
     }
     func setupNavigationBar() {
-        navigationItem.title = SearchType.song.title
+        navigationItem.title = SearchType.title.title
         navigationItem.searchController = searchController
-        searchController.searchBar.placeholder = SearchType.song.title
-        searchController.searchBar.scopeButtonTitles = [SearchType.song.title,
+        searchController.searchBar.placeholder = SearchType.title.title
+        searchController.searchBar.scopeButtonTitles = [SearchType.title.title,
                                                         SearchType.singer.title]
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false

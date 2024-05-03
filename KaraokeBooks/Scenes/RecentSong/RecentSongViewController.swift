@@ -14,7 +14,7 @@ final class RecentSongViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.locale = Locale(identifier: "ko_KR")
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
+        datePicker.preferredDatePickerStyle = .wheels
         datePicker.maximumDate = Date()
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         return datePicker

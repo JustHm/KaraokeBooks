@@ -31,14 +31,13 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
         }
     }
     func searchReqeust(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
-        guard let url = searchURL.searchURL(query: query, searchType: searchType) else {
+        guard let url = searchURL.searchURL(brand: brand, query: query, searchType: searchType) else {
             throw KaraokeError.invalidURL
         }
-        let param = KaraokeRequestModel(brand: brand.rawValue)
-        let dataTask = AF.request(url, method: .get, parameters: param).serializingDecodable([Song].self)
+        let dataTask = AF.request(url, method: .get).serializingDecodable(SongsResponse.self)
         switch await dataTask.result {
         case .success(let data):
-            return data
+            return data.data
         case .failure(let error):
             throw error //AFError
         }
