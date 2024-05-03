@@ -10,7 +10,7 @@ import CoreData
 class PersistenceManager {
     static var shared: PersistenceManager = PersistenceManager()
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Model.xcdatamodeld")
+        let container = NSPersistentContainer(name: "SongModel")
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -24,12 +24,14 @@ class PersistenceManager {
         return self.persistentContainer.viewContext
     }
     
-    func fetchData(request: NSManagedObject) -> [FavoriteSong] {
+    func fetchData() -> [FavoriteSong] {
         do {
             let fetchRequest = FavoriteSong.fetchRequest()
-            return try self.context.fetch(fetchRequest)
+            let data = try self.context.fetch(fetchRequest)
+            return data
         } catch {
             //ERROR
+            print("\(error.localizedDescription)")
             return []
         }
     }
@@ -39,7 +41,7 @@ class PersistenceManager {
         if let entity {
             let managedObject = NSManagedObject(entity: entity, insertInto: self.context)
             managedObject.setValue(song.id, forKey: "id")
-            managedObject.setValue(song.brand, forKey: "brand")
+            managedObject.setValue(song.brand.name, forKey: "brand")
             managedObject.setValue(song.title, forKey: "title")
             managedObject.setValue(song.no, forKey: "number")
             managedObject.setValue(song.singer, forKey: "singer")
@@ -88,9 +90,11 @@ class PersistenceManager {
         let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id)
         do {
-            let _ = try context.fetch(request)
+            let data = try self.context.fetch(request)
+            if data.isEmpty { return false }
             return true
         } catch {
+            print(error.localizedDescription)
             return false
         }
     }

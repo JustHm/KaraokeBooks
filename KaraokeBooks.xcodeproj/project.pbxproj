@@ -13,6 +13,7 @@
 		2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BC299E68BF0059222E /* SearchResultViewController.swift */; };
 		2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BE299E68E80059222E /* SearchResultPresenter.swift */; };
 		227DC65429C0990500AAC9D2 /* SongTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227DC65329C0990500AAC9D2 /* SongTableView.swift */; };
+		22A375AC2BE4DD9A00902081 /* SongModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22A375AA2BE4DD9A00902081 /* SongModel.xcdatamodeld */; };
 		22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501192993EA4E00677964 /* AppDelegate.swift */; };
 		22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011B2993EA4E00677964 /* SceneDelegate.swift */; };
 		22B501232993EA4E00677964 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B501222993EA4E00677964 /* Assets.xcassets */; };
@@ -39,7 +40,6 @@
 		22B50179299796BC00677964 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B50178299796BC00677964 /* UserDefaultsManager.swift */; };
 		22B5017F2998EAD100677964 /* FavoriteSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5017E2998EAD100677964 /* FavoriteSongViewController.swift */; };
 		22B501812998EAED00677964 /* FavoriteSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501802998EAED00677964 /* FavoriteSongPresenter.swift */; };
-		22E0A83E2BE4B80D0024EBE7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22E0A83C2BE4B80D0024EBE7 /* Model.xcdatamodeld */; };
 		22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +50,7 @@
 		2261D7BC299E68BF0059222E /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2261D7BE299E68E80059222E /* SearchResultPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultPresenter.swift; sourceTree = "<group>"; };
 		227DC65329C0990500AAC9D2 /* SongTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableView.swift; sourceTree = "<group>"; };
+		22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SongModel.xcdatamodel; sourceTree = "<group>"; };
 		22B501162993EA4E00677964 /* KaraokeBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaraokeBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B501192993EA4E00677964 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B5011B2993EA4E00677964 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,7 +77,6 @@
 		22B50178299796BC00677964 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		22B5017E2998EAD100677964 /* FavoriteSongViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongViewController.swift; sourceTree = "<group>"; };
 		22B501802998EAED00677964 /* FavoriteSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongPresenter.swift; sourceTree = "<group>"; };
-		22E0A83D2BE4B80D0024EBE7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,13 +214,13 @@
 		22B501612993EBE800677964 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				22E0A83C2BE4B80D0024EBE7 /* Model.xcdatamodeld */,
 				22333BE529ADE9A800C0A56D /* KaraokeError.swift */,
 				22B501592993EB4F00677964 /* Song.swift */,
 				22B501702996868300677964 /* KaraokeRequestModel.swift */,
 				22B50174299686B000677964 /* RankDataType.swift */,
 				22B501722996869E00677964 /* BrandType.swift */,
 				22B501662993F40F00677964 /* HomeList.swift */,
+				22A375AA2BE4DD9A00902081 /* SongModel.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -285,7 +285,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					22B501152993EA4E00677964 = {
 						CreatedOnToolsVersion = 14.2;
@@ -334,6 +334,7 @@
 			files = (
 				22B501522993EAD800677964 /* KaraokeSearchInfo.swift in Sources */,
 				22B501562993EB0E00677964 /* SongTableViewCell.swift in Sources */,
+				22A375AC2BE4DD9A00902081 /* SongModel.xcdatamodeld in Sources */,
 				22B5014F2993EABA00677964 /* KaraokeSearchManager.swift in Sources */,
 				22B501812998EAED00677964 /* FavoriteSongPresenter.swift in Sources */,
 				2261D7B829990B660059222E /* RecentSongPresenter.swift in Sources */,
@@ -361,7 +362,6 @@
 				22B5017F2998EAD100677964 /* FavoriteSongViewController.swift in Sources */,
 				22B5014A2993EA7900677964 /* HomeViewController.swift in Sources */,
 				22B501652993F30F00677964 /* HomeItemCollectionViewCell.swift in Sources */,
-				22E0A83E2BE4B80D0024EBE7 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -548,7 +548,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -617,14 +617,14 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		22E0A83C2BE4B80D0024EBE7 /* Model.xcdatamodeld */ = {
+		22A375AA2BE4DD9A00902081 /* SongModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				22E0A83D2BE4B80D0024EBE7 /* Model.xcdatamodel */,
+				22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */,
 			);
-			currentVersion = 22E0A83D2BE4B80D0024EBE7 /* Model.xcdatamodel */;
-			name = Model.xcdatamodeld;
-			path = "/Users/justhm/Documents/Xcode-workspace/KaraokeBooks/KaraokeBooks/Domain/Models/Model.xcdatamodeld";
+			currentVersion = 22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */;
+			name = SongModel.xcdatamodeld;
+			path = "/Users/justhm/Documents/Xcode-workspace/KaraokeBooks/KaraokeBooks/Domain/Models/SongModel.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
