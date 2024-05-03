@@ -14,7 +14,7 @@ final class FavoriteSongViewController: UIViewController {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
             segmentedControl.insertSegment(
-                withTitle: value.replace,
+                withTitle: value.name,
                 at: index,
                 animated: false)
         }

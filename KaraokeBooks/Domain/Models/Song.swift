@@ -8,7 +8,7 @@
 import Foundation
 /// 노래검색 Response Model
 struct Song: Codable, Identifiable {
-    var id: String { return UUID().uuidString }
+    var id: String { return String(brand.name + no) }
     let brand: BrandType
     let no: String
     let title: String

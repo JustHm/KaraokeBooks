@@ -7,6 +7,14 @@
 
 import Foundation
 
+//        "brand": "joysound",
+//        "no": "918878",
+//        "title": "Darling Missing",
+//        "singer": "ZELDA",
+//        "composer": "小澤亜子",
+//        "lyricist": "高橋佐代子",
+//        "release": "2012-06-18"
+
 struct KaraokeSearchInfo {
     private let host = "https://api.manana.kr/karaoke/"
     ///  Karaoke API URL Generator (최신곡, 가수, 노래 검색)

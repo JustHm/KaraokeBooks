@@ -11,7 +11,7 @@ enum BrandType: String, CaseIterable, Codable {
     case tj
     case kumyoung
     //case joysound, dam, uga
-    var replace: String {
+    var name: String {
         switch self {
         case .tj:
             return "TJ"
