@@ -84,6 +84,7 @@ extension SearchResultViewController: SearchResultProtocol {
         searchController.searchBar.placeholder = SearchType.title.title
         searchController.searchBar.scopeButtonTitles = [SearchType.title.title,
                                                         SearchType.singer.title]
+        searchController.searchBar.showsScopeBar = true
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
     }

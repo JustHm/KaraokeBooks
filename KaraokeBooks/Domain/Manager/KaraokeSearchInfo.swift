@@ -7,16 +7,7 @@
 
 import Foundation
 
-//        "brand": "joysound",
-//        "no": "918878",
-//        "title": "Darling Missing",
-//        "singer": "ZELDA",
-//        "composer": "小澤亜子",
-//        "lyricist": "高橋佐代子",
-//        "release": "2012-06-18"
-
 struct KaraokeSearchInfo {
-    
     ///  Karaoke API URL Generator (최신곡, 가수, 노래 검색)
     /// - Parameters:
     ///   - query: 검색어 (최신곡 검색시 YYYYMM 또는 YYYYMMDD)
@@ -41,16 +32,3 @@ struct KaraokeSearchInfo {
         return url
     }
 }
-
-/*
- https://api.manana.kr/karaoke/release/202404/kumyoung.json
- https://api.manana.kr/karaoke/song/{title}/kumyoung.json
- https://api.manana.kr/karaoke/singer/{singer}/kumyoung.json
- https://api.manana.kr/karaoke/popular/{brand}/{period}.json
- https://api.manana.kr/karaoke/singer/{singer}/kumyoung.json
- 
- https://api.manana.kr/v2/karaoke/search.json?brand=tj&singer=서시
- https://api.manana.kr/v2/karaoke/search.json?brand=tj&title=서시
- https://api.manana.kr/v2/karaoke/search.json?brand=tj&title=%EC%84%9C%EC%8B%9C
- brand=\(brand)&singer=\(singer)
- */
