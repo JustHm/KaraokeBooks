@@ -22,17 +22,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func migrationToCoreData() {
         //데이터 이전 작업 UserDefaults -> CoreData
-        enum Key: String {
-            case kyFavorite
-            case tjFavorite
-        }
-        let tj = Key.tjFavorite
-        let ky = Key.kyFavorite
         var songs: [Song] = []
-        if let data = UserDefaults.standard.data(forKey: tj.rawValue) {
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsManager.Key.tjFavorite.rawValue) {
             songs.append(contentsOf: (try? PropertyListDecoder().decode([Song].self, from: data)) ?? [])
         }
-        if let data = UserDefaults.standard.data(forKey: ky.rawValue) {
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsManager.Key.kyFavorite.rawValue) {
             songs.append(contentsOf: (try? PropertyListDecoder().decode([Song].self, from: data)) ?? [])
         }
         
