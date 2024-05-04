@@ -38,9 +38,7 @@ final class RecentSongPresenter: NSObject {
         viewController?.reloadTableView()
     }
     func dateChanged(date: Date) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMM"
-        currentDate = formatter.string(from: date)
+        currentDate = date.dateToString(format: "yyyyMM")
         searchRecentSongs()
     }
     

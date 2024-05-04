@@ -13,9 +13,7 @@ final class RecentSongViewController: UIViewController {
     private lazy var dateField: UITextField = {
         let field = UITextField()
         field.inputView = currentDatePicker
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월"
-        field.text = formatter.string(from: Date())
+        field.text = Date().dateToString(format: "yyyy년 MM월")
         field.borderStyle = .roundedRect
         return field
     }()
@@ -110,19 +108,12 @@ private extension RecentSongViewController {
     }
     @objc func dateChanged(sender: UIDatePicker) {
         let date = sender.date
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월"
-        dateField.text = formatter.string(from: date)
+        dateField.text = date.dateToString(format: "yyyy년 MM월")
     }
     @objc func doneButtonHandeler(_ sender: UIBarButtonItem) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월"
-        dateField.text = formatter.string(from: currentDatePicker.date)
+        dateField.text = currentDatePicker.date.dateToString(format: "yyyy년 MM월")
         presenter.dateChanged(date: currentDatePicker.date)
-        print(currentDatePicker.date)
         // 키보드 내리기
         dateField.resignFirstResponder()
     }
 }
-
-//https://programmingwithswift.com/add-uidatepicker-in-a-uitextfield-with-swift/
