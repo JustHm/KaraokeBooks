@@ -23,6 +23,7 @@ final class SearchResultPresenter: NSObject {
     private var currentSearchType: SearchType = .title
     private var query: String = ""
     private var result: [Song] = []
+    private var currentPage: Int = 1
     init(
         viewController: SearchResultViewController,
         searchManager: KaraokeSearchManagerProtocol = KaraokeSearchManager()) {
@@ -35,17 +36,21 @@ final class SearchResultPresenter: NSObject {
         viewController?.setupNavigationBar()
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
+        currentPage = 1
+        result = []
         currentBrand = brand
-        searchSongs()
+        searchSongs(brand: brand, currentPage: currentPage)
     }
-    private func searchSongs() {
+    private func searchSongs(brand: BrandType, currentPage: Int) {
         guard query != "" else { return }
         Task { [weak self] in
             do {
                 let songs = try await self?.searchManager.searchReqeust(brand: currentBrand,
-                                                              query: query,
-                                                              searchType: currentSearchType)
-                self?.result = songs ?? []
+                                                                        query: query,
+                                                                        searchType: currentSearchType,
+                                                                        page: currentPage)
+                self?.result += songs ?? []
+                self?.currentPage += 1
                 await MainActor.run { [weak self] in
                     self?.viewController?.isEmptyTableView(isEmpty: !(songs?.isEmpty ?? false))
                     self?.viewController?.reloadTableView()
@@ -62,7 +67,9 @@ extension SearchResultPresenter: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
         query = text
-        searchSongs()
+        result = []
+        currentPage = 1
+        searchSongs(brand: currentBrand, currentPage: currentPage)
     }
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         guard let title = searchBar.scopeButtonTitles?[selectedScope] else { return }
@@ -75,7 +82,9 @@ extension SearchResultPresenter: UISearchBarDelegate {
             currentSearchType = .title
         }
         viewController?.setupNavigationTitle(title: title)
-        searchSongs()
+        result = []
+        currentPage = 1
+        searchSongs(brand: currentBrand, currentPage: currentPage)
     }
 }
 // MARK: SearchResultTableView DataSource
@@ -99,5 +108,18 @@ extension SearchResultPresenter: UITableViewDelegate {
         let song = result[indexPath.row]
         viewController?.moveToDetailViewController(song: song)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+// MARK: SearchResultTableView DataSourcePrefetching
+extension SearchResultPresenter: UITableViewDataSourcePrefetching {
+    // 곧 보여질 셀들을 미리 불러오는 역할
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard currentPage != 1 else { return }
+        
+        indexPaths.forEach { // 1 page당 25 item
+            if (($0.row + 1) / 20 + 1) == currentPage {
+                self.searchSongs(brand: currentBrand, currentPage: currentPage)
+            }
+        }
     }
 }

@@ -35,6 +35,7 @@ final class SearchResultViewController: UIViewController {
         let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.dataSource = presenter
         tableView.delegate = presenter
+        tableView.prefetchDataSource = presenter
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
         return tableView
     }()

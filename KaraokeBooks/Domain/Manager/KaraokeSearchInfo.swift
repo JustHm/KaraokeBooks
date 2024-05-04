@@ -8,17 +8,22 @@
 import Foundation
 
 struct KaraokeSearchInfo {
-    ///  Karaoke API URL Generator (최신곡, 가수, 노래 검색)
+    //https://api.manana.kr/v2/karaoke/search.json?brand=tj&title=사랑&limit=20&page=1
+    ///  Karaoke API URL Generator (가수, 노래 검색)
     /// - Parameters:
     ///   - query: 검색어 (최신곡 검색시 YYYYMM 또는 YYYYMMDD)
     ///   - searchType: 검색 유형
-    func searchURL(brand: BrandType, query: String, searchType: SearchType) -> URL? {
+    func searchURL(brand: BrandType, query: String, searchType: SearchType, page: Int) -> URL? {
         let host = "https://api.manana.kr/v2/karaoke/"
-        let str = host + "search.json?" + "brand=\(brand.rawValue)&" + "\(searchType.rawValue)=\(query)"
+        let str = host + "search.json?" + "brand=\(brand.rawValue)&" + "\(searchType.rawValue)=\(query)" + "&page=\(page)&limit=20"
         guard let encodedURLStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encodedURLStr) else { return nil }
         return url
     }
+    ///  Karaoke API URL Generator (최신곡)
+    /// - Parameters:
+    ///   - query: 검색어 (최신곡 검색시 YYYYMM 또는 YYYYMMDD)
+    ///   - searchType: 검색 유형
     func recentURL(brand: BrandType, query: String, searchType: SearchType) -> URL? {
         let host = "https://api.manana.kr/karaoke/"
         let str = host + "release.json?" + "brand=\(brand.rawValue)&" + "\(searchType.rawValue)=\(query)"
