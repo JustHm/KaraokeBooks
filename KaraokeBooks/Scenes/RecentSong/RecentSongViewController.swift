@@ -12,19 +12,14 @@ final class RecentSongViewController: UIViewController {
     private lazy var presenter = RecentSongPresenter(viewController: self)
     private lazy var dateField: UITextField = {
         let field = UITextField()
-        field.inputView = currentDatePicker
+        
+        field.datePickerMonthAndYear(target: self,
+                                     doneAction: #selector(doneAction),
+                                     cancelAction: #selector(cancelAction),
+                                     screenWidth: UIScreen.main.bounds.width)
         field.text = Date().dateToString(format: "yyyy년 MM월")
         field.borderStyle = .roundedRect
         return field
-    }()
-    private lazy var currentDatePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.locale = Locale(identifier: "ko_KR")
-        datePicker.datePickerMode = .init(rawValue: 4269) ?? .date //왜 되는거지..?
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.maximumDate = Date()
-        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
-        return datePicker
     }()
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
@@ -60,21 +55,7 @@ extension RecentSongViewController: RecentSongProtocol {
     func reloadTableView() {
         recentSongTableView.reloadData()
     }
-    func setupToolBar() {
-        let toolBar = UIToolbar()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonHandeler))
-
-        toolBar.items = [flexibleSpace, doneButton]
-        // 적절한 사이즈로 toolBar의 크기를 만들어 줍니다.
-        toolBar.sizeToFit()
-
-        // textField의 경우 클릭 시 키보드 위에 AccessoryView가 표시된다고 합니다.
-        // 현재 inputView를 datePicker로 만들어 줬으니 datePicker위에 표시되겠죠?
-        dateField.inputAccessoryView = toolBar
-    }
     func setupViews() {
-        setupToolBar()
         view.backgroundColor = .customBackground
         navigationItem.title = "최신곡"
         [dateField, recentSongTableView, brandSegmentedControl].forEach {
@@ -106,14 +87,17 @@ private extension RecentSongViewController {
         let brand = BrandType.allCases[selectedIndex]
         presenter.valueChangedBrandSegmentedControl(brand: brand)
     }
-    @objc func dateChanged(sender: UIDatePicker) {
-        let date = sender.date
-        dateField.text = date.dateToString(format: "yyyy년 MM월")
+    @objc
+    func cancelAction() {
+        self.dateField.resignFirstResponder()
     }
-    @objc func doneButtonHandeler(_ sender: UIBarButtonItem) {
-        dateField.text = currentDatePicker.date.dateToString(format: "yyyy년 MM월")
-        presenter.dateChanged(date: currentDatePicker.date)
-        // 키보드 내리기
-        dateField.resignFirstResponder()
+    @objc
+    func doneAction() {
+        if let datePickerView = self.dateField.inputView as? UIDatePicker {
+            let dateString = datePickerView.date.dateToString(format: "yyyy년 MM월")
+            self.dateField.text = dateString
+            presenter.dateChanged(date: datePickerView.date)
+            self.dateField.resignFirstResponder()
+        }
     }
 }
