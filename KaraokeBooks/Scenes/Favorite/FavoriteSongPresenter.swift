@@ -16,45 +16,23 @@ protocol FavoriteSongProtocol: AnyObject {
 
 final class FavoriteSongPresenter: NSObject {
     private weak var viewController: FavoriteSongProtocol?
-    private var favoriteSongs: [Song]
+    private var favoriteSongs: [Song] = []
     private var currentBrand: BrandType = BrandType.allCases[0]
+    
     init(viewController: FavoriteSongProtocol) {
         self.viewController = viewController
-        favoriteSongs = PersistenceManager.shared.fetchData().map({
-            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
-            return Song(brand: brand,
-                        no: $0.number!,
-                        title: $0.title!,
-                        singer: $0.singer!,
-                        composer: $0.composer!,
-                        lyricist: $0.lyricist!,
-                        release: "",
-                        isStar: true)
-        })
     }
     func viewDidLoad() {
         viewController?.setupViews()
-        viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
+        reload()
     }
     func valueChangedBrandSegmentedControl(brand: BrandType) {
-        favoriteSongs = PersistenceManager.shared.fetchByBrand(brand: brand.name).map({
-            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
-            return Song(brand: brand,
-                        no: $0.number!,
-                        title: $0.title!,
-                        singer: $0.singer!,
-                        composer: $0.composer!,
-                        lyricist: $0.lyricist!,
-                        release: "",
-                        isStar: true)
-        })
-        viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
-        viewController?.reloadTableView()
+        currentBrand = brand
+        reload()
     }
     func reload() {
         favoriteSongs = PersistenceManager.shared.fetchByBrand(brand: currentBrand.name).map({
-            let brand = $0.brand! == "TJ" ? BrandType.tj : BrandType.kumyoung
-            return Song(brand: brand,
+            return Song(brand: currentBrand,
                         no: $0.number!,
                         title: $0.title!,
                         singer: $0.singer!,
@@ -63,6 +41,7 @@ final class FavoriteSongPresenter: NSObject {
                         release: "",
                         isStar: true)
         })
+        viewController?.isEmptyTableView(isEmpty: !favoriteSongs.isEmpty)
         viewController?.reloadTableView()
     }
 }

@@ -8,8 +8,12 @@
 import UIKit
 import SnapKit
 import SafariServices
-
+// BViewControllerDelegate 프로토콜 정의
+protocol SongDetailViewControllerDelegate: AnyObject {
+    func didDismiss()
+}
 final class SongDetailViewController: UIViewController {
+    var delegate: SongDetailViewControllerDelegate?
     private var presenter: SongDetailPresenter!
     private var youtubeURL: URL?
     private lazy var titleImage: UIImageView = {
@@ -141,7 +145,9 @@ extension SongDetailViewController: SongDetailProtocol {
         }
     }
     func dismiss() {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.delegate?.didDismiss()
+        }
     }
     func moveToYoutube() {
         guard let url = youtubeURL else { return }
@@ -156,7 +162,6 @@ private extension SongDetailViewController {
     }
     @objc func didTapStarButton() {
         presenter.didTapStarButton()
-        NotificationCenter.default.post(name: Notification.Name("change"), object: nil)
     }
     @objc func didTapCloseButton() {
         presenter.didTapCloseButton()

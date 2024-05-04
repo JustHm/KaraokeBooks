@@ -19,10 +19,9 @@ final class FavoriteSongViewController: UIViewController {
                 animated: false)
         }
         segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(
-            self,
-            action: #selector(valueChangedBrandSegmentedControl),
-            for: .valueChanged
+        segmentedControl.addTarget(self,
+                                   action: #selector(valueChangedBrandSegmentedControl),
+                                   for: .valueChanged
         )
         return segmentedControl
     }()
@@ -45,10 +44,6 @@ final class FavoriteSongViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reload),
-                                               name: Notification.Name("change"),
-                                               object: nil)
     }
 }
 
@@ -79,16 +74,19 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
+        viewController.delegate = self
         present(viewController, animated: true)
     }
 }
-private extension FavoriteSongViewController {
-    @objc func reload() {
-        presenter.reload()
-    }
+extension FavoriteSongViewController {
     @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
         presenter.valueChangedBrandSegmentedControl(brand: brand)
+    }
+}
+extension FavoriteSongViewController: SongDetailViewControllerDelegate {
+    func didDismiss() {
+        self.presenter.reload()
     }
 }
