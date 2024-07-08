@@ -12,6 +12,7 @@ TJ, KY 노래방의 곡 정보, 최신곡, 인기차트 등을 확인하고 검�
 
 ## Skills
 - Swift Concurrency (async/await)
+- CoreData
 
 ### Library
 - Alamofire
