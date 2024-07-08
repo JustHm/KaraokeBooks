@@ -13,6 +13,10 @@ TJ, KY 노래방의 곡 정보, 최신곡, 인기차트 등을 확인하고 검�
 ## Skills
 - Swift Concurrency (async/await)
 
+### Library
+- Alamofire
+- SnapKit
+
 ## Preview
 <div>
   <img src="https://user-images.githubusercontent.com/21167914/236417018-0d62abef-975f-42b9-b83c-1c10bef296d6.PNG" width="180" height="400"/>
@@ -22,9 +26,6 @@ TJ, KY 노래방의 곡 정보, 최신곡, 인기차트 등을 확인하고 검�
   <img src="https://user-images.githubusercontent.com/21167914/236416523-e654f16d-5b1f-43e2-9698-10bdc7b1b250.PNG" width="180" height="400"/>
 </div>
 
-### Library
-- Alamofire
-- SnapKit
 
 ### API 
 - https://api.manana.kr/karaoke
