@@ -66,7 +66,7 @@ final class SearchResultPresenter: NSObject {
 extension SearchResultPresenter: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
-        query = text
+        query = text.replacingOccurrences(of: " ", with: "")
         result = []
         currentPage = 1
         searchSongs(brand: currentBrand, currentPage: currentPage)

@@ -41,6 +41,7 @@ extension UITextField {
         datePicker.locale = Locale(identifier: "ko_KR")
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.maximumDate = Date()
+        datePicker.datePickerMode = .date
         datePicker.datePickerMode = .init(rawValue: 4269) ?? .date /*왜 되는거지..?*/
         self.inputView = datePicker
         

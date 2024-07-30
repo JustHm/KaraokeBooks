@@ -42,7 +42,7 @@ final class HomePresenter: NSObject {
         Task { [weak self] in
             do {
                 let songs = try await searchManager.rankRequest(brand: currentBrand, date: currentDate)
-                self?.songs = songs ?? []
+                self?.songs = songs
                 await MainActor.run { [weak self] in
                     self?.viewController?.reloadTableView()
                     self?.viewController?.activeIndicator(isStart: false)
