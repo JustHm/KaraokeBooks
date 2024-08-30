@@ -39,6 +39,7 @@ final class SearchResultPresenter: NSObject {
         currentPage = 1
         result = []
         currentBrand = brand
+        viewController?.reloadTableView()
         searchSongs(brand: brand)
     }
     private func searchSongs(brand: BrandType) {
