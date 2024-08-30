@@ -53,9 +53,6 @@ final class HomePresenter: NSObject {
             }
         }
     }
-    func didTapRightSearchButton() {
-        viewController?.moveToSearchResultViewController()
-    }
 }
 // MARK: RankTableView DataSource
 extension HomePresenter: UITableViewDataSource {
@@ -99,7 +96,7 @@ extension HomePresenter: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeItemCollectionViewCell.identifier, for: indexPath) as? HomeItemCollectionViewCell
-        let title = HomeList.allCases[indexPath.row].rawValue
+        let title = HomeList.allCases[indexPath.row]
         cell?.setup(title: title)
         return cell ?? UICollectionViewCell()
     }
@@ -120,8 +117,8 @@ extension HomePresenter: UICollectionViewDelegateFlowLayout {
         switch HomeList.allCases[indexPath.row] {
         case .favourite:
             viewController?.moveToFavoriteViewController()
-        case .newSong:
-            viewController?.moveToRecentSongViewController()
+        case .search:
+            viewController?.moveToSearchResultViewController()
             break
         }
     }

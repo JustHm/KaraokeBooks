@@ -39,9 +39,9 @@ final class SearchResultPresenter: NSObject {
         currentPage = 1
         result = []
         currentBrand = brand
-        searchSongs(brand: brand, currentPage: currentPage)
+        searchSongs(brand: brand)
     }
-    private func searchSongs(brand: BrandType, currentPage: Int) {
+    private func searchSongs(brand: BrandType) {
         guard query != "" else { return }
         Task { [weak self] in
             do {
@@ -69,7 +69,7 @@ extension SearchResultPresenter: UISearchBarDelegate {
         query = text.replacingOccurrences(of: " ", with: "")
         result = []
         currentPage = 1
-        searchSongs(brand: currentBrand, currentPage: currentPage)
+        searchSongs(brand: currentBrand)
     }
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         guard let title = searchBar.scopeButtonTitles?[selectedScope] else { return }
@@ -84,7 +84,7 @@ extension SearchResultPresenter: UISearchBarDelegate {
         viewController?.setupNavigationTitle(title: title)
         result = []
         currentPage = 1
-        searchSongs(brand: currentBrand, currentPage: currentPage)
+        searchSongs(brand: currentBrand)
     }
 }
 // MARK: SearchResultTableView DataSource
@@ -118,7 +118,7 @@ extension SearchResultPresenter: UITableViewDataSourcePrefetching {
         
         indexPaths.forEach { // 1 page당 25 item
             if (($0.row + 1) / 20 + 1) == currentPage {
-                self.searchSongs(brand: currentBrand, currentPage: currentPage)
+                self.searchSongs(brand: currentBrand)
             }
         }
     }

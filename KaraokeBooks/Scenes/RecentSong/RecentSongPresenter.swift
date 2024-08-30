@@ -21,6 +21,8 @@ final class RecentSongPresenter: NSObject {
     private var currentBrand: BrandType = BrandType.allCases[0]
     private var tjRecentSongs: [Song] = []
     private var kyRecentSongs: [Song] = []
+    private var currentPage: Int = 1
+    
     init(
         viewController: RecentSongProtocol,
         searchManager: KaraokeSearchManagerProtocol = KaraokeSearchManager()
@@ -47,13 +49,16 @@ final class RecentSongPresenter: NSObject {
             do {
                 async let tj = searchManager.recentRequest(brand: .tj,
                                                            query: currentDate,
-                                                           searchType: .release)
+                                                           searchType: .release,
+                                                           page: currentPage)
                 async let ky = searchManager.recentRequest(brand: .kumyoung,
                                                            query: currentDate,
-                                                           searchType: .release)
+                                                           searchType: .release,
+                                                           page: currentPage)
                 let songs = try await [tj, ky]
                 self?.tjRecentSongs = songs[0]
                 self?.kyRecentSongs = songs[1]
+                self?.currentPage += 1
                 await MainActor.run { [weak self] in
                     self?.viewController?.reloadTableView()
                 }
@@ -101,5 +106,18 @@ extension RecentSongPresenter: UITableViewDelegate {
         }
         viewController?.moveToDetailViewController(song: song)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+// MARK: RecentSongTableView DataSourcePrefetching
+extension RecentSongPresenter: UITableViewDataSourcePrefetching {
+    // 곧 보여질 셀들을 미리 불러오는 역할
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard currentPage != 1 else { return }
+        
+        indexPaths.forEach { // 1 page당 25 item
+            if (($0.row + 1) / 20 + 1) == currentPage {
+                self.searchRecentSongs()
+            }
+        }
     }
 }

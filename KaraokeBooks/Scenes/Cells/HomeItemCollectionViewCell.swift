@@ -15,10 +15,17 @@ final class HomeItemCollectionViewCell: UICollectionViewCell {
         label.textColor = .white
         return label
     }()
+    private lazy var titleIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .white
+        return imageView
+    }()
     private lazy var gradientLayer = CAGradientLayer()
     
-    func setup(title: String) {
-        titleLabel.text = title
+    func setup(title: HomeList) {
+        titleLabel.text = title.rawValue
+        titleIcon.image = title == .favourite ? UIImage(systemName: "star") : UIImage(systemName: "magnifyingglass")
         setupLayout()
     }
 }
@@ -26,11 +33,15 @@ final class HomeItemCollectionViewCell: UICollectionViewCell {
 private extension HomeItemCollectionViewCell {
     func setupLayout() {
         setupGradientLayer()
+        let stack = UIStackView(arrangedSubviews: [titleIcon, titleLabel])
+        stack.axis = .vertical
+        stack.spacing = 8
+        
         contentView.layer.addSublayer(gradientLayer)
         contentView.layer.cornerRadius = 15.0
         contentView.clipsToBounds = true
-        addSubview(titleLabel)
-        titleLabel.snp.makeConstraints {
+        addSubview(stack)
+        stack.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }

@@ -101,12 +101,7 @@ extension HomeViewController: HomeProtocol {
     
     func setupNavigationBar() {
         navigationItem.title = "노래방Book"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "magnifyingglass"),
-            style: .plain,
-            target: self,
-            action: #selector(didTapRightSearchButton)
-        )
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     func moveToDetailViewController(song: Song) {
         let viewController = SongDetailViewController(song: song)
@@ -135,8 +130,5 @@ private extension HomeViewController {
         let selectedIndex = sender.selectedSegmentIndex
         let brand = BrandType.allCases[selectedIndex]
         presenter.rankRequest(brand: brand)
-    }
-    @objc func didTapRightSearchButton() {
-        presenter.didTapRightSearchButton()
     }
 }

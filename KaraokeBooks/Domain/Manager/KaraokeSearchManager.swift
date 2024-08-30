@@ -17,11 +17,13 @@ protocol KaraokeSearchManagerProtocol {
                        page: Int) async throws -> [Song]
     func recentRequest(brand: BrandType,
                        query: String,
-                       searchType: SearchType) async throws -> [Song]
+                       searchType: SearchType,
+                       page: Int) async throws -> [Song]
 }
 
-struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
+final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
     private let searchURL = KaraokeSearchInfo()
+    
     func rankRequest(brand: BrandType, date: RankDateType) async throws -> [Song] {
         guard let url = searchURL.rankingURL(brand: brand, date: date) else {
             throw KaraokeError.invalidURL
@@ -41,17 +43,17 @@ struct KaraokeSearchManager: KaraokeSearchManagerProtocol {
         let dataTask = AF.request(url, method: .get).serializingDecodable(SongsResponse.self)
         switch await dataTask.result {
         case .success(let data):
-            print(data.page)
             return data.data
         case .failure(let error):
             throw error //AFError
         }
     }
     
-    func recentRequest(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
-        guard let url = searchURL.recentURL(brand: brand, query: query, searchType: searchType) else {
+    func recentRequest(brand: BrandType, query: String, searchType: SearchType, page: Int) async throws -> [Song] {
+        guard let url = searchURL.recentURL(brand: brand, query: query, searchType: searchType, page: page) else {
             throw KaraokeError.invalidURL
         }
+        print(url)
         let dataTask = AF.request(url, method: .get).serializingDecodable([Song].self)
         switch await dataTask.result {
         case .success(let data):

@@ -24,9 +24,10 @@ struct KaraokeSearchInfo {
     /// - Parameters:
     ///   - query: 검색어 (최신곡 검색시 YYYYMM 또는 YYYYMMDD)
     ///   - searchType: 검색 유형
-    func recentURL(brand: BrandType, query: String, searchType: SearchType) -> URL? {
-        let host = "https://api.manana.kr/karaoke/"
-        let str = host + "release.json?" + "brand=\(brand.rawValue)&" + "\(searchType.rawValue)=\(query)"
+    ///   https://api.manana.kr/v2/karaoke/release.json?release=202408&brand=kumyoung
+    func recentURL(brand: BrandType, query: String, searchType: SearchType, page: Int) -> URL? {
+        let host = "https://api.manana.kr/v2/karaoke/"
+        let str = host + "release.json?" + "\(searchType.rawValue)=\(query)" + "&brand=\(brand.rawValue)" + "&page=\(page)&limit=20"
         guard let encodedURLStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encodedURLStr) else { return nil }
         return url

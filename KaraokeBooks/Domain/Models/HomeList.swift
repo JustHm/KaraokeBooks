@@ -9,8 +9,8 @@ import Foundation
 
 enum HomeList: String, CaseIterable {
     case favourite = "애창곡"
-    case newSong = "최신곡"
-    //case random = "복불복" //번호 검색이 잘 안되서 취소
+    case search = "노래 검색"
+//    case newSong = "최신곡" //최신곡 API 지원 중지...
 }
 
 
