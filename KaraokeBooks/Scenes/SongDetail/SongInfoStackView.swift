@@ -10,34 +10,29 @@ import UIKit
 final class SongInfoStackView: UIStackView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .label
         label.textColor = .customPrimaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var singerLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .label
         label.textColor = .customPrimaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var numberLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .label
         label.textColor = .customPrimaryText
         return label
     }()
     private lazy var composerLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .label
         label.textColor = .customPrimaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var lyricistLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .label
         label.textColor = .customPrimaryText
         label.numberOfLines = 0
         return label

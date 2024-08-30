@@ -26,7 +26,7 @@ final class SongDetailViewController: UIViewController {
         let stackView = SongInfoStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 5.0
+        stackView.spacing = 8.0
         stackView.distribution = .equalSpacing
         return stackView
     }()
