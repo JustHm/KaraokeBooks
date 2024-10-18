@@ -1,28 +1,43 @@
 # KaraokeBooks
 노래방 책자 어플
-TJ, KY 노래방의 곡 정보, 인기차트 등을 검색하고 애창곡을 저장할 수 있는 어플
 
-- Swift Concurrency를 사용해서 API 통신 구현
-- CoreData를 사용해 유저가 좋아요한 노래를 따로 저장 및 관리
+<img width="1306" alt="앱 스크린샷 정렬된거" src="https://github.com/user-attachments/assets/56187b27-b6a8-4750-aa79-7b25c3096dd4">
 
-[앱스토어](https://apps.apple.com/kr/app/%EB%85%B8%EB%9E%98%EB%B0%A9book/id1672848960)
+## 프로젝트 설명
+> 개발 인원: 1명 (iOS)
+> 
+> 개발 기간: 2023년 2월 (최초 개발기간 2주, 현재까지 서비스중)
+
+- TJ, KY 노래방의 곡 정보, 인기차트 등을 검색하고 애창곡을 저장할 수 있는 어플
+- 앱스토어에 출시 후 지속적으로 관리 중
+- [앱스토어](https://apps.apple.com/kr/app/%EB%85%B8%EB%9E%98%EB%B0%A9book/id1672848960)
 
 ## 사용 기술
 - MVP Architecture
-- Swift, UIKit
+
+  > ViewController에 책임을 나누기 위해 MVP 아키텍처 사용
+    View와 Presenter가 1:1 대응이 되게 구성
+
+- UIKit, SnapKit
+  
+  > Storyboard를 사용하지 않고 SnapKit 라이브러리를 사용해 뷰 구성
 - Swift Concurrency (async/await)
+  
+  > 노래방 곡 정보등의 데이터를 서버에서 가져올 때 비동기 API 통신 구현
 - CoreData
+
+  > 유저가 애창곡을 저장했을 때 데이터를 저장하기 위해 구현
+  > 
+  > 기존에는 UserDefaults에 저장하여 관리했지만, 업데이트 후 앱 실행시 UserDefaults에 있는 데이터를 CoreData로 마이그레이션 후 CoreData만 사용
+
+
+## Preview
+
+<img width="250" alt="앱 스크린샷 정렬된거" src="https://github.com/user-attachments/assets/eacc29ab-7067-4cc2-a6e4-ad6d332abe30">
 
 ## 사용 라이브러리
 - Alamofire
 - SnapKit
 
-## Preview
-https://github.com/user-attachments/assets/eacc29ab-7067-4cc2-a6e4-ad6d332abe30
-
-
 ### API 
 - https://api.manana.kr/karaoke
-
-
-
