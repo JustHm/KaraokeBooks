@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 // MARK: 더이상 사용하지 않음
 struct UserDefaultsManager {
     enum Key: String {

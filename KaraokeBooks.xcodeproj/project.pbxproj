@@ -16,6 +16,7 @@
 		2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7BE299E68E80059222E /* SearchResultPresenter.swift */; };
 		227DC65429C0990500AAC9D2 /* SongTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227DC65329C0990500AAC9D2 /* SongTableView.swift */; };
 		22A375AC2BE4DD9A00902081 /* SongModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22A375AA2BE4DD9A00902081 /* SongModel.xcdatamodeld */; };
+		22AE3BFA2CDDFAFB00CFE787 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 22AE3BF92CDDFAFB00CFE787 /* ReactorKit */; };
 		22B5011A2993EA4E00677964 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501192993EA4E00677964 /* AppDelegate.swift */; };
 		22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5011B2993EA4E00677964 /* SceneDelegate.swift */; };
 		22B501232993EA4E00677964 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B501222993EA4E00677964 /* Assets.xcassets */; };
@@ -90,6 +91,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B5015D2993EB9200677964 /* SnapKit in Frameworks */,
+				22AE3BFA2CDDFAFB00CFE787 /* ReactorKit in Frameworks */,
 				22B501602993EBA300677964 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,10 +200,10 @@
 				22B501532993EAF600677964 /* CleanSegmentedControl.swift */,
 				227DC65329C0990500AAC9D2 /* SongTableView.swift */,
 				22B501682995DD0300677964 /* Home */,
-				22B5016D2995E2B900677964 /* SongDetail */,
 				22B501822998EE6900677964 /* Favorite */,
-				2261D7B929990B6A0059222E /* RecentSong */,
 				2261D7C0299E690A0059222E /* SearchResult */,
+				22B5016D2995E2B900677964 /* SongDetail */,
+				2261D7B929990B6A0059222E /* RecentSong */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -278,6 +280,7 @@
 			packageProductDependencies = (
 				22B5015C2993EB9200677964 /* SnapKit */,
 				22B5015F2993EBA300677964 /* Alamofire */,
+				22AE3BF92CDDFAFB00CFE787 /* ReactorKit */,
 			);
 			productName = KaraokeBooks;
 			productReference = 22B501162993EA4E00677964 /* KaraokeBooks.app */;
@@ -311,6 +314,7 @@
 			packageReferences = (
 				22B5015B2993EB9200677964 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				22B5015E2993EBA300677964 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 			);
 			productRefGroup = 22B501172993EA4E00677964 /* Products */;
 			projectDirPath = "";
@@ -593,6 +597,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		22B5015B2993EB9200677964 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -612,6 +624,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		22AE3BF92CDDFAFB00CFE787 /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
 		22B5015C2993EB9200677964 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 22B5015B2993EB9200677964 /* XCRemoteSwiftPackageReference "SnapKit" */;
