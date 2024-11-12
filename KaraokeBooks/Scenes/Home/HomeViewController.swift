@@ -7,14 +7,29 @@
 
 import UIKit
 import SnapKit
+import RxCocoa
 import ReactorKit
 
-final class HomeViewController: UIViewController {
-    private lazy var presenter = HomePresenter(viewController: self)
+final class HomeViewController: UIViewController, View {
+    typealias Reactor = HomeReactor
+    
+    var disposeBag = DisposeBag()
+    
+    private var stackView = UIStackView()
+    private var moveToSearchButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    private var moveToBookmarkButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    
     private lazy var loadIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.color = .customPrimaryText
         indicator.isHidden = true
+        indicator.startAnimating()
         return indicator
     }()
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
@@ -26,27 +41,11 @@ final class HomeViewController: UIViewController {
                 animated: false)
         }
         segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(
-            self,
-            action: #selector(valueChangedBrandSegmentedControl),
-            for: .valueChanged
-        )
         return segmentedControl
-    }()
-    private lazy var homeItemCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = presenter
-        collectionView.delegate = presenter
-        collectionView.register(HomeItemCollectionViewCell.self, forCellWithReuseIdentifier: HomeItemCollectionViewCell.identifier)
-        collectionView.backgroundColor = .customBackground
-        collectionView.contentMode = .center
-        return collectionView
     }()
     private lazy var rankTableView: SongTableView = {
         let tableView = SongTableView(frame: .zero, style: .plain)
-        tableView.dataSource = presenter
-        tableView.delegate = presenter
+        tableView.delegate = self
         tableView.register(SongTableViewCell.self,
                            forCellReuseIdentifier: SongTableViewCell.identifier)
         tableView.register(RankTableViewHeader.self,
@@ -54,40 +53,38 @@ final class HomeViewController: UIViewController {
         return tableView
     }()
     
+    init(reactor: Reactor) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.viewDidLoad()
+        setupViews()
+        setupNavigationBar()
     }
 }
 
-extension HomeViewController: HomeProtocol {
-    func activeIndicator(isStart: Bool) {
-        loadIndicator.isHidden = !isStart
-        if isStart {
-            loadIndicator.startAnimating()
-        } else {
-            loadIndicator.stopAnimating()
-        }
-    }
-    
-    func reloadTableView() {
-        rankTableView.reloadData()
-    }
-    
+extension HomeViewController {
     func setupViews() {
-        [homeItemCollectionView, brandSegmentedControl, rankTableView, loadIndicator].forEach {
+        [brandSegmentedControl, rankTableView, loadIndicator].forEach {
             view.addSubview($0)
         }
         
-        homeItemCollectionView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
-            $0.height.equalTo(120)
-        }
+//        homeItemCollectionView.snp.makeConstraints {
+//            $0.left.right.equalToSuperview()
+//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
+//            $0.height.equalTo(120)
+//        }
         
         brandSegmentedControl.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(32.0)
-            $0.top.equalTo(homeItemCollectionView.snp.bottom)
+//            $0.top.equalTo(homeItemCollectionView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
         }
         
         rankTableView.snp.makeConstraints {
@@ -126,10 +123,47 @@ extension HomeViewController: HomeProtocol {
     }
 }
 
-private extension HomeViewController {
-    @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
-        let selectedIndex = sender.selectedSegmentIndex
-        let brand = BrandType.allCases[selectedIndex]
-        presenter.rankRequest(brand: brand)
+extension HomeViewController {
+    func bind(reactor: HomeReactor) {
+        //Action
+        brandSegmentedControl.rx.selectedSegmentIndex
+            .map{Reactor.Action.brandType(BrandType.allCases[$0])}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        rankTableView.rx.itemSelected
+            .map{Reactor.Action.songDetail($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        (rankTableView.headerView(forSection: 0) as? RankTableViewHeader)?
+            .dateSegmentedControl.rx.selectedSegmentIndex
+            .map{Reactor.Action.rankDateType(RankDateType.allCases[$0])}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        //State
+        reactor.state.map{$0.isLoading}
+            .distinctUntilChanged()
+            .bind(onNext: { [weak self] in
+                self?.loadIndicator.isHidden = !$0
+                $0 ? self?.loadIndicator.startAnimating() : self?.loadIndicator.stopAnimating()
+            })
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.popularList}
+            .observe(on: MainScheduler.instance)
+            .bind(to: rankTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
+                cell.setup(rank: index, song: item)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView
+            .dequeueReusableHeaderFooterView(
+                withIdentifier: RankTableViewHeader.identifier
+            ) as? RankTableViewHeader
+        header?.setup()
+        return header
     }
 }
