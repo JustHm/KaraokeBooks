@@ -14,7 +14,6 @@ class HomeReactor: Reactor {
     enum Action {
         case brandType(BrandType)
         case rankDateType(RankDateType)
-        case popularRanking(RankDateType)
         case songDetail(IndexPath)
     }
     
@@ -26,7 +25,7 @@ class HomeReactor: Reactor {
     }
     
     struct State {
-        var popularList: [Song] = []
+        var popularList: [Song] = [Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")]
         var brandType: BrandType?
         var dateType: RankDateType?
         var isLoading: Bool = false
@@ -38,17 +37,21 @@ class HomeReactor: Reactor {
         case let .brandType(brand):
             return .concat([
                 .just(.changeBrand(brand)), .just(.LoadState(true)),
-                .just(.popularList([])),
+                .just(.popularList([
+                    Song(brand: .kumyoung, no: "HI1", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1"),
+                    Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")
+                ]))
             ])
         case let .rankDateType(date):
             return .concat([
                 .just(.changeDate(date)), .just(.LoadState(true)),
-                .just(.popularList([]))
+                .just(.popularList([
+                    Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1"),
+                    Song(brand: .kumyoung, no: "HI1", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")
+                ]))
             ])
-        case let .popularRanking(randData):
-            return .just(.popularList([]))
         case let .songDetail(indexPath):
-            return .just(.LoadState(false))
+            return .just(.popularList([]))
         }
     }
     

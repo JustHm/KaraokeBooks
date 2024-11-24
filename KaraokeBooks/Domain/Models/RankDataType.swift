@@ -8,15 +8,17 @@
 import Foundation
 /// 인기 순위 노래 검색시 날짜 구분 (URL에 들어감)
 enum RankDateType: String, CaseIterable {
-    case daily, weekly, monthly
-    var replace: String {
-        switch self {
-        case .daily:
-            return "일간"
-        case .weekly:
-            return "주간"
-        case .monthly:
-            return "월간"
-        }
-    }
+    case daily = "일간"
+    case weekly = "주간"
+    case monthly = "월간"
+    //    var replace: String {
+    //        switch self {
+    //        case .daily:
+    //            return "일간"
+    //        case .weekly:
+    //            return "주간"
+    //        case .monthly:
+    //            return "월간"
+    //        }
+    //    }
 }

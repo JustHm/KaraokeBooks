@@ -32,7 +32,7 @@ final class ClearSegmentedControl: UISegmentedControl {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func setEachTextAttribute(defaultColor: UIColor, selectedColor: UIColor, font: UIFont) {
+    private func setEachTextAttribute(defaultColor: UIColor, selectedColor: UIColor, font: UIFont) {
         self.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: defaultColor,
             NSAttributedString.Key.font: font

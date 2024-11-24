@@ -15,15 +15,25 @@ final class HomeViewController: UIViewController, View {
     
     var disposeBag = DisposeBag()
     
-    private var stackView = UIStackView()
-    private var moveToSearchButton: UIButton = {
-        let button = UIButton()
+    private lazy var stackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 16
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    private lazy var favoriteListButton: MoveSceneButton = {
+        let button = MoveSceneButton(title: "애창곡", symbol: "star")
         return button
     }()
-    private var moveToBookmarkButton: UIButton = {
-        let button = UIButton()
+    
+    private lazy var searchButton: MoveSceneButton = {
+        let button = MoveSceneButton(title: "노래검색", symbol: "magnifyingglass")
         return button
     }()
+    
+    private lazy var rankTableHeader = RankTableViewHeader()
     
     private lazy var loadIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -32,6 +42,7 @@ final class HomeViewController: UIViewController, View {
         indicator.startAnimating()
         return indicator
     }()
+    
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
@@ -43,13 +54,11 @@ final class HomeViewController: UIViewController, View {
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
+    
     private lazy var rankTableView: SongTableView = {
         let tableView = SongTableView(frame: .zero, style: .plain)
-        tableView.delegate = self
         tableView.register(SongTableViewCell.self,
                            forCellReuseIdentifier: SongTableViewCell.identifier)
-        tableView.register(RankTableViewHeader.self,
-                           forHeaderFooterViewReuseIdentifier: RankTableViewHeader.identifier)
         return tableView
     }()
     
@@ -71,25 +80,30 @@ final class HomeViewController: UIViewController, View {
 
 extension HomeViewController {
     func setupViews() {
-        [brandSegmentedControl, rankTableView, loadIndicator].forEach {
+        [favoriteListButton, searchButton].forEach { stackView.addArrangedSubview($0) }
+        [stackView, rankTableHeader, brandSegmentedControl, rankTableView, loadIndicator].forEach {
             view.addSubview($0)
         }
         
-//        homeItemCollectionView.snp.makeConstraints {
-//            $0.left.right.equalToSuperview()
-//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
-//            $0.height.equalTo(120)
-//        }
+        stackView.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(16.0)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+            $0.height.equalTo(120)
+        }
+        
+        rankTableHeader.snp.makeConstraints {
+            $0.top.equalTo(stackView.snp.bottom).offset(16.0)
+            $0.left.right.equalToSuperview().inset(32.0)
+        }
         
         brandSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(rankTableHeader.snp.bottom)
             $0.left.right.equalToSuperview().inset(32.0)
-//            $0.top.equalTo(homeItemCollectionView.snp.bottom)
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
         }
         
         rankTableView.snp.makeConstraints {
+            $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(2.0)
             $0.left.right.equalToSuperview().inset(16.0)
-            $0.top.equalTo(brandSegmentedControl.snp.bottom)
             $0.bottom.equalToSuperview()
         }
         loadIndicator.snp.makeConstraints {
@@ -134,11 +148,6 @@ extension HomeViewController {
             .map{Reactor.Action.songDetail($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        (rankTableView.headerView(forSection: 0) as? RankTableViewHeader)?
-            .dateSegmentedControl.rx.selectedSegmentIndex
-            .map{Reactor.Action.rankDateType(RankDateType.allCases[$0])}
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
         
         //State
         reactor.state.map{$0.isLoading}
@@ -148,22 +157,11 @@ extension HomeViewController {
                 $0 ? self?.loadIndicator.startAnimating() : self?.loadIndicator.stopAnimating()
             })
             .disposed(by: disposeBag)
-        reactor.state.map{$0.popularList}
-            .observe(on: MainScheduler.instance)
+        reactor.state.observe(on: MainScheduler.instance)
+            .map{ $0.popularList }
             .bind(to: rankTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
-    }
-}
-
-extension HomeViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView
-            .dequeueReusableHeaderFooterView(
-                withIdentifier: RankTableViewHeader.identifier
-            ) as? RankTableViewHeader
-        header?.setup()
-        return header
     }
 }

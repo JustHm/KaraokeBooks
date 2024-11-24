@@ -8,59 +8,62 @@
 import UIKit
 import SnapKit
 
-/// 일간, 월간, 주간 선택됐는지 처리
-//protocol RankDateTableViewHeaderDelegate: AnyObject {
-//    func didSelectTag(_ selectedBrand: RankDateType)
-//}
-
-final class RankTableViewHeader: UITableViewHeaderFooterView {
-    static let identifier = "RankTableViewHeader"
-//    private weak var delegate: RankDateTableViewHeaderDelegate?
+final class RankTableViewHeader: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18.0, weight: .bold)
+        label.font = .systemFont(ofSize: 22.0, weight: .bold)
         label.text = "인기 차트"
         return label
+    }()
+    lazy var dateMenu: UIButton = {
+        let button = UIButton()
+        let actions = RankDateType.allCases.map {
+            UIAction(title: $0.rawValue, handler: { [weak self] action in
+                button.setTitle(action.title, for: .normal)
+            })
+        }
+        let menu = UIMenu(children: actions)
+        button.menu = menu
+        button.showsMenuAsPrimaryAction = true
+        button.setTitle("일간", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 22.0, weight: .bold)
+        
+        return button
     }()
     lazy var dateSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         RankDateType.allCases.enumerated()
             .forEach { (index, section) in
                 segmentedControl.insertSegment(
-                    withTitle: section.replace,
+                    withTitle: section.rawValue,
                     at: index,
                     animated: false)
             }
         segmentedControl.selectedSegmentIndex = 0;
-//        segmentedControl.addTarget(
-//            self,
-//            action: #selector(valueChangedDateSegmentedControl),
-//            for: .valueChanged)
         return segmentedControl
     }()
     
-    func setup(/*delegate: RankDateTableViewHeaderDelegate*/) {
-//        self.delegate = delegate
-        contentView.backgroundColor = .customForeground2
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupViews()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupViews() {
-        [titleLabel, dateSegmentedControl].forEach {
+        [dateMenu, titleLabel].forEach {
             addSubview($0)
         }
-        titleLabel.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(16.0)
-            $0.top.bottom.equalToSuperview().inset(8.0)
+        dateMenu.snp.makeConstraints {
+            $0.left.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
         }
-        dateSegmentedControl.snp.makeConstraints {
-            $0.right.equalToSuperview().inset(8.0)
-            $0.top.bottom.equalTo(titleLabel)
+        titleLabel.snp.makeConstraints {
+            $0.left.equalTo(dateMenu.snp.right).offset(8.0)
+            $0.top.bottom.equalToSuperview()
         }
     }
-//    @objc private func valueChangedDateSegmentedControl(_ sender: UISegmentedControl) {
-//        let selectedIndex = sender.selectedSegmentIndex
-//        let date = RankDateType.allCases[selectedIndex]
-//        delegate?.didSelectTag(date)
-//    }
 }
