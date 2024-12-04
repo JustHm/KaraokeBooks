@@ -148,6 +148,10 @@ extension HomeViewController {
             .map{Reactor.Action.songDetail($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        rankTableHeader.currentTitle
+            .map {Reactor.Action.rankDateType($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         //State
         reactor.state.map{$0.isLoading}

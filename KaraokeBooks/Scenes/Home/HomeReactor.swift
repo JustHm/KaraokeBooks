@@ -13,7 +13,7 @@ class HomeReactor: Reactor {
     
     enum Action {
         case brandType(BrandType)
-        case rankDateType(RankDateType)
+        case rankDateType(String?)
         case songDetail(IndexPath)
     }
     
@@ -32,7 +32,7 @@ class HomeReactor: Reactor {
     }
     
     
-    func mutate(action: Action) -> Observable<Mutation> {
+    func mutate(action: Action) -> Observable<Mutation> { //service 및 데이터 변환
         switch action {
         case let .brandType(brand):
             return .concat([
@@ -43,6 +43,7 @@ class HomeReactor: Reactor {
                 ]))
             ])
         case let .rankDateType(date):
+            let date = (RankDateType(rawValue: date ?? "일간") ?? RankDateType.daily)
             return .concat([
                 .just(.changeDate(date)), .just(.LoadState(true)),
                 .just(.popularList([
@@ -55,7 +56,7 @@ class HomeReactor: Reactor {
         }
     }
     
-    func reduce(state: State, mutation: Mutation) -> State {
+    func reduce(state: State, mutation: Mutation) -> State { // state data 주입
         var state = state
         switch mutation {
         case let .LoadState(isLoad):
