@@ -31,15 +31,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let data = UserDefaults.standard.data(forKey: UserDefaultsManager.Key.kyFavorite.rawValue) {
             songs.append(contentsOf: (try? PropertyListDecoder().decode([Song].self, from: data)) ?? [])
         }
-        
-        for song in songs {
-            if !PersistenceManager.shared.isExist(songID: song.id) {
-                let result = PersistenceManager.shared.addFavoriteSong(song: song)
-                if !result {
-                    print("Failed Migration: \(song.id), \(song.title)")
+        do {
+            for song in songs {
+                if try !PersistenceManager.shared.isExist(songID: song.id) {
+                    let result = try PersistenceManager.shared.addFavoriteSong(song: song)
+                    if !result {
+                        print("Failed Migration: \(song.id), \(song.title)")
+                    }
                 }
             }
-        }
+        } catch { print("Migration Error: \(error.localizedDescription)")}
     }
 }
 

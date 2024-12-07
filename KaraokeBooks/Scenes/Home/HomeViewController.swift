@@ -115,26 +115,6 @@ extension HomeViewController {
         navigationItem.title = "노래방Book"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    func moveToDetailViewController(song: Song) {
-        let viewController = SongDetailViewController(song: song)
-        present(viewController, animated: true)
-    }
-    func moveToFavoriteViewController() {
-        let viewController = FavoriteSongViewController()
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-    func moveToRecentSongViewController() {
-        let viewController = RecentSongViewController()
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-    func moveToRandomSongViewController() {
-        let viewController = FavoriteSongViewController()
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-    func moveToSearchResultViewController() {
-        let viewController = SearchResultViewController()
-        navigationController?.pushViewController(viewController, animated: true)
-    }
 }
 
 extension HomeViewController {
@@ -152,7 +132,14 @@ extension HomeViewController {
             .map {Reactor.Action.rankDateType($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+        favoriteListButton.rx.tap
+            .withUnretained(self)
+            .bind { owner, _ in
+                let reactor = FavoriteSongReactor()
+                let vc = FavoriteSongViewController(reactor: reactor)
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         //State
         reactor.state.map{$0.isLoading}
             .distinctUntilChanged()

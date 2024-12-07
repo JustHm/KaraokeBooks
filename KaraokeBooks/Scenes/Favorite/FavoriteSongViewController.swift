@@ -7,9 +7,12 @@
 
 import UIKit
 import SnapKit
+import ReactorKit
 
-final class FavoriteSongViewController: UIViewController {
-    private lazy var presenter = FavoriteSongPresenter(viewController: self)
+final class FavoriteSongViewController: UIViewController, View {
+    typealias Reactor = FavoriteSongReactor
+    var disposeBag = DisposeBag()
+    
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
@@ -19,16 +22,10 @@ final class FavoriteSongViewController: UIViewController {
                 animated: false)
         }
         segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self,
-                                   action: #selector(valueChangedBrandSegmentedControl),
-                                   for: .valueChanged
-        )
         return segmentedControl
     }()
     private lazy var favoriteSongTableView: SongTableView = {
         let tableView = SongTableView(frame: .zero, style: .plain)
-        tableView.dataSource = presenter
-        tableView.delegate = presenter
         tableView.register(SongTableViewCell.self,
                            forCellReuseIdentifier: SongTableViewCell.identifier)
         return tableView
@@ -41,13 +38,59 @@ final class FavoriteSongViewController: UIViewController {
         label.isHidden = true
         return label
     }()
+    
+    init(reactor: Reactor) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.viewDidLoad()
+        setupViews()
+    }
+    
+    func bind(reactor: FavoriteSongReactor) {
+        brandSegmentedControl.rx.selectedSegmentIndex
+            .map{Reactor.Action.brandType(BrandType.allCases[$0])}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+//        favoriteSongTableView.rx.itemSelected
+//            .map{Reactor.Action.songDetail($0)}
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
+        favoriteSongTableView.rx.itemDeleted
+            .map{Reactor.Action.deleteSong($0)}
+            .bind(to: reactor.action)
+            .disposed(by:disposeBag)
+        
+        //State
+        reactor.state.observe(on: MainScheduler.instance)
+            .map {$0.favoriteSongs}
+            .bind(to: favoriteSongTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
+                cell.setup(rank: index, song: item)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map {$0.isEmpty}
+            .distinctUntilChanged()
+            .bind { [weak self] in
+                self?.warningText.isHidden = !$0
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map {$0.errorDescription}
+            .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
+            .bind { [weak self] in
+                self?.showAlert(header: "Error", body: $0)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
-extension FavoriteSongViewController: FavoriteSongProtocol {
+
+extension FavoriteSongViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
         navigationItem.title = HomeList.favourite.rawValue
@@ -66,27 +109,11 @@ extension FavoriteSongViewController: FavoriteSongProtocol {
             $0.center.equalToSuperview()
         }
     }
-    func isEmptyTableView(isEmpty: Bool) {
-        warningText.isHidden = isEmpty
-    }
-    func reloadTableView() {
-        favoriteSongTableView.reloadData()
-    }
-    func moveToDetailViewController(song: Song) {
-        let viewController = SongDetailViewController(song: song)
-        viewController.delegate = self
-        present(viewController, animated: true)
-    }
-}
-extension FavoriteSongViewController {
-    @objc func valueChangedBrandSegmentedControl(_ sender: UISegmentedControl) {
-        let selectedIndex = sender.selectedSegmentIndex
-        let brand = BrandType.allCases[selectedIndex]
-        presenter.valueChangedBrandSegmentedControl(brand: brand)
-    }
-}
-extension FavoriteSongViewController: SongDetailViewControllerDelegate {
-    func didDismiss() {
-        self.presenter.reload()
+    
+    private func showAlert(header: String, body: String) {
+        let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true)
     }
 }
