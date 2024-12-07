@@ -48,6 +48,9 @@
 		22B50179299796BC00677964 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B50178299796BC00677964 /* UserDefaultsManager.swift */; };
 		22B5017F2998EAD100677964 /* FavoriteSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5017E2998EAD100677964 /* FavoriteSongViewController.swift */; };
 		22B501812998EAED00677964 /* FavoriteSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501802998EAED00677964 /* FavoriteSongPresenter.swift */; };
+		22BF3D242D04260900A7037C /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF3D232D04260900A7037C /* SearchType.swift */; };
+		22BF3D262D043F6000A7037C /* SongDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF3D252D043F6000A7037C /* SongDetailReactor.swift */; };
+		22BF3D282D0441C300A7037C /* FavoriteSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF3D272D0441C300A7037C /* FavoriteSongReactor.swift */; };
 		22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +92,9 @@
 		22B50178299796BC00677964 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		22B5017E2998EAD100677964 /* FavoriteSongViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongViewController.swift; sourceTree = "<group>"; };
 		22B501802998EAED00677964 /* FavoriteSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongPresenter.swift; sourceTree = "<group>"; };
+		22BF3D232D04260900A7037C /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
+		22BF3D252D043F6000A7037C /* SongDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailReactor.swift; sourceTree = "<group>"; };
+		22BF3D272D0441C300A7037C /* FavoriteSongReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavoriteSongReactor.swift; path = KaraokeBooks/Scenes/Favorite/FavoriteSongReactor.swift; sourceTree = SOURCE_ROOT; };
 		22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -236,6 +242,7 @@
 				22333BE529ADE9A800C0A56D /* KaraokeError.swift */,
 				22B501592993EB4F00677964 /* Song.swift */,
 				22B501702996868300677964 /* KaraokeRequestModel.swift */,
+				22BF3D232D04260900A7037C /* SearchType.swift */,
 				22B50174299686B000677964 /* RankDataType.swift */,
 				22B501722996869E00677964 /* BrandType.swift */,
 				22B501662993F40F00677964 /* HomeList.swift */,
@@ -259,6 +266,8 @@
 			children = (
 				22B501692995E2AB00677964 /* SongDetailViewController.swift */,
 				22B5016B2995E2B500677964 /* SongDetailPresenter.swift */,
+				22BF3D272D0441C300A7037C /* FavoriteSongReactor.swift */,
+				22BF3D252D043F6000A7037C /* SongDetailReactor.swift */,
 				22B5016E29963AEE00677964 /* SongInfoStackView.swift */,
 			);
 			path = SongDetail;
@@ -375,12 +384,15 @@
 				227DC65429C0990500AAC9D2 /* SongTableView.swift in Sources */,
 				22B5011C2993EA4E00677964 /* SceneDelegate.swift in Sources */,
 				226104662BE60BD800E77003 /* Date+.swift in Sources */,
+				22BF3D282D0441C300A7037C /* FavoriteSongReactor.swift in Sources */,
+				22BF3D242D04260900A7037C /* SearchType.swift in Sources */,
 				2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */,
 				22AE3BFC2CDDFD5C00CFE787 /* HomeReactor.swift in Sources */,
 				22B5016C2995E2B500677964 /* SongDetailPresenter.swift in Sources */,
 				22B501672993F40F00677964 /* HomeList.swift in Sources */,
 				22B5016A2995E2AB00677964 /* SongDetailViewController.swift in Sources */,
 				22B501582993EB1A00677964 /* RankTableViewHeader.swift in Sources */,
+				22BF3D262D043F6000A7037C /* SongDetailReactor.swift in Sources */,
 				22B5014C2993EA9C00677964 /* HomePresenter.swift in Sources */,
 				22B50177299790FF00677964 /* UIColor+.swift in Sources */,
 				22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */,

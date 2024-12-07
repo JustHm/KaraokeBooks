@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import RxSwift
 
 protocol KaraokeSearchManagerProtocol {
     func rankRequest(brand: BrandType,
@@ -62,4 +63,12 @@ final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
             throw error //AFError
         }
     }
+}
+
+extension Reactive where Base == KaraokeSearchManager {
+//    func fetch() -> Single<[Song]> {
+//        return Single.create { single in
+////            self.base.fetchData
+//        })
+//    }
 }
