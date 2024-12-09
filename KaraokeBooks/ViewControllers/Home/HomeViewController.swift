@@ -141,7 +141,8 @@ extension HomeViewController {
             }
             .disposed(by: disposeBag)
         //State
-        reactor.state.map{$0.isLoading}
+        reactor.state.observe(on: MainScheduler.instance)
+            .map{$0.isLoading}
             .distinctUntilChanged()
             .bind(onNext: { [weak self] in
                 self?.loadIndicator.isHidden = !$0

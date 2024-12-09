@@ -9,6 +9,21 @@ import Foundation
 import Alamofire
 import RxSwift
 
+enum NetworkError: Error {
+    case rankLoadFailed
+    case searchFailed
+}
+
+extension NetworkError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .rankLoadFailed: return "인기차트 불러오기 실패."
+        case .searchFailed: return "노래 검색 실패."
+        }
+    }
+}
+
+
 protocol KaraokeSearchManagerProtocol {
     func rankRequest(brand: BrandType,
                      date: RankDateType) async throws -> [Song]
@@ -22,7 +37,8 @@ protocol KaraokeSearchManagerProtocol {
                        page: Int) async throws -> [Song]
 }
 
-final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
+final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtocol {
+    static var shared: KaraokeSearchManager = KaraokeSearchManager()
     private let searchURL = KaraokeSearchInfo()
     
     func rankRequest(brand: BrandType, date: RankDateType) async throws -> [Song] {
@@ -34,7 +50,7 @@ final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
         case .success(let data):
             return data
         case .failure(let error):
-            throw error
+            throw NetworkError.rankLoadFailed
         }
     }
     func searchReqeust(brand: BrandType, query: String, searchType: SearchType, page: Int) async throws -> [Song] {
@@ -46,7 +62,7 @@ final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
         case .success(let data):
             return data.data
         case .failure(let error):
-            throw error //AFError
+            throw NetworkError.searchFailed //AFError
         }
     }
     
@@ -66,9 +82,52 @@ final class KaraokeSearchManager: KaraokeSearchManagerProtocol {
 }
 
 extension Reactive where Base == KaraokeSearchManager {
-//    func fetch() -> Single<[Song]> {
+    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]> {
+        return Single.create { single in
+            let task = Task {
+                do {
+                    let response = try await self.base.rankRequest(brand: brand, date: date)
+                    single(.success(response))
+                }
+                catch {
+                    single(.failure(error))
+                }
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    func searchReqeust(brand: BrandType, searchType: SearchType, query: String, page: Int) -> Single<[Song]> {
+        return Single.create { single in
+            let task = Task {
+                do {
+                    let response = try await self.base.searchReqeust(brand: brand, query: query, searchType: searchType, page: page)
+                    single(.success(response))
+                }
+                catch {
+                    single(.failure(error))
+                }
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+//    func recentRequest(brand: BrandType, query: String, searchType: SearchType, page: Int) -> Single<[Song]> {
 //        return Single.create { single in
-////            self.base.fetchData
-//        })
+//            let task = Task {
+//                do {
+//                    let response = try await self.base.recentRequest(brand: brand, query: query, searchType: searchType, page: page)
+//                    single(.success(response))
+//                }
+//                catch {
+//                    single(.failure(error))
+//                }
+//            }
+//            return Disposables.create {
+//                task.cancel()
+//            }
+//        }
 //    }
 }

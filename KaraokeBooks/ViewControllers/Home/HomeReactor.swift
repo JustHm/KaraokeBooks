@@ -9,12 +9,12 @@ import ReactorKit
 
 class HomeReactor: Reactor {
     var initialState = State()
-    private var searchManager = KaraokeSearchManager()
-    
+    private let service = KaraokeSearchManager.shared
     enum Action {
         case brandType(BrandType)
         case rankDateType(String?)
         case songDetail(IndexPath)
+        
     }
     
     enum Mutation {
@@ -22,34 +22,49 @@ class HomeReactor: Reactor {
         case LoadState(Bool)
         case changeBrand(BrandType)
         case changeDate(RankDateType)
+        case alertError(NetworkError?)
+        case null
     }
     
     struct State {
         var popularList: [Song] = [Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")]
-        var brandType: BrandType?
-        var dateType: RankDateType?
+        var brandType: BrandType = .tj
+        var dateType: RankDateType = .daily
         var isLoading: Bool = false
+        var errorDescription: String? = nil
     }
     
     
     func mutate(action: Action) -> Observable<Mutation> { //service 및 데이터 변환
         switch action {
         case let .brandType(brand):
-            return .concat([
-                .just(.changeBrand(brand)), .just(.LoadState(true)),
-                .just(.popularList([
-                    Song(brand: .kumyoung, no: "HI1", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1"),
-                    Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")
-                ]))
-            ])
+            
+            let changeBrand: Observable<Mutation> = .just(Mutation.changeBrand(brand))
+            let changestate: Observable<Mutation> = .just(Mutation.LoadState(true))
+            let response: Observable<Mutation> = service.rx.rankSongsRequest(brand: brand, date: currentState.dateType)
+                .asObservable().materialize()
+                .map { result -> Mutation in
+                    switch result {
+                    case .completed: return .null
+                    case let .next(songs): return .popularList(songs)
+                    case let .error(error): return .alertError(error as? NetworkError)
+                    }
+                }
+            return .concat([changeBrand, changestate, response])
         case let .rankDateType(date):
             let date = (RankDateType(rawValue: date ?? "일간") ?? RankDateType.daily)
+            let response: Observable<Mutation> = service.rx.rankSongsRequest(brand: currentState.brandType, date: date)
+                .asObservable().materialize()
+                .map { result -> Mutation in
+                    switch result {
+                    case .completed: return .null
+                    case let .next(songs): return .popularList(songs)
+                    case let .error(error): return .alertError(error as? NetworkError)
+                    }
+                }
             return .concat([
                 .just(.changeDate(date)), .just(.LoadState(true)),
-                .just(.popularList([
-                    Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1"),
-                    Song(brand: .kumyoung, no: "HI1", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")
-                ]))
+                response
             ])
         case let .songDetail(indexPath):
             return .just(.popularList([]))
@@ -68,6 +83,12 @@ class HomeReactor: Reactor {
         case let .popularList(songs):
             state.popularList = songs
             state.isLoading = false
+        case let .alertError(error):
+            if let error {
+                state.errorDescription = error.errorDescription
+            }
+            else { state.errorDescription = nil }
+        case .null: break
         }
         return state
     }

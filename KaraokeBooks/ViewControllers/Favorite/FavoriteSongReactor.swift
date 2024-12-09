@@ -10,7 +10,7 @@ import ReactorKit
 
 final class FavoriteSongReactor: Reactor {
     var initialState: State = State()
-    let persistence = PersistenceManager.shared
+    private let persistence = PersistenceManager.shared
     enum Action {
         case brandType(BrandType)
         case deleteSong(IndexPath)

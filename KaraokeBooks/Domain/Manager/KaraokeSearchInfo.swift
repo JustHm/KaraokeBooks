@@ -39,7 +39,7 @@ struct KaraokeSearchInfo {
     ///   - searchType: 인기순 검색 기본값
     func rankingURL(brand: BrandType, date: RankDateType, _ searchType: SearchType = .popular) -> URL? {
         let host = "https://api.manana.kr/karaoke/"
-        let str = host + "\(searchType.rawValue)/" + "\(brand.rawValue)/" + "\(date.rawValue).json"
+        let str = host + "\(searchType.rawValue)/" + "\(brand.rawValue)/" + "\(date.replace).json"
         guard let encodedURLStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encodedURLStr) else { return nil }
         return url
