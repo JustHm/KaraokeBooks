@@ -18,16 +18,17 @@ class HomeReactor: Reactor {
     }
     
     enum Mutation {
-        case popularList([Song])
-        case LoadState(Bool)
         case changeBrand(BrandType)
         case changeDate(RankDateType)
+        case popularList([Song])
+        case LoadState(Bool)
+        case moveToDetail(Song)
         case alertError(NetworkError?)
         case null
     }
     
     struct State {
-        var popularList: [Song] = [Song(brand: .kumyoung, no: "HI2", title: "HI1", singer: "HI1", composer: "HI1", lyricist: "HI1", release: "HI1")]
+        var popularList: [Song] = []
         var brandType: BrandType = .tj
         var dateType: RankDateType = .daily
         var isLoading: Bool = false
@@ -38,11 +39,10 @@ class HomeReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> { //service 및 데이터 변환
         switch action {
         case let .brandType(brand):
-            
             let changeBrand: Observable<Mutation> = .just(Mutation.changeBrand(brand))
             let changestate: Observable<Mutation> = .just(Mutation.LoadState(true))
             let response: Observable<Mutation> = service.rx.rankSongsRequest(brand: brand, date: currentState.dateType)
-                .asObservable().materialize()
+                .asObservable().materialize() //Event<>로 감싸주는것
                 .map { result -> Mutation in
                     switch result {
                     case .completed: return .null
@@ -67,13 +67,16 @@ class HomeReactor: Reactor {
                 response
             ])
         case let .songDetail(indexPath):
-            return .just(.popularList([]))
+            let song = currentState.popularList[indexPath.row]
+            return .just(.moveToDetail(song))
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State { // state data 주입
         var state = state
         switch mutation {
+        case let .moveToDetail(song):
+            break
         case let .LoadState(isLoad):
             state.isLoading = isLoad
         case let .changeDate(date):

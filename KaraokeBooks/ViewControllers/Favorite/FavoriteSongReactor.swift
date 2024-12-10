@@ -31,7 +31,7 @@ final class FavoriteSongReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .brandType(brand):
-            return persistence.rx.fetchFavoriteSongs(brand: initialState.currentBrand.rawValue)
+            return persistence.rx.fetchFavoriteSongs(brand: brand.rawValue)
                 .asObservable()
                 .materialize()
                 .map { event -> Event<Result<[Song], PersistenceError>> in
@@ -44,7 +44,7 @@ final class FavoriteSongReactor: Reactor {
                 .dematerialize()
                 .map{Mutation.favoriteList($0)}
         case let .deleteSong(indexPath):
-            let song = initialState.favoriteSongs[indexPath.row]
+            let song = currentState.favoriteSongs[indexPath.row]
             return persistence.rx.deleteSong(songID: song.id)
                 .asObservable()
                 .materialize()
