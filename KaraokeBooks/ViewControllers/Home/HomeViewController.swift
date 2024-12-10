@@ -156,4 +156,11 @@ extension HomeViewController {
             }
             .disposed(by: disposeBag)
     }
+    
+    private func showAlert(header: String, body: String) {
+        let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
 }

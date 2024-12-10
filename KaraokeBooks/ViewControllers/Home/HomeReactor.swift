@@ -96,5 +96,7 @@ class HomeReactor: Reactor {
         return state
     }
     
-    
+    func transform(action: Observable<Action>) -> Observable<Action> {
+        <#code#>
+    }
 }
