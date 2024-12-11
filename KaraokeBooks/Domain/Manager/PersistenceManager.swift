@@ -8,8 +8,12 @@
 import CoreData
 import RxSwift
 
+enum PersistenceEvent {
+    case deleted(Bool)
+}
 final class PersistenceManager: ReactiveCompatible {
     static var shared: PersistenceManager = PersistenceManager()
+    let event = PublishSubject<PersistenceEvent>()
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "SongModel")
         
@@ -24,7 +28,6 @@ final class PersistenceManager: ReactiveCompatible {
     var context: NSManagedObjectContext {
         return self.persistentContainer.viewContext
     }
-    
 //    func fetchData() -> [FavoriteSong] {
 //        do {
 //            let fetchRequest = FavoriteSong.fetchRequest()
@@ -81,8 +84,10 @@ final class PersistenceManager: ReactiveCompatible {
         self.context.delete(object)
         do {
             try self.context.save()
+            event.onNext(.deleted(true))
             return true
         } catch {
+            event.onNext(.deleted(false))
             throw PersistenceError.fetchError
         }
     }
@@ -105,7 +110,7 @@ extension Reactive where Base == PersistenceManager {
     func fetchFavoriteSongs(brand: String) -> Single<[Song]> {
         return Single.create { single in
             do {
-                var data = try self.base.fetchByBrand(brand: brand)
+                let data = try self.base.fetchByBrand(brand: brand)
                 let songs = data.compactMap { song -> Song? in
                     guard let brandString = song.brand,
                           let brand = BrandType(rawValue: brandString),

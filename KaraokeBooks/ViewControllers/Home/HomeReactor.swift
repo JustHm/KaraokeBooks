@@ -14,7 +14,6 @@ class HomeReactor: Reactor {
         case brandType(BrandType)
         case rankDateType(String?)
         case songDetail(IndexPath)
-        
     }
     
     enum Mutation {
@@ -28,6 +27,7 @@ class HomeReactor: Reactor {
     }
     
     struct State {
+        var selectedSong: Song?
         var popularList: [Song] = []
         var brandType: BrandType = .tj
         var dateType: RankDateType = .daily
@@ -76,7 +76,7 @@ class HomeReactor: Reactor {
         var state = state
         switch mutation {
         case let .moveToDetail(song):
-            break
+            state.selectedSong = song
         case let .LoadState(isLoad):
             state.isLoading = isLoad
         case let .changeDate(date):
@@ -95,8 +95,8 @@ class HomeReactor: Reactor {
         }
         return state
     }
-    
-    func transform(action: Observable<Action>) -> Observable<Action> {
-        <#code#>
+    // FavoriteSongReactor에서 SongDetailReactor를 return해 주어야 값 처리가 가능함.
+    func reactorForSetting(song: Song) -> SongDetailReactor? {
+        return SongDetailReactor(song: song)
     }
 }

@@ -10,7 +10,7 @@ import ReactorKit
 
 final class SongDetailReactor: Reactor {
     private let persistence = PersistenceManager.shared
-    var initialState: State = State()
+    var initialState: State
     private var youtube: URL? {
         get {
             let song = currentState.song
@@ -39,7 +39,9 @@ final class SongDetailReactor: Reactor {
         var song: Song = Song(brand: .kumyoung, no: "1", title: "1", singer: "1", composer: "1", lyricist: "1", release: "1")
         var errorMessage: String?
     }
-    
+    init(song: Song) {
+        self.initialState = State(song: song)
+    }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .starTapped:
@@ -47,7 +49,7 @@ final class SongDetailReactor: Reactor {
                 .asObservable().materialize()
                 .map { result -> SongDetailReactor.Mutation in
                     switch result {
-                    case let .next(done):
+                    case .next:
                         return Mutation.changeStar
                     case let .error(error):
                         let errorMessage = (error as? PersistenceError)?.errorDescription
@@ -57,12 +59,7 @@ final class SongDetailReactor: Reactor {
                     }
                 }
         case .youtubeTapped:
-            if let url = youtube {
-                return .just(Mutation.moveToYoutube(youtube))
-            }
-            else {
-                return .just(.alertError("곡 번호를 확인할 수 없습니다."))
-            }
+            return .just(Mutation.moveToYoutube(youtube))
         case .closeTapped:
             return .just(Mutation.close)
         }

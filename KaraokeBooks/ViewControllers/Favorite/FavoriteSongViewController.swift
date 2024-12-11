@@ -58,10 +58,10 @@ final class FavoriteSongViewController: UIViewController, View {
             .map{Reactor.Action.brandType(BrandType.allCases[$0])}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-//        favoriteSongTableView.rx.itemSelected
-//            .map{Reactor.Action.songDetail($0)}
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
+        favoriteSongTableView.rx.itemSelected
+            .map{Reactor.Action.songDetail($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         favoriteSongTableView.rx.itemDeleted
             .map{Reactor.Action.deleteSong($0)}
             .bind(to: reactor.action)
@@ -84,6 +84,14 @@ final class FavoriteSongViewController: UIViewController, View {
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
             .bind { [weak self] in
                 self?.showAlert(header: "Error", body: $0)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.compactMap{$0.selectedSong}
+            .bind { [weak self] song in
+                if let detailReactor = reactor.reactorForSetting() {
+                    let songDetailVC = SongDetailViewController(reactor: detailReactor)
+                    self?.present(songDetailVC, animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }

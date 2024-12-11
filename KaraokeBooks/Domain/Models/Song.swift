@@ -7,13 +7,18 @@
 
 import Foundation
 
-struct SongsResponse: Decodable {
+struct SongsResponse: Decodable, Equatable {
+    static func == (lhs: SongsResponse, rhs: SongsResponse) -> Bool {
+        if lhs.data == rhs.data && lhs.data == rhs.data { return true }
+        else { return false }
+    }
+    
     let data: [Song]
     let page: Int
 }
 
 /// 노래검색 Response Model
-struct Song: Codable, Identifiable {
+struct Song: Codable, Identifiable, Equatable {
     var id: String { return String(brand.name + no) }
     let brand: BrandType
     let no: String

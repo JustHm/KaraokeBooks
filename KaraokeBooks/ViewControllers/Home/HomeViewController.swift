@@ -155,6 +155,15 @@ extension HomeViewController {
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
+        reactor.state.compactMap{$0.selectedSong}
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] song in
+                if let detailReactor = reactor.reactorForSetting(song: song) {
+                    let songDetailVC = SongDetailViewController(reactor: detailReactor)
+                    self?.present(songDetailVC, animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
     private func showAlert(header: String, body: String) {

@@ -59,6 +59,7 @@ final class SongDetailViewController: UIViewController, View {
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -94,8 +95,8 @@ final class SongDetailViewController: UIViewController, View {
                 self?.starButton.setImage(UIImage(systemName: symbol), for: .normal)
             }
             .disposed(by: disposeBag)
-        reactor.state.map{$0.youtubeURL}
-            .compactMap{$0}
+        reactor.state.compactMap{$0.youtubeURL}
+            .distinctUntilChanged()
             .bind { [weak self] in
                 let viewController = SFSafariViewController(url: $0.absoluteURL)
                 self?.present(viewController, animated: true)
@@ -105,6 +106,12 @@ final class SongDetailViewController: UIViewController, View {
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
             .bind { [weak self] in
                 self?.showAlert(header: "Error", body: $0)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.song}
+            .distinctUntilChanged()
+            .bind { [weak self] song in
+                self?.songInfoStackView.setupLabelText(song: song)
             }
             .disposed(by: disposeBag)
     }
@@ -153,11 +160,3 @@ extension SongDetailViewController {
         present(alert, animated: true)
     }
 }
-//
-//
-
-//if isStar {
-//
-//} else {
-//    starButton.setImage(UIImage(systemName: "star"), for: .normal)
-//}

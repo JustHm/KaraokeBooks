@@ -49,7 +49,7 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         switch await dataTask.result {
         case .success(let data):
             return data
-        case .failure(let error):
+        case .failure:
             throw NetworkError.rankLoadFailed
         }
     }
@@ -61,7 +61,7 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         switch await dataTask.result {
         case .success(let data):
             return data.data
-        case .failure(let error):
+        case .failure:
             throw NetworkError.searchFailed //AFError
         }
     }
