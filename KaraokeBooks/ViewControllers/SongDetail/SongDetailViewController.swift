@@ -68,6 +68,7 @@ final class SongDetailViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        reactor?.action.onNext(.viewDidLoad)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -90,28 +91,38 @@ final class SongDetailViewController: UIViewController, View {
         reactor.state.map{$0.isStar}
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] in
-                let symbol = $0 ? "star.fill" : "star"
-                self?.starButton.setImage(UIImage(systemName: symbol), for: .normal)
+            .withUnretained(self)
+            .bind { owner, isStar in
+                let symbol = isStar ? "star.fill" : "star"
+                owner.starButton.setImage(UIImage(systemName: symbol), for: .normal)
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.youtubeURL}
             .distinctUntilChanged()
-            .bind { [weak self] in
-                let viewController = SFSafariViewController(url: $0.absoluteURL)
-                self?.present(viewController, animated: true)
+            .withUnretained(self)
+            .bind { owner, url in
+                let viewController = SFSafariViewController(url: url.absoluteURL)
+                owner.present(viewController, animated: true)
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.errorMessage}
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
-            .bind { [weak self] in
-                self?.showAlert(header: "Error", body: $0)
+            .withUnretained(self)
+            .bind { owner, msg in
+                owner.showAlert(header: "Error", body: msg)
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.song}
             .distinctUntilChanged()
-            .bind { [weak self] song in
-                self?.songInfoStackView.setupLabelText(song: song)
+            .withUnretained(self)
+            .bind { owner, song in
+                owner.songInfoStackView.setupLabelText(song: song)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.filter{$0.isDismiss}
+            .withUnretained(self)
+            .bind { owner, isDismiss in
+                owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
     }

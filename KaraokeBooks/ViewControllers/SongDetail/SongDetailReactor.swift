@@ -23,12 +23,13 @@ final class SongDetailReactor: Reactor {
         }
     }
     enum Action {
+        case viewDidLoad
         case starTapped
         case youtubeTapped
         case closeTapped
     }
     enum Mutation {
-        case changeStar
+        case changeStar(Bool)
         case moveToYoutube(URL?)
         case close
         case alertError(String?)
@@ -36,8 +37,9 @@ final class SongDetailReactor: Reactor {
     struct State {
         var youtubeURL: URL?
         var isStar: Bool = false
-        var song: Song = Song(brand: .kumyoung, no: "1", title: "1", singer: "1", composer: "1", lyricist: "1", release: "1")
+        var song: Song
         var errorMessage: String?
+        var isDismiss = false
     }
     init(song: Song) {
         self.initialState = State(song: song)
@@ -45,12 +47,38 @@ final class SongDetailReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .starTapped:
-            return persistence.rx.deleteSong(songID: currentState.song.id)
+            var result: Observable<Event<Bool>>
+            if currentState.isStar {
+                result = persistence.rx.deleteSong(songID: currentState.song.id)
+                    .asObservable().materialize()
+            }
+            else {
+                result = persistence.rx.addFavoriteSong(song: currentState.song)
+                    .asObservable().materialize()
+            }
+            return result.withUnretained(self)
+                .map { owner, result -> SongDetailReactor.Mutation in
+                switch result {
+                case let .next(isStar):
+                    return Mutation.changeStar(isStar)
+                case let .error(error):
+                    let errorMessage = (error as? PersistenceError)?.errorDescription
+                    return Mutation.alertError(errorMessage)
+                case .completed:
+                    return Mutation.alertError(nil)
+                }
+            }
+        case .youtubeTapped:
+            return .just(Mutation.moveToYoutube(youtube))
+        case .closeTapped:
+            return .just(Mutation.close)
+        case .viewDidLoad:
+            let isStar = persistence.rx.checkExistSong(songID: currentState.song.id)
                 .asObservable().materialize()
                 .map { result -> SongDetailReactor.Mutation in
                     switch result {
-                    case .next:
-                        return Mutation.changeStar
+                    case let .next(isStar):
+                        return Mutation.changeStar(isStar)
                     case let .error(error):
                         let errorMessage = (error as? PersistenceError)?.errorDescription
                         return Mutation.alertError(errorMessage)
@@ -58,19 +86,17 @@ final class SongDetailReactor: Reactor {
                         return Mutation.alertError(nil)
                     }
                 }
-        case .youtubeTapped:
-            return .just(Mutation.moveToYoutube(youtube))
-        case .closeTapped:
-            return .just(Mutation.close)
+            return isStar
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
-        case .changeStar:
-            state.isStar = !state.isStar
-        case .close: break
+        case let .changeStar(isStar):
+            state.isStar = isStar
+        case .close:
+            state.isDismiss = true
         case let .moveToYoutube(url):
             state.youtubeURL = url
         case let .alertError(msg):

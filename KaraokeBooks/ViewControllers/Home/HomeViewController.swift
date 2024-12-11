@@ -156,6 +156,7 @@ extension HomeViewController {
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
+            .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind { [weak self] song in
                 if let detailReactor = reactor.reactorForSetting(song: song) {

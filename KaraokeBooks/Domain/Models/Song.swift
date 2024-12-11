@@ -8,11 +8,6 @@
 import Foundation
 
 struct SongsResponse: Decodable, Equatable {
-    static func == (lhs: SongsResponse, rhs: SongsResponse) -> Bool {
-        if lhs.data == rhs.data && lhs.data == rhs.data { return true }
-        else { return false }
-    }
-    
     let data: [Song]
     let page: Int
 }
@@ -31,5 +26,12 @@ struct Song: Codable, Identifiable, Equatable {
     
     enum CodingKeys: String, CodingKey {
         case brand, no, title, singer, composer, lyricist, release
+    }
+}
+
+extension SongsResponse {
+    static func == (lhs: SongsResponse, rhs: SongsResponse) -> Bool {
+        if lhs.data == rhs.data && lhs.page == rhs.page { return true }
+        else { return false }
     }
 }

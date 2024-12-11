@@ -28,17 +28,7 @@ final class PersistenceManager: ReactiveCompatible {
     var context: NSManagedObjectContext {
         return self.persistentContainer.viewContext
     }
-//    func fetchData() -> [FavoriteSong] {
-//        do {
-//            let fetchRequest = FavoriteSong.fetchRequest()
-//            let data = try self.context.fetch(fetchRequest)
-//            return data
-//        } catch {
-//            //ERROR
-//            print("\(error.localizedDescription)")
-//            return []
-//        }
-//    }
+
     @discardableResult
     func addFavoriteSong(song: Song) throws -> Bool {
         let entity = NSEntityDescription.entity(forEntityName: "FavoriteSong", in: self.context)
