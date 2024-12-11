@@ -144,10 +144,11 @@ extension HomeViewController {
         reactor.state.observe(on: MainScheduler.instance)
             .map{$0.isLoading}
             .distinctUntilChanged()
-            .bind(onNext: { [weak self] in
-                self?.loadIndicator.isHidden = !$0
-                $0 ? self?.loadIndicator.startAnimating() : self?.loadIndicator.stopAnimating()
-            })
+            .withUnretained(self)
+            .bind { owner, isLoading in
+                owner.loadIndicator.isHidden = !isLoading
+                isLoading ? owner.loadIndicator.startAnimating() : owner.loadIndicator.stopAnimating()
+            }
             .disposed(by: disposeBag)
         reactor.state.observe(on: MainScheduler.instance)
             .map{ $0.popularList }
@@ -156,12 +157,12 @@ extension HomeViewController {
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
-            .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] song in
+            .withUnretained(self)
+            .bind { owner, song in
                 if let detailReactor = reactor.reactorForSetting(song: song) {
                     let songDetailVC = SongDetailViewController(reactor: detailReactor)
-                    self?.present(songDetailVC, animated: true)
+                    owner.present(songDetailVC, animated: true)
                 }
             }
             .disposed(by: disposeBag)

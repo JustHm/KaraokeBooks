@@ -21,7 +21,7 @@ class HomeReactor: Reactor {
         case changeDate(RankDateType)
         case popularList([Song])
         case LoadState(Bool)
-        case moveToDetail(Song)
+        case moveToDetail(Song?)
         case alertError(NetworkError?)
         case null
     }
@@ -68,7 +68,7 @@ class HomeReactor: Reactor {
             ])
         case let .songDetail(indexPath):
             let song = currentState.popularList[indexPath.row]
-            return .just(.moveToDetail(song))
+            return .concat([.just(.moveToDetail(song)), .just(.moveToDetail(nil))])
         }
     }
     

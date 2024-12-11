@@ -76,21 +76,24 @@ final class FavoriteSongViewController: UIViewController, View {
             .disposed(by: disposeBag)
         reactor.state.map {$0.isEmpty}
             .distinctUntilChanged()
-            .bind { [weak self] in
-                self?.warningText.isHidden = !$0
+            .withUnretained(self)
+            .bind { owner, isEmpty in
+                owner.warningText.isHidden = !isEmpty
             }
             .disposed(by: disposeBag)
         reactor.state.map {$0.errorDescription}
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
-            .bind { [weak self] in
-                self?.showAlert(header: "Error", body: $0)
+            .withUnretained(self)
+            .bind { owner, msg in
+                owner.showAlert(header: "Error", body: msg)
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
-            .bind { [weak self] song in
+            .withUnretained(self)
+            .bind { owner, song in
                 if let detailReactor = reactor.reactorForSetting() {
                     let songDetailVC = SongDetailViewController(reactor: detailReactor)
-                    self?.present(songDetailVC, animated: true)
+                    owner.present(songDetailVC, animated: true)
                 }
             }
             .disposed(by: disposeBag)
