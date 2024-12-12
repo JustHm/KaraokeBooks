@@ -19,4 +19,15 @@ enum BrandType: String, CaseIterable, Codable {
             return "KY"
         }
     }
+    
+    static func currentByName(name: String) -> Self? {
+        switch name {
+        case BrandType.tj.name:
+            return BrandType.tj
+        case BrandType.kumyoung.name:
+            return BrandType.kumyoung
+        default:
+            return nil
+        }
+    }
 }

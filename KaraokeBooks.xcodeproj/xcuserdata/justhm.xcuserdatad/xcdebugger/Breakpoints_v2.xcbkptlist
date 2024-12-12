@@ -7,31 +7,63 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7DD60F08-E5C5-4209-81CA-9F61FA44F2B4"
+            uuid = "C991851C-9A47-42E5-879D-AA5AA507B8EE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "KaraokeBooks/ViewControllers/Favorite/FavoriteSongReactor.swift"
+            filePath = "KaraokeBooks/Domain/Manager/PersistenceManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "mutate(action:)"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "fetchFavoriteSongs(brand:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "981B7DEF-0699-470D-892B-E630C7587AE6"
+            uuid = "9F455E2F-5FB1-4DAD-A8BB-310229C4E8EC"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "KaraokeBooks/ViewControllers/SongDetail/SongDetailReactor.swift"
+            filePath = "KaraokeBooks/Domain/Manager/PersistenceManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "fetchFavoriteSongs(brand:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C7E894B-93AF-44CF-B516-BEB8C8B3D4F4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KaraokeBooks/ViewControllers/Favorite/FavoriteSongReactor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "reduce(state:mutation:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DBDDC4B4-5975-4D5C-A491-99BB95DABD15"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KaraokeBooks/ViewControllers/Favorite/FavoriteSongReactor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "mutate(action:)"
             landmarkType = "7">
          </BreakpointContent>

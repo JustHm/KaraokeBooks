@@ -21,7 +21,8 @@ final class FavoriteSongReactor: Reactor {
         case favoriteList([Song])
         case changeBrand(BrandType)
         case alertError(PersistenceError?)
-        case selected(Song)
+        case deleted(IndexPath)
+        case selected(Song?)
     }
     struct State {
         var favoriteSongs: [Song] = []
@@ -34,7 +35,7 @@ final class FavoriteSongReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .brandType(brand):
-            return persistence.rx.fetchFavoriteSongs(brand: brand.rawValue)
+            let result = persistence.rx.fetchFavoriteSongs(brand: brand.name)
                 .asObservable()
                 .materialize()
                 .map { event -> FavoriteSongReactor.Mutation in
@@ -45,6 +46,7 @@ final class FavoriteSongReactor: Reactor {
                     case let .error(error): return .alertError(error as? PersistenceError)
                     }
                 }
+            return .concat([result, .just(.changeBrand(brand))])
         case let .deleteSong(indexPath):
             let song = currentState.favoriteSongs[indexPath.row]
             return persistence.rx.deleteSong(songID: song.id)
@@ -53,25 +55,26 @@ final class FavoriteSongReactor: Reactor {
                 .map { event -> FavoriteSongReactor.Mutation in
                     switch event {
                     case .completed: return Mutation.alertError(nil)
-                    case .next(_): return Mutation.alertError(nil)
+                    case .next(_): return Mutation.deleted(indexPath)
                     case let .error(error): return Mutation.alertError(error as? PersistenceError)
                     }
                 }
         case .reload:
-            let brand = currentState.currentBrand.rawValue
+            let brand = currentState.currentBrand.name
             return persistence.rx.fetchFavoriteSongs(brand: brand)
                 .asObservable()
                 .materialize()
                 .map { event -> FavoriteSongReactor.Mutation in
                     switch event {
                     case .completed: return .alertError(nil)
-                    case let .next(songs): return .favoriteList(songs)
+                    case let .next(songs):
+                        return .favoriteList(songs)
                     case let .error(error): return .alertError(error as? PersistenceError)
                     }
                 }
         case let .songDetail(indexPath):
             let song = currentState.favoriteSongs[indexPath.row]
-            return .just(.selected(song))
+            return .concat([.just(.selected(song)), .just(.selected(nil))])
         }
     }
     
@@ -80,6 +83,7 @@ final class FavoriteSongReactor: Reactor {
         switch mutation {
         case let .favoriteList(songs):
             state.favoriteSongs = songs
+            state.isEmpty = songs.isEmpty
         case let .changeBrand(brand):
             state.currentBrand = brand
         case let .selected(song):
@@ -88,6 +92,8 @@ final class FavoriteSongReactor: Reactor {
             if let error {
                 state.errorDescription = error.localizedDescription
             }
+        case let .deleted(indexPath):
+            state.favoriteSongs.remove(at: indexPath.row)
         }
         return state
     }

@@ -44,9 +44,13 @@ final class PersistenceManager: ReactiveCompatible {
             
             do {
                 try self.context.save()
+                event.onNext(.deleted(true))
                 return true
             }
-            catch { throw PersistenceError.addError }
+            catch {
+                event.onNext(.deleted(false))
+                throw PersistenceError.addError
+            }
         }
         else {
             throw PersistenceError.entityError
@@ -102,8 +106,8 @@ extension Reactive where Base == PersistenceManager {
             do {
                 let data = try self.base.fetchByBrand(brand: brand)
                 let songs = data.compactMap { song -> Song? in
-                    guard let brandString = song.brand,
-                          let brand = BrandType(rawValue: brandString),
+                    guard let str = song.brand,
+                          let brand = BrandType.currentByName(name: str),
                           let no = song.number,
                           let title = song.title,
                           let singer = song.singer,

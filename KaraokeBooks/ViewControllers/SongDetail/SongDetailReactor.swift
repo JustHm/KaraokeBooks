@@ -58,16 +58,17 @@ final class SongDetailReactor: Reactor {
             }
             return result.withUnretained(self)
                 .map { owner, result -> SongDetailReactor.Mutation in
-                switch result {
-                case let .next(isStar):
-                    return Mutation.changeStar(isStar)
-                case let .error(error):
-                    let errorMessage = (error as? PersistenceError)?.errorDescription
-                    return Mutation.alertError(errorMessage)
-                case .completed:
-                    return Mutation.alertError(nil)
+                    let star = !owner.currentState.isStar
+                    switch result {
+                    case .next:
+                        return Mutation.changeStar(star)
+                    case let .error(error):
+                        let errorMessage = (error as? PersistenceError)?.errorDescription
+                        return Mutation.alertError(errorMessage)
+                    case .completed:
+                        return Mutation.alertError(nil)
+                    }
                 }
-            }
         case .youtubeTapped:
             return .just(Mutation.moveToYoutube(youtube))
         case .closeTapped:
