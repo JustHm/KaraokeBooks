@@ -10,6 +10,7 @@
 		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
 		224679272D057676005408E6 /* FavoriteSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224679262D057676005408E6 /* FavoriteSongReactor.swift */; };
 		224679292D0B2667005408E6 /* RecentSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224679282D0B2667005408E6 /* RecentSongReactor.swift */; };
+		2246792B2D115080005408E6 /* SearchResultReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2246792A2D115080005408E6 /* SearchResultReactor.swift */; };
 		226104662BE60BD800E77003 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226104652BE60BD700E77003 /* Date+.swift */; };
 		226104682BE60BE300E77003 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226104672BE60BE300E77003 /* UITextField+.swift */; };
 		2261D7B629990B5E0059222E /* RecentSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261D7B529990B5E0059222E /* RecentSongViewController.swift */; };
@@ -52,6 +53,7 @@
 		22333BE529ADE9A800C0A56D /* KaraokeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeError.swift; sourceTree = "<group>"; };
 		224679262D057676005408E6 /* FavoriteSongReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongReactor.swift; sourceTree = "<group>"; };
 		224679282D0B2667005408E6 /* RecentSongReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongReactor.swift; sourceTree = "<group>"; };
+		2246792A2D115080005408E6 /* SearchResultReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultReactor.swift; sourceTree = "<group>"; };
 		226104652BE60BD700E77003 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		226104672BE60BE300E77003 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		2261D7B529990B5E0059222E /* RecentSongViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSongViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				2261D7BC299E68BF0059222E /* SearchResultViewController.swift */,
+				2246792A2D115080005408E6 /* SearchResultReactor.swift */,
 				2261D7BE299E68E80059222E /* SearchResultPresenter.swift */,
 			);
 			path = SearchResult;
@@ -351,6 +354,7 @@
 			files = (
 				22B501522993EAD800677964 /* KaraokeSearchInfo.swift in Sources */,
 				22A375AC2BE4DD9A00902081 /* SongModel.xcdatamodeld in Sources */,
+				2246792B2D115080005408E6 /* SearchResultReactor.swift in Sources */,
 				22B5014F2993EABA00677964 /* KaraokeSearchManager.swift in Sources */,
 				22B501812998EAED00677964 /* FavoriteSongPresenter.swift in Sources */,
 				2261D7B829990B660059222E /* RecentSongPresenter.swift in Sources */,

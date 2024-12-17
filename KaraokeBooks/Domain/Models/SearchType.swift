@@ -11,14 +11,19 @@ import Foundation
 enum SearchType: String {
     case title, singer
     case popular, release//, no
-    var title: String {
+}
+
+enum SearchScopeType: String, CaseIterable {
+    case title, singer
+    
+    var name: String {
         switch self {
         case .title:
             return "노래 검색"
         case .singer:
             return "가수 검색"
-        default:
-            return ""
+//        default:
+//            return ""
         }
     }
 }

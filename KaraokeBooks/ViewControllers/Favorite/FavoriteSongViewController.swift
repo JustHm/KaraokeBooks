@@ -74,12 +74,9 @@ final class FavoriteSongViewController: UIViewController, View {
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
-        reactor.state.map {$0.isEmpty}
+        reactor.state.map{$0.isEmpty}
             .distinctUntilChanged()
-            .withUnretained(self)
-            .bind { owner, isEmpty in
-                owner.warningText.isHidden = !isEmpty
-            }
+            .bind(to: warningText.rx.isHidden)
             .disposed(by: disposeBag)
         reactor.state.map {$0.errorDescription}
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.

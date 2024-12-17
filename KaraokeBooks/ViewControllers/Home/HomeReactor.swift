@@ -95,7 +95,7 @@ class HomeReactor: Reactor {
         }
         return state
     }
-    // FavoriteSongReactor에서 SongDetailReactor를 return해 주어야 값 처리가 가능함.
+    
     func reactorForSetting(song: Song) -> SongDetailReactor? {
         return SongDetailReactor(song: song)
     }

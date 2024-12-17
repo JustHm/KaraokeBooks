@@ -140,6 +140,14 @@ extension HomeViewController {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        searchButton.rx.tap
+            .withUnretained(self)
+            .bind { owner, _ in
+                let reactor = SearchResultReactor()
+                let vc = SearchResultViewController(reactor: reactor)
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         //State
         reactor.state.observe(on: MainScheduler.instance)
             .map{$0.isLoading}

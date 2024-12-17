@@ -67,8 +67,7 @@ final class FavoriteSongReactor: Reactor {
                 .map { event -> FavoriteSongReactor.Mutation in
                     switch event {
                     case .completed: return .alertError(nil)
-                    case let .next(songs):
-                        return .favoriteList(songs)
+                    case let .next(songs): return .favoriteList(songs)
                     case let .error(error): return .alertError(error as? PersistenceError)
                     }
                 }
