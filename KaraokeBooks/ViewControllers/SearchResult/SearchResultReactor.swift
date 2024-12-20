@@ -24,8 +24,8 @@ final class SearchResultReactor: Reactor {
         case changeBrand(BrandType)
         case changeSearchType(SearchType)
         case changeQuery(String?)
-        case songDetail(Song)
-        case searchSongs([Song])
+        case songDetail(Song?)
+        case searchSongs([Song], reload: Bool)
         case alertError(NetworkError?)
         case clear
     }
@@ -51,13 +51,15 @@ final class SearchResultReactor: Reactor {
             let brand = currentState.brandType
             let searchType = currentState.searchType
             let page = currentState.currentPage
-            return searchSongsByQuery(brand: brand, type: searchType, query: query, page: page)
+            return searchSongsByQuery(brand: brand, type: searchType, query: query, page: page, reload: true)
         case let .currentRow(indexPath):
+            guard let query = currentState.searchQuery,
+                  indexPath.row > currentState.songs.count - 2
+            else { return .just(.alertError(nil)) }
             let brand = currentState.brandType
             let searchType = currentState.searchType
             let page = currentState.currentPage
-            let query = currentState.searchQuery ?? ""
-            return searchSongsByQuery(brand: brand, type: searchType, query: query, page: page)
+            return searchSongsByQuery(brand: brand, type: searchType, query: query, page: page, reload: false)
         case let .brandType(brand):
             return .just(.changeBrand(brand))
         case let .searchType(type):
@@ -67,7 +69,7 @@ final class SearchResultReactor: Reactor {
             }
         case let .songDetail(indexPath):
             let song = currentState.songs[indexPath.row]
-            return .just(.songDetail(song))
+            return .concat([.just(.songDetail(song)), .just(.songDetail(nil))])
         case .clear:
             return .just(.clear)
         case let .searchQuery(query):
@@ -79,6 +81,7 @@ final class SearchResultReactor: Reactor {
         switch mutation {
         case let .changeQuery(query):
             state.searchQuery = query
+            state.currentPage = 0
         case let .changeBrand(brand):
             state.brandType = brand
             state.currentPage = 0
@@ -87,9 +90,10 @@ final class SearchResultReactor: Reactor {
             state.currentPage = 0
         case let .songDetail(song):
             state.selectedSong = song
-        case let .searchSongs(songs):
-            state.songs = songs
-            state.isEmpty = songs.isEmpty
+        case let .searchSongs(songs, reload):
+            if reload { state.songs = songs }
+            else { state.songs += songs }
+            state.isEmpty = !state.songs.isEmpty
             state.currentPage += 1
         case .clear:
             state.searchQuery = nil
@@ -107,7 +111,8 @@ final class SearchResultReactor: Reactor {
     private func searchSongsByQuery(brand: BrandType,
                                     type: SearchType,
                                     query: String,
-                                    page: Int
+                                    page: Int,
+                                    reload: Bool
     ) -> Observable<Mutation> {
         return service.rx.searchReqeust(brand: brand, searchType: type, query: query, page: page)
             .asObservable()
@@ -119,7 +124,7 @@ final class SearchResultReactor: Reactor {
                 case let .error(error):
                     return .alertError(error as? NetworkError)
                 case let .next(songs):
-                    return .searchSongs(songs)
+                    return .searchSongs(songs, reload: reload)
                 }
             }
     }

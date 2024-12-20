@@ -74,7 +74,7 @@ final class FavoriteSongViewController: UIViewController, View {
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
-        reactor.state.map{$0.isEmpty}
+        reactor.state.map{!$0.isEmpty}
             .distinctUntilChanged()
             .bind(to: warningText.rx.isHidden)
             .disposed(by: disposeBag)

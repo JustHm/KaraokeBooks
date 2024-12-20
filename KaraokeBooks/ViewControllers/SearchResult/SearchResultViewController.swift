@@ -86,8 +86,13 @@ final class SearchResultViewController: UIViewController, View {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        searchController.searchBar.rx.text
-            .map{Reactor.Action.searchQuery($0)}
+        searchController.searchBar.rx.value
+            .distinctUntilChanged()
+            .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
+            .map{
+                let query = $0 == "" ? nil : $0
+                return Reactor.Action.searchQuery(query)
+            }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         searchController.searchBar.rx.textDidEndEditing
@@ -108,8 +113,7 @@ final class SearchResultViewController: UIViewController, View {
             .observe(on: MainScheduler.instance)
             .bind(to: warningText.rx.isHidden)
             .disposed(by: disposeBag)
-        reactor.state.map{$0.errorDescription}
-            .compactMap{$0}
+        reactor.state.compactMap{$0.errorDescription}
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .bind { owner, msg in
