@@ -16,9 +16,9 @@
 - ~~MVP Architecture~~ -> MVVM Archtecture with ReactorKit
 
   > ViewController에 책임을 나누기 위해 MVP 아키텍처 사용
-    View와 Presenter가 1:1 대응이 되게 구성
+    View와 Presenter가 1:1 대응이 되게 구성했었음.
   > 
-  > MVP에서 ReactorKit을 사용해 MVVM으로 구조 변경
+  > (2024.12) MVP에서 ReactorKit을 사용해 MVVM으로 구조 변경
   > 
   > ReactorKit을 사용하니 상태관리가 편했고 구조화 되어 있어서 빠르게 작업을 완료할 수 있었다.
   > 
