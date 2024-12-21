@@ -13,16 +13,16 @@
 - [앱스토어](https://apps.apple.com/kr/app/%EB%85%B8%EB%9E%98%EB%B0%A9book/id1672848960)
 
 ## 사용 기술
-- ~~MVP Architecture~~ -> MVVM Archtecture with ReactorKit
+- ~~MVP Architecture~~ -> ReactorKit
 
   > ViewController에 책임을 나누기 위해 MVP 아키텍처 사용
     View와 Presenter가 1:1 대응이 되게 구성했었음.
   > 
-  > (2024.12) MVP에서 ReactorKit을 사용해 MVVM으로 구조 변경
+  > (2024.12) MVP에서 ReactorKit을 사용해 구조 변경
   > 
   > ReactorKit을 사용하니 상태관리가 편했고 구조화 되어 있어서 빠르게 작업을 완료할 수 있었다.
   > 
-  > RxSwift을 제대로 적용해보며 Operation들을 사용해 더 간소화 된 코드를 만들 수 있었다.
+  > RxSwift을 사용해보며 Operation들을 사용해 더 간소화 된 코드를 만들 수 있었다.
 
 - UIKit, SnapKit
   
