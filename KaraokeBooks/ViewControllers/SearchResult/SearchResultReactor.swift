@@ -27,6 +27,7 @@ final class SearchResultReactor: Reactor {
         case songDetail(Song?)
         case searchSongs([Song], reload: Bool)
         case alertError(NetworkError?)
+        case LoadState(Bool)
         case clear
     }
     struct State {
@@ -34,6 +35,7 @@ final class SearchResultReactor: Reactor {
         var selectedSong: Song?
         var errorDescription: String?
         var isEmpty: Bool = true
+        var isLoading: Bool = false
         
         var searchQuery: String?
         var brandType: BrandType = .tj
@@ -51,7 +53,10 @@ final class SearchResultReactor: Reactor {
             let brand = currentState.brandType
             let searchType = currentState.searchType
             let page = currentState.currentPage
-            return searchSongsByQuery(brand: brand, type: searchType, query: query, page: page, reload: true)
+            return .concat([
+                .just(.LoadState(true)),
+                searchSongsByQuery(brand: brand, type: searchType, query: query, page: page, reload: true)
+                ])
         case let .currentRow(indexPath):
             guard let query = currentState.searchQuery,
                   indexPath.row > currentState.songs.count - 2
@@ -79,6 +84,9 @@ final class SearchResultReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
+        case let .LoadState(isLoading):
+            state.isLoading = isLoading
+            state.songs = []
         case let .changeQuery(query):
             state.searchQuery = query
             state.currentPage = 0
@@ -93,14 +101,17 @@ final class SearchResultReactor: Reactor {
         case let .searchSongs(songs, reload):
             if reload { state.songs = songs }
             else { state.songs += songs }
+            state.isLoading = false
             state.isEmpty = !state.songs.isEmpty
             state.currentPage += 1
         case .clear:
             state.searchQuery = nil
         case let .alertError(error):
-            if let error {
-                state.errorDescription = error.localizedDescription
+            guard let error else {
+                state.errorDescription = nil
+                break
             }
+            state.errorDescription = error.localizedDescription
         }
         return state
     }

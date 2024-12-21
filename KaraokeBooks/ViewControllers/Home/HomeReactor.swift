@@ -77,8 +77,8 @@ class HomeReactor: Reactor {
         switch mutation {
         case let .moveToDetail(song):
             state.selectedSong = song
-        case let .LoadState(isLoad):
-            state.isLoading = isLoad
+        case let .LoadState(isLoading):
+            state.isLoading = isLoading
         case let .changeDate(date):
             state.dateType = date
         case let .changeBrand(brand):

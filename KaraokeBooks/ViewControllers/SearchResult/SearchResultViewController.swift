@@ -42,6 +42,13 @@ final class SearchResultViewController: UIViewController, View {
         label.isHidden = true
         return label
     }()
+    private lazy var loadIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .customPrimaryText
+        indicator.isHidden = true
+        indicator.startAnimating()
+        return indicator
+    }()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -129,6 +136,15 @@ final class SearchResultViewController: UIViewController, View {
                 }
             }
             .disposed(by: disposeBag)
+        reactor.state.observe(on: MainScheduler.instance)
+            .map{$0.isLoading}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .bind { owner, isLoading in
+                owner.loadIndicator.isHidden = !isLoading
+                isLoading ? owner.loadIndicator.startAnimating() : owner.loadIndicator.stopAnimating()
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -136,7 +152,7 @@ extension SearchResultViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
         
-        [searchResultTableView, brandSegmentedControl, warningText].forEach {
+        [searchResultTableView, brandSegmentedControl, warningText, loadIndicator].forEach {
             view.addSubview($0)
         }
         brandSegmentedControl.snp.makeConstraints {
@@ -149,6 +165,9 @@ extension SearchResultViewController {
         }
         warningText.snp.makeConstraints {
             $0.center.equalToSuperview()
+        }
+        loadIndicator.snp.makeConstraints {
+            $0.center.equalTo(searchResultTableView)
         }
     }
     func setupNavigationBar() {
