@@ -10,6 +10,7 @@ import ReactorKit
 class HomeReactor: Reactor {
     var initialState = State()
     private let service = KaraokeSearchManager.shared
+    
     enum Action {
         case brandType(BrandType)
         case rankDateType(String?)

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -46,6 +46,13 @@
 		22B501812998EAED00677964 /* FavoriteSongPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B501802998EAED00677964 /* FavoriteSongPresenter.swift */; };
 		22BF3D242D04260900A7037C /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF3D232D04260900A7037C /* SearchType.swift */; };
 		22BF3D262D043F6000A7037C /* SongDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF3D252D043F6000A7037C /* SongDetailReactor.swift */; };
+		22C277DE2D7966B600B740C1 /* HomeItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277D52D7966B600B740C1 /* HomeItemCollectionViewCell.swift */; };
+		22C277DF2D7966B600B740C1 /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277D62D7966B600B740C1 /* SongTableViewCell.swift */; };
+		22C277E02D7966B600B740C1 /* CleanSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277D82D7966B600B740C1 /* CleanSegmentedControl.swift */; };
+		22C277E12D7966B600B740C1 /* MoveSceneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277D92D7966B600B740C1 /* MoveSceneButton.swift */; };
+		22C277E22D7966B600B740C1 /* RankTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277DA2D7966B600B740C1 /* RankTableViewHeader.swift */; };
+		22C277E32D7966B600B740C1 /* SongInfoStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */; };
+		22C277E42D7966B600B740C1 /* SongTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277DC2D7966B600B740C1 /* SongTableView.swift */; };
 		22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,12 +92,15 @@
 		22B501802998EAED00677964 /* FavoriteSongPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSongPresenter.swift; sourceTree = "<group>"; };
 		22BF3D232D04260900A7037C /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
 		22BF3D252D043F6000A7037C /* SongDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailReactor.swift; sourceTree = "<group>"; };
+		22C277D52D7966B600B740C1 /* HomeItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		22C277D62D7966B600B740C1 /* SongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableViewCell.swift; sourceTree = "<group>"; };
+		22C277D82D7966B600B740C1 /* CleanSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanSegmentedControl.swift; sourceTree = "<group>"; };
+		22C277D92D7966B600B740C1 /* MoveSceneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSceneButton.swift; sourceTree = "<group>"; };
+		22C277DA2D7966B600B740C1 /* RankTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewHeader.swift; sourceTree = "<group>"; };
+		22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfoStackView.swift; sourceTree = "<group>"; };
+		22C277DC2D7966B600B740C1 /* SongTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableView.swift; sourceTree = "<group>"; };
 		22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		224679112D05746A005408E6 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		22B501132993EA4E00677964 /* Frameworks */ = {
@@ -134,6 +144,7 @@
 			children = (
 				22B501192993EA4E00677964 /* AppDelegate.swift */,
 				22B5011B2993EA4E00677964 /* SceneDelegate.swift */,
+				227DC65029C08DD100AAC9D2 /* Utils */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -160,7 +171,6 @@
 		227DC65129C08DEA00AAC9D2 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				22B501502993EAC300677964 /* Manager */,
 				22B501612993EBE800677964 /* Models */,
 			);
 			path = Domain;
@@ -186,26 +196,26 @@
 			isa = PBXGroup;
 			children = (
 				22B501272993EA4E00677964 /* Info.plist */,
-				227DC64E29C08DB000AAC9D2 /* App */,
 				227DC64F29C08DC300AAC9D2 /* Assets */,
+				227DC64E29C08DB000AAC9D2 /* App */,
+				22C277D42D79636300B740C1 /* Data */,
 				227DC65129C08DEA00AAC9D2 /* Domain */,
-				224679112D05746A005408E6 /* Views */,
-				22B5014D2993EAA500677964 /* ViewControllers */,
-				227DC65029C08DD100AAC9D2 /* Utils */,
+				22B5014D2993EAA500677964 /* Presentation */,
 			);
 			path = KaraokeBooks;
 			sourceTree = "<group>";
 		};
-		22B5014D2993EAA500677964 /* ViewControllers */ = {
+		22B5014D2993EAA500677964 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				22C277DD2D7966B600B740C1 /* Views */,
 				22B501682995DD0300677964 /* Home */,
 				22B501822998EE6900677964 /* Favorite */,
 				2261D7C0299E690A0059222E /* SearchResult */,
 				22B5016D2995E2B900677964 /* SongDetail */,
 				2261D7B929990B6A0059222E /* RecentSong */,
 			);
-			path = ViewControllers;
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 		22B501502993EAC300677964 /* Manager */ = {
@@ -264,6 +274,36 @@
 			path = Favorite;
 			sourceTree = "<group>";
 		};
+		22C277D42D79636300B740C1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				22B501502993EAC300677964 /* Manager */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		22C277D72D7966B600B740C1 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				22C277D52D7966B600B740C1 /* HomeItemCollectionViewCell.swift */,
+				22C277D62D7966B600B740C1 /* SongTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		22C277DD2D7966B600B740C1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				22C277D72D7966B600B740C1 /* Cells */,
+				22C277D82D7966B600B740C1 /* CleanSegmentedControl.swift */,
+				22C277D92D7966B600B740C1 /* MoveSceneButton.swift */,
+				22C277DA2D7966B600B740C1 /* RankTableViewHeader.swift */,
+				22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */,
+				22C277DC2D7966B600B740C1 /* SongTableView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -278,9 +318,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				224679112D05746A005408E6 /* Views */,
 			);
 			name = KaraokeBooks;
 			packageProductDependencies = (
@@ -373,6 +410,13 @@
 				22B501672993F40F00677964 /* HomeList.swift in Sources */,
 				22B5016A2995E2AB00677964 /* SongDetailViewController.swift in Sources */,
 				22BF3D262D043F6000A7037C /* SongDetailReactor.swift in Sources */,
+				22C277DE2D7966B600B740C1 /* HomeItemCollectionViewCell.swift in Sources */,
+				22C277DF2D7966B600B740C1 /* SongTableViewCell.swift in Sources */,
+				22C277E02D7966B600B740C1 /* CleanSegmentedControl.swift in Sources */,
+				22C277E12D7966B600B740C1 /* MoveSceneButton.swift in Sources */,
+				22C277E22D7966B600B740C1 /* RankTableViewHeader.swift in Sources */,
+				22C277E32D7966B600B740C1 /* SongInfoStackView.swift in Sources */,
+				22C277E42D7966B600B740C1 /* SongTableView.swift in Sources */,
 				22B5014C2993EA9C00677964 /* HomePresenter.swift in Sources */,
 				22B50177299790FF00677964 /* UIColor+.swift in Sources */,
 				22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */,
