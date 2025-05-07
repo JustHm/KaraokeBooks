@@ -72,11 +72,12 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
     }
     func searchRequestAll(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
         guard let url = searchURL.searchURLV1(brand: brand, query: query, searchType: searchType) else { throw KaraokeError.invalidURL }
-        let dataTask = AF.request(url, method: .get).serializingDecodable(SongsResponse.self)
+        let dataTask = AF.request(url, method: .get).serializingDecodable([Song].self)
         switch await dataTask.result {
         case .success(let data):
-            return data.data
-        case .failure:
+            return data
+        case .failure(let error):
+            print(error.localizedDescription)
             throw NetworkError.searchFailed //AFError
         }
     }

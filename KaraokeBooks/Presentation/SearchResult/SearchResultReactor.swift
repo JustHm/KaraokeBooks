@@ -125,7 +125,7 @@ final class SearchResultReactor: Reactor {
                                     page: Int,
                                     reload: Bool
     ) -> Observable<Mutation> {
-        return service.rx.searchReqeust(brand: brand, searchType: type, query: query, page: page)
+        return service.rx.searchReqeustAll(brand: brand, searchType: type, query: query)
             .asObservable()
             .materialize()
             .map { event -> Mutation in
@@ -138,5 +138,18 @@ final class SearchResultReactor: Reactor {
                     return .searchSongs(songs, reload: reload)
                 }
             }
+//        return service.rx.searchReqeust(brand: brand, searchType: type, query: query, page: page)
+//            .asObservable()
+//            .materialize()
+//            .map { event -> Mutation in
+//                switch event {
+//                case .completed:
+//                    return .alertError(nil)
+//                case let .error(error):
+//                    return .alertError(error as? NetworkError)
+//                case let .next(songs):
+//                    return .searchSongs(songs, reload: reload)
+//                }
+//            }
     }
 }

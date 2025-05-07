@@ -70,11 +70,11 @@ final class SearchResultViewController: UIViewController, View {
             .map{Reactor.Action.songDetail($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        searchResultTableView.rx.prefetchRows
-            .flatMap{Observable.from($0)}
-            .map{ Reactor.Action.currentRow($0)}
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+//        searchResultTableView.rx.prefetchRows
+//            .flatMap{Observable.from($0)}
+//            .map{ Reactor.Action.currentRow($0)}
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
         brandSegmentedControl.rx.selectedSegmentIndex
             .flatMap{ index in
                 let type = BrandType.allCases[index]
