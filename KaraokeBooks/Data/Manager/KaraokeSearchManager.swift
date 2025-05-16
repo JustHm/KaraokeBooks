@@ -27,6 +27,11 @@ extension NetworkError: LocalizedError {
 protocol KaraokeSearchManagerProtocol {
     func rankRequest(brand: BrandType,
                      date: RankDateType) async throws -> [Song]
+    /// 페이징 없이 검색어에 연관된 모든 노래 반환
+    func searchRequestAll(brand: BrandType,
+                          query: String,
+                          searchType: SearchType) async throws -> [Song]
+    /// 검색어에 연관된 모든 노래 반환 (페이징 있음)
     func searchReqeust(brand: BrandType,
                        query: String,
                        searchType: SearchType,
@@ -62,6 +67,17 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         case .success(let data):
             return data.data
         case .failure:
+            throw NetworkError.searchFailed //AFError
+        }
+    }
+    func searchRequestAll(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
+        guard let url = searchURL.searchURLV1(brand: brand, query: query, searchType: searchType) else { throw KaraokeError.invalidURL }
+        let dataTask = AF.request(url, method: .get).serializingDecodable([Song].self)
+        switch await dataTask.result {
+        case .success(let data):
+            return data
+        case .failure(let error):
+            print(error.localizedDescription)
             throw NetworkError.searchFailed //AFError
         }
     }
@@ -103,6 +119,22 @@ extension Reactive where Base == KaraokeSearchManager {
             let task = Task {
                 do {
                     let response = try await self.base.searchReqeust(brand: brand, query: query, searchType: searchType, page: page)
+                    single(.success(response))
+                }
+                catch {
+                    single(.failure(error))
+                }
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    func searchReqeustAll(brand: BrandType, searchType: SearchType, query: String) -> Single<[Song]> {
+        return Single.create { single in
+            let task = Task {
+                do {
+                    let response = try await self.base.searchRequestAll(brand: brand, query: query, searchType: searchType)
                     single(.success(response))
                 }
                 catch {
