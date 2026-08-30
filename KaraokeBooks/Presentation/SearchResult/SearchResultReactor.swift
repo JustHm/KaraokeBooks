@@ -17,7 +17,7 @@ final class SearchResultReactor: Reactor {
         case brandType(BrandType)
         case searchType(SearchScopeType)
         case currentRow(IndexPath)
-        case search
+        case search(String?)
         case clear
     }
     enum Mutation {
@@ -35,6 +35,7 @@ final class SearchResultReactor: Reactor {
         var selectedSong: Song?
         var errorDescription: String?
         var isEmpty: Bool = true
+        var hasCompletedSearch: Bool = false
         var isLoading: Bool = false
         
         var searchQuery: String?
@@ -46,16 +47,16 @@ final class SearchResultReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .search:
-            guard let query = currentState.searchQuery else {
+        case let .search(query):
+            guard let query, !query.isEmpty else {
                 return .just(.alertError(nil))
             }
             let brand = currentState.brandType
             let searchType = currentState.searchType
-            let page = currentState.currentPage
             return .concat([
+                .just(.changeQuery(query)),
                 .just(.LoadState(true)),
-                searchSongsByQuery(brand: brand, type: searchType, query: query, page: page, reload: true)
+                searchSongsByQuery(brand: brand, type: searchType, query: query, page: 0, reload: true)
                 ])
         case let .currentRow(indexPath):
             guard let query = currentState.searchQuery,
@@ -73,6 +74,9 @@ final class SearchResultReactor: Reactor {
             case .singer: return .just(.changeSearchType(.singer))
             }
         case let .songDetail(indexPath):
+            guard currentState.songs.indices.contains(indexPath.row) else {
+                return .empty()
+            }
             let song = currentState.songs[indexPath.row]
             return .concat([.just(.songDetail(song)), .just(.songDetail(nil))])
         case .clear:
@@ -87,6 +91,9 @@ final class SearchResultReactor: Reactor {
         case let .LoadState(isLoading):
             state.isLoading = isLoading
             state.songs = []
+            if isLoading {
+                state.hasCompletedSearch = false
+            }
         case let .changeQuery(query):
             state.searchQuery = query
             state.currentPage = 0
@@ -102,7 +109,8 @@ final class SearchResultReactor: Reactor {
             if reload { state.songs = songs }
             else { state.songs += songs }
             state.isLoading = false
-            state.isEmpty = !state.songs.isEmpty
+            state.isEmpty = state.songs.isEmpty
+            state.hasCompletedSearch = true
             state.currentPage += 1
         case .clear:
             state.searchQuery = nil
@@ -128,14 +136,17 @@ final class SearchResultReactor: Reactor {
         return service.rx.searchReqeustAll(brand: brand, searchType: type, query: query)
             .asObservable()
             .materialize()
-            .map { event -> Mutation in
+            .flatMap { event -> Observable<Mutation> in
                 switch event {
                 case .completed:
-                    return .alertError(nil)
+                    return .just(.alertError(nil))
                 case let .error(error):
-                    return .alertError(error as? NetworkError)
+                    return .from([
+                        .LoadState(false),
+                        .alertError(error as? NetworkError)
+                    ])
                 case let .next(songs):
-                    return .searchSongs(songs, reload: reload)
+                    return .just(.searchSongs(songs, reload: reload))
                 }
             }
 //        return service.rx.searchReqeust(brand: brand, searchType: type, query: query, page: page)

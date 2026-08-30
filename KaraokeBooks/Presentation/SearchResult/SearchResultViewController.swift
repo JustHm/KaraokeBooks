@@ -12,21 +12,37 @@ import ReactorKit
 final class SearchResultViewController: UIViewController, View {
     typealias Reactor = SearchResultReactor
     var disposeBag = DisposeBag()
-    
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController()
-        return searchController
+
+    private var selectedSearchScope = SearchScopeType.title
+    private var selectedBrand = BrandType.tj
+
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = SearchScopeType.title.name
+        searchBar.searchBarStyle = .minimal
+        return searchBar
     }()
-    private lazy var brandSegmentedControl: ClearSegmentedControl = {
-        let segmentedControl = ClearSegmentedControl()
-        BrandType.allCases.enumerated().forEach { (index, value) in
-            segmentedControl.insertSegment(
-                withTitle: value.name,
-                at: index,
-                animated: false)
-        }
-        segmentedControl.selectedSegmentIndex = 0
-        return segmentedControl
+    private lazy var filterTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "필터"
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle"), for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.tintColor = .systemBlue
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.backgroundColor = .tertiarySystemFill
+        button.layer.cornerRadius = 12.0
+        button.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
+        button.semanticContentAttribute = .forceRightToLeft
+        button.showsMenuAsPrimaryAction = true
+        return button
     }()
     private lazy var searchResultTableView: SongTableView = {
         let tableView = SongTableView(frame: .zero, style: .plain)
@@ -63,6 +79,12 @@ final class SearchResultViewController: UIViewController, View {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
+        searchBar.searchTextField.addTarget(
+            self,
+            action: #selector(searchTextFieldDidSubmit),
+            for: .editingDidEndOnExit
+        )
+        updateFilterMenu()
     }
     
     func bind(reactor: SearchResultReactor) {
@@ -75,35 +97,13 @@ final class SearchResultViewController: UIViewController, View {
 //            .map{ Reactor.Action.currentRow($0)}
 //            .bind(to: reactor.action)
 //            .disposed(by: disposeBag)
-        brandSegmentedControl.rx.selectedSegmentIndex
-            .flatMap{ index in
-                let type = BrandType.allCases[index]
-                let first = Observable.just(Reactor.Action.brandType(type))
-                let second = Observable.just(Reactor.Action.search)
-                return Observable.concat([first, second])
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        searchController.searchBar.rx.selectedScopeButtonIndex
-            .flatMap{ index in
-                let type = SearchScopeType.allCases[index]
-                let first = Observable.just(Reactor.Action.searchType(type))
-                let second = Observable.just(Reactor.Action.search)
-                return Observable.concat([first, second])
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        searchController.searchBar.rx.value
+        searchBar.rx.value
             .distinctUntilChanged()
-            .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
+            .debounce(RxTimeInterval.milliseconds(150), scheduler: MainScheduler.instance)
             .map{
                 let query = $0 == "" ? nil : $0
                 return Reactor.Action.searchQuery(query)
             }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        searchController.searchBar.rx.textDidEndEditing
-            .map{Reactor.Action.search}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -115,7 +115,9 @@ final class SearchResultViewController: UIViewController, View {
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
-        reactor.state.map{$0.isEmpty}
+        reactor.state.map { state in
+            !(state.hasCompletedSearch && state.isEmpty)
+        }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind(to: warningText.rx.isHidden)
@@ -124,7 +126,7 @@ final class SearchResultViewController: UIViewController, View {
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .bind { owner, msg in
-                owner.showAlert(header: "Error", body: msg)
+                owner.showAlert(header: "검색 실패", body: msg)
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
@@ -145,6 +147,24 @@ final class SearchResultViewController: UIViewController, View {
                 isLoading ? owner.loadIndicator.startAnimating() : owner.loadIndicator.stopAnimating()
             }
             .disposed(by: disposeBag)
+        reactor.state.map { $0.brandType }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .withUnretained(self)
+            .bind { owner, brand in
+                owner.selectedBrand = brand
+                owner.updateFilterMenu()
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map { $0.searchType }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .withUnretained(self)
+            .bind { owner, type in
+                owner.selectedSearchScope = type == .title ? .title : .singer
+                owner.updateFilterMenu()
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -152,16 +172,26 @@ extension SearchResultViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
         
-        [searchResultTableView, brandSegmentedControl, warningText, loadIndicator].forEach {
+        [searchBar, filterTitleLabel, filterButton, searchResultTableView, warningText, loadIndicator].forEach {
             view.addSubview($0)
         }
-        brandSegmentedControl.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        searchBar.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
             $0.left.right.equalToSuperview().inset(16.0)
+        }
+        filterButton.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(8.0)
+            $0.right.equalToSuperview().inset(16.0)
+            $0.height.equalTo(40.0)
+        }
+        filterTitleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(filterButton)
+            $0.right.equalTo(filterButton.snp.left).offset(-12.0)
+            $0.left.greaterThanOrEqualToSuperview().inset(16.0)
         }
         searchResultTableView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
-            $0.top.equalTo(brandSegmentedControl.snp.bottom)
+            $0.top.equalTo(filterButton.snp.bottom).offset(8.0)
         }
         warningText.snp.makeConstraints {
             $0.center.equalToSuperview()
@@ -172,20 +202,55 @@ extension SearchResultViewController {
     }
     func setupNavigationBar() {
         navigationItem.title = SearchScopeType.title.name
-        navigationItem.searchController = searchController
-        searchController.searchBar.placeholder = SearchScopeType.title.name
-        searchController.searchBar.scopeButtonTitles = [
-            SearchScopeType.title.name,
-            SearchScopeType.singer.name
-        ]
-        searchController.searchBar.showsScopeBar = true
-        searchController.obscuresBackgroundDuringPresentation = false
-        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.largeTitleDisplayMode = .never
+    }
+
+    private func updateFilterMenu() {
+        let scopeActions = SearchScopeType.allCases.map { scope in
+            UIAction(
+                title: scope.name,
+                state: scope == selectedSearchScope ? .on : .off
+            ) { [weak self] _ in
+                self?.changeSearchScope(scope)
+            }
+        }
+        let brandActions = BrandType.allCases.map { brand in
+            UIAction(
+                title: brand.name,
+                state: brand == selectedBrand ? .on : .off
+            ) { [weak self] _ in
+                self?.changeBrand(brand)
+            }
+        }
+        filterButton.menu = UIMenu(children: [
+            UIMenu(title: "검색 기준", options: .displayInline, children: scopeActions),
+            UIMenu(title: "서비스", options: .displayInline, children: brandActions)
+        ])
+        filterButton.setTitle(
+            "\(selectedSearchScope.name) · \(selectedBrand.name)  ",
+            for: .normal
+        )
+    }
+
+    private func changeSearchScope(_ scope: SearchScopeType) {
+        guard scope != selectedSearchScope else { return }
+        reactor?.action.onNext(.searchType(scope))
+        reactor?.action.onNext(.search(searchBar.text))
+    }
+
+    private func changeBrand(_ brand: BrandType) {
+        guard brand != selectedBrand else { return }
+        reactor?.action.onNext(.brandType(brand))
+        reactor?.action.onNext(.search(searchBar.text))
     }
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
+    }
+
+    @objc private func searchTextFieldDidSubmit() {
+        reactor?.action.onNext(.search(searchBar.text))
     }
 }
