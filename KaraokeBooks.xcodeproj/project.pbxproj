@@ -53,7 +53,18 @@
 		22C277E32D7966B600B740C1 /* SongInfoStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */; };
 		22C277E42D7966B600B740C1 /* SongTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C277DC2D7966B600B740C1 /* SongTableView.swift */; };
 		22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */; };
+		AA0000000000000000000001 /* KaraokeSearchInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA000000000000000000000C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22B5010E2993EA4E00677964 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22B501152993EA4E00677964;
+			remoteInfo = KaraokeBooks;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		22333BE529ADE9A800C0A56D /* KaraokeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeError.swift; sourceTree = "<group>"; };
@@ -99,6 +110,8 @@
 		22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfoStackView.swift; sourceTree = "<group>"; };
 		22C277DC2D7966B600B740C1 /* SongTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableView.swift; sourceTree = "<group>"; };
 		22E0A83F2BE4C4CE0024EBE7 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeSearchInfoTests.swift; sourceTree = "<group>"; };
+		AA0000000000000000000003 /* KaraokeBooksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaraokeBooksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +125,13 @@
 				22AE3BFA2CDDFAFB00CFE787 /* ReactorKit in Frameworks */,
 				22AE3C022CE2113C00CFE787 /* RxCocoa in Frameworks */,
 				22B501602993EBA300677964 /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				22B501182993EA4E00677964 /* KaraokeBooks */,
+				AA0000000000000000000004 /* KaraokeBooksTests */,
 				22B501172993EA4E00677964 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -187,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				22B501162993EA4E00677964 /* KaraokeBooks.app */,
+				AA0000000000000000000003 /* KaraokeBooksTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -303,6 +325,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		AA0000000000000000000004 /* KaraokeBooksTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */,
+			);
+			path = KaraokeBooksTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -331,6 +361,23 @@
 			productReference = 22B501162993EA4E00677964 /* KaraokeBooks.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AA0000000000000000000007 /* KaraokeBooksTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000000000000000000008 /* Build configuration list for PBXNativeTarget "KaraokeBooksTests" */;
+			buildPhases = (
+				AA0000000000000000000005 /* Sources */,
+				AA0000000000000000000006 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA000000000000000000000B /* PBXTargetDependency */,
+			);
+			name = KaraokeBooksTests;
+			productName = KaraokeBooksTests;
+			productReference = AA0000000000000000000003 /* KaraokeBooksTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -343,6 +390,10 @@
 				TargetAttributes = {
 					22B501152993EA4E00677964 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					AA0000000000000000000007 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 22B501152993EA4E00677964;
 					};
 				};
 			};
@@ -367,6 +418,7 @@
 			projectRoot = "";
 			targets = (
 				22B501152993EA4E00677964 /* KaraokeBooks */,
+				AA0000000000000000000007 /* KaraokeBooksTests */,
 			);
 		};
 /* End PBXProject section */
@@ -429,7 +481,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0000000000000000000001 /* KaraokeSearchInfoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA000000000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22B501152993EA4E00677964 /* KaraokeBooks */;
+			targetProxy = AA000000000000000000000C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		22B501242993EA4E00677964 /* LaunchScreen.storyboard */ = {
@@ -625,6 +693,34 @@
 			};
 			name = Release;
 		};
+		AA0000000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KaraokeBooks.app/KaraokeBooks";
+				TEST_TARGET_NAME = KaraokeBooks;
+			};
+			name = Debug;
+		};
+		AA000000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KaraokeBooks.app/KaraokeBooks";
+				TEST_TARGET_NAME = KaraokeBooks;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -642,6 +738,15 @@
 			buildConfigurations = (
 				22B501412993EA4F00677964 /* Debug */,
 				22B501422993EA4F00677964 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA0000000000000000000008 /* Build configuration list for PBXNativeTarget "KaraokeBooksTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000009 /* Debug */,
+				AA000000000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
