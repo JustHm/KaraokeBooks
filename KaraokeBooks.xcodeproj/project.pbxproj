@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
 		224679272D057676005408E6 /* FavoriteSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224679262D057676005408E6 /* FavoriteSongReactor.swift */; };
-		224679292D0B2667005408E6 /* RecentSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224679282D0B2667005408E6 /* RecentSongReactor.swift */; };
 		2246792B2D115080005408E6 /* SearchResultReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2246792A2D115080005408E6 /* SearchResultReactor.swift */; };
 		226104662BE60BD800E77003 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226104652BE60BD700E77003 /* Date+.swift */; };
 		226104682BE60BE300E77003 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226104672BE60BE300E77003 /* UITextField+.swift */; };
@@ -420,7 +419,6 @@
 				22B5014C2993EA9C00677964 /* HomePresenter.swift in Sources */,
 				22B50177299790FF00677964 /* UIColor+.swift in Sources */,
 				22E0A8402BE4C4CE0024EBE7 /* PersistenceManager.swift in Sources */,
-				224679292D0B2667005408E6 /* RecentSongReactor.swift in Sources */,
 				2261D7BF299E68E80059222E /* SearchResultPresenter.swift in Sources */,
 				2261D7BD299E68BF0059222E /* SearchResultViewController.swift in Sources */,
 				224679272D057676005408E6 /* FavoriteSongReactor.swift in Sources */,
@@ -726,7 +724,7 @@
 			);
 			currentVersion = 22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */;
 			name = SongModel.xcdatamodeld;
-			path = "/Users/justhm/Documents/Xcode-workspace/KaraokeBooks/KaraokeBooks/Domain/Models/SongModel.xcdatamodeld";
+			path = SongModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
