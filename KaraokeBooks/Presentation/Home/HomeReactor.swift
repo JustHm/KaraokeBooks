@@ -68,6 +68,9 @@ class HomeReactor: Reactor {
                 response
             ])
         case let .songDetail(indexPath):
+            guard currentState.popularList.indices.contains(indexPath.row) else {
+                return .empty()
+            }
             let song = currentState.popularList[indexPath.row]
             return .concat([.just(.moveToDetail(song)), .just(.moveToDetail(nil))])
         }
