@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222C1B68304422D2003D8C86 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 222C1B67304422D2003D8C86 /* GoogleMobileAds */; };
 		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
 		224679272D057676005408E6 /* FavoriteSongReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224679262D057676005408E6 /* FavoriteSongReactor.swift */; };
 		2246792B2D115080005408E6 /* SearchResultReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2246792A2D115080005408E6 /* SearchResultReactor.swift */; };
@@ -125,6 +126,7 @@
 				22AE3BFA2CDDFAFB00CFE787 /* ReactorKit in Frameworks */,
 				22AE3C022CE2113C00CFE787 /* RxCocoa in Frameworks */,
 				22B501602993EBA300677964 /* Alamofire in Frameworks */,
+				222C1B68304422D2003D8C86 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +358,7 @@
 				22AE3C012CE2113C00CFE787 /* RxCocoa */,
 				22AE3C032CE2113C00CFE787 /* RxRelay */,
 				22AE3C052CE2113C00CFE787 /* RxSwift */,
+				222C1B67304422D2003D8C86 /* GoogleMobileAds */,
 			);
 			productName = KaraokeBooks;
 			productReference = 22B501162993EA4E00677964 /* KaraokeBooks.app */;
@@ -412,6 +415,7 @@
 				22B5015E2993EBA300677964 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				22AE3C002CE2113C00CFE787 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				222C1B66304422D2003D8C86 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 22B501172993EA4E00677964 /* Products */;
 			projectDirPath = "";
@@ -754,6 +758,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		222C1B66304422D2003D8C86 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.9.0;
+			};
+		};
 		22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
@@ -789,6 +801,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		222C1B67304422D2003D8C86 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 222C1B66304422D2003D8C86 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
 		22AE3BF92CDDFAFB00CFE787 /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 22AE3BF82CDDFAFB00CFE787 /* XCRemoteSwiftPackageReference "ReactorKit" */;
@@ -828,7 +845,6 @@
 				22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */,
 			);
 			currentVersion = 22A375AB2BE4DD9A00902081 /* SongModel.xcdatamodel */;
-			name = SongModel.xcdatamodeld;
 			path = SongModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
