@@ -17,6 +17,7 @@ final class SongDetailViewController: UIViewController, View {
     private lazy var titleImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "music.note.house"))
         imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .systemPink
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -25,41 +26,60 @@ final class SongDetailViewController: UIViewController, View {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.spacing = 8.0
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
+        stackView.setContentHuggingPriority(.required, for: .vertical)
         return stackView
     }()
     private lazy var youtubeLinkButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         let image = UIImage(systemName: "play.rectangle.fill")
         button.setImage(image, for: .normal)
+        button.setTitle("  YouTube 보기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.tintColor = .white
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.backgroundColor = .systemRed
+        button.layer.cornerRadius = 12.0
         return button
     }()
     private lazy var starButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         let image = UIImage(systemName: "star")
         button.setImage(image, for: .normal)
+        button.setTitle("  애창곡", for: .normal)
+        button.setTitleColor(.customPrimaryText, for: .normal)
         button.tintColor = .systemYellow
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.backgroundColor = .customBackground
+        button.layer.cornerRadius = 12.0
         return button
     }()
     private lazy var closeButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("확인", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.tintColor = .secondaryLabel
+        button.backgroundColor = .tertiarySystemFill
+        button.layer.cornerRadius = 16.0
+        button.accessibilityLabel = "닫기"
         return button
     }()
     private lazy var interactionButtonStackView: UIStackView = {
         let stackView = UIStackView(
-            arrangedSubviews: [youtubeLinkButton, starButton, closeButton]
+            arrangedSubviews: [youtubeLinkButton, starButton]
         )
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 20.0
+        stackView.distribution = .fillEqually
+        stackView.spacing = 12.0
         return stackView
     }()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
+        modalPresentationStyle = .pageSheet
+        preferredContentSize = CGSize(width: 0, height: 420.0)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -67,12 +87,9 @@ final class SongDetailViewController: UIViewController, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureSheet()
         setupViews()
         reactor?.action.onNext(.viewDidLoad)
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupViewHeight()
     }
     func bind(reactor: SongDetailReactor) {
         starButton.rx.tap
@@ -129,24 +146,31 @@ final class SongDetailViewController: UIViewController, View {
 }
 
 extension SongDetailViewController {
-    func setupViewHeight() {
-        // 모달 컨트롤러용 iOS 13에 도입된 최상단까지의 거리
-        let TOP_CARD_DISTANCE: CGFloat = 40.0
-        //SnapKit으로 레이아웃이 잡혀도 각 뷰에 constraints값은 변경이 안되어 있다. 근데 왜 배치는 잘됨?
-        //그래서 layoutIfNeeded를 호출해서 뷰를 다시 계산하면 변경된 값이 나온다.
-        songInfoStackView.layoutIfNeeded()
-        let viewHeight: CGFloat = songInfoStackView.frame.height + (songInfoStackView.frame.maxY * 1.5)
-        view.frame.size.height = viewHeight
-        // reposition the view (if not it will be near the top)
-        view.frame.origin.y = UIScreen.main.bounds.height - viewHeight - TOP_CARD_DISTANCE
-        view.layoutIfNeeded()
+    private func configureSheet() {
+        guard #available(iOS 15.0, *), let sheet = sheetPresentationController else { return }
+
+        let compactDetentIdentifier = UISheetPresentationController.Detent.Identifier("songDetail")
+        if #available(iOS 16.0, *) {
+            sheet.detents = [
+                .custom(identifier: compactDetentIdentifier) { context in
+                    min(420.0, context.maximumDetentValue)
+                }
+            ]
+            sheet.selectedDetentIdentifier = compactDetentIdentifier
+        } else {
+            sheet.detents = [.medium()]
+            sheet.selectedDetentIdentifier = .medium
+        }
+        sheet.prefersGrabberVisible = true
+        sheet.preferredCornerRadius = 24.0
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
     }
-    
-    func setupViews() {
-        view.backgroundColor = .customBackground
-        view.layer.cornerRadius = 15.0
+
+    private func setupViews() {
+        view.backgroundColor = .customForeground
         [
             titleImage,
+            closeButton,
             songInfoStackView,
             interactionButtonStackView
         ].forEach {
@@ -156,12 +180,19 @@ extension SongDetailViewController {
             $0.size.equalTo(32.0)
             $0.top.left.equalToSuperview().inset(16.0)
         }
-        interactionButtonStackView.snp.makeConstraints {
+        closeButton.snp.makeConstraints {
+            $0.size.equalTo(32.0)
             $0.top.right.equalToSuperview().inset(16.0)
         }
         songInfoStackView.snp.makeConstraints {
-            $0.top.equalTo(interactionButtonStackView.snp.bottom).offset(16.0)
+            $0.top.equalTo(titleImage.snp.bottom).offset(16.0)
             $0.left.right.equalToSuperview().inset(16.0)
+        }
+        interactionButtonStackView.snp.makeConstraints {
+            $0.top.greaterThanOrEqualTo(songInfoStackView.snp.bottom).offset(20.0)
+            $0.left.right.equalToSuperview().inset(16.0)
+            $0.height.greaterThanOrEqualTo(48.0)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
     }
     private func showAlert(header: String, body: String) {
