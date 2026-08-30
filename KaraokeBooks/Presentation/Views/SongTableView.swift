@@ -16,6 +16,8 @@ final class SongTableView: UITableView {
             self.sectionHeaderTopPadding = 0
         }
         self.showsVerticalScrollIndicator = false
+        self.rowHeight = UITableView.automaticDimension
+        self.estimatedRowHeight = 56.0
         self.layer.cornerRadius = 15.0
         self.clipsToBounds = true
         self.backgroundColor = .customBackground

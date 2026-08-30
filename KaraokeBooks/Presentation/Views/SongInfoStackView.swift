@@ -10,30 +10,42 @@ import UIKit
 final class SongInfoStackView: UIStackView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFontMetrics(forTextStyle: .title3).scaledFont(
+            for: .systemFont(ofSize: 20.0, weight: .bold)
+        )
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .customPrimaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var singerLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .customPrimaryText
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .customSecondaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var numberLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .customPrimaryText
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .systemRed
         return label
     }()
     private lazy var composerLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .customPrimaryText
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .customSecondaryText
         label.numberOfLines = 0
         return label
     }()
     private lazy var lyricistLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .customPrimaryText
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .customSecondaryText
         label.numberOfLines = 0
         return label
     }()
@@ -48,19 +60,17 @@ final class SongInfoStackView: UIStackView {
             lyricistLabel
         ].forEach {
             addArrangedSubview($0)
-            $0.text = "1111 1111"
         }
     }
     func setupLabelText(song: Song) {
-        titleLabel.text = "제목: \(song.title)"
-        singerLabel.text = "가수: \(song.singer)"
-        numberLabel.text = "번호: \(song.no)"
-        composerLabel.text = "작곡: \(song.composer)"
-        lyricistLabel.text = "작사: \(song.lyricist)"
+        titleLabel.text = song.title
+        singerLabel.text = song.singer
+        numberLabel.text = "\(song.brand.name) · \(song.no)"
+        composerLabel.text = "작곡  \(song.composer)"
+        lyricistLabel.text = "작사  \(song.lyricist)"
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
