@@ -51,6 +51,7 @@ final class FavoriteSongViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     func bind(reactor: FavoriteSongReactor) {
@@ -106,12 +107,13 @@ extension FavoriteSongViewController {
             view.addSubview($0)
         }
         brandSegmentedControl.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(16.0)
-            $0.left.right.equalToSuperview().inset(16.0)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8.0)
+            $0.left.right.equalToSuperview().inset(32.0)
         }
         favoriteSongTableView.snp.makeConstraints {
-            $0.left.right.bottom.equalToSuperview()
-            $0.top.equalTo(brandSegmentedControl.snp.bottom)
+            $0.left.right.equalToSuperview().inset(16.0)
+            $0.bottom.equalToSuperview()
+            $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(8.0)
         }
         warningText.snp.makeConstraints {
             $0.center.equalToSuperview()

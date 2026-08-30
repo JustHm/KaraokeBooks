@@ -21,7 +21,6 @@ final class FavoriteSongReactor: Reactor {
         case favoriteList([Song])
         case changeBrand(BrandType)
         case alertError(PersistenceError?)
-        case deleted(IndexPath)
         case selected(Song?)
     }
     struct State {
@@ -48,6 +47,9 @@ final class FavoriteSongReactor: Reactor {
                 }
             return .concat([result, .just(.changeBrand(brand))])
         case let .deleteSong(indexPath):
+            guard currentState.favoriteSongs.indices.contains(indexPath.row) else {
+                return .empty()
+            }
             let song = currentState.favoriteSongs[indexPath.row]
             return persistence.rx.deleteSong(songID: song.id)
                 .asObservable()
@@ -55,7 +57,7 @@ final class FavoriteSongReactor: Reactor {
                 .map { event -> FavoriteSongReactor.Mutation in
                     switch event {
                     case .completed: return Mutation.alertError(nil)
-                    case .next(_): return Mutation.deleted(indexPath)
+                    case .next: return Mutation.alertError(nil)
                     case let .error(error): return Mutation.alertError(error as? PersistenceError)
                     }
                 }
@@ -72,6 +74,9 @@ final class FavoriteSongReactor: Reactor {
                     }
                 }
         case let .songDetail(indexPath):
+            guard currentState.favoriteSongs.indices.contains(indexPath.row) else {
+                return .empty()
+            }
             let song = currentState.favoriteSongs[indexPath.row]
             return .concat([.just(.selected(song)), .just(.selected(nil))])
         }
@@ -91,8 +96,6 @@ final class FavoriteSongReactor: Reactor {
             if let error {
                 state.errorDescription = error.localizedDescription
             }
-        case let .deleted(indexPath):
-            state.favoriteSongs.remove(at: indexPath.row)
         }
         return state
     }
@@ -101,8 +104,7 @@ final class FavoriteSongReactor: Reactor {
         let eventAction =  persistence.event.flatMap { event -> Observable<Action> in
             switch event {
             case let .deleted(isDeleted):
-                if isDeleted { return .just(.reload)}
-                else { return .just(.reload)}
+                return isDeleted ? .just(.reload) : .empty()
             }
         }
         return Observable.merge(action, eventAction)
