@@ -83,6 +83,9 @@ class HomeReactor: Reactor {
             state.selectedSong = song
         case let .LoadState(isLoading):
             state.isLoading = isLoading
+            if isLoading {
+                state.errorDescription = nil
+            }
         case let .changeDate(date):
             state.dateType = date
         case let .changeBrand(brand):
@@ -90,7 +93,9 @@ class HomeReactor: Reactor {
         case let .popularList(songs):
             state.popularList = songs
             state.isLoading = false
+            state.errorDescription = nil
         case let .alertError(error):
+            state.isLoading = false
             if let error {
                 state.errorDescription = error.errorDescription
             }

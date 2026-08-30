@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ReactorKit
+import GoogleMobileAds
 
 final class SearchResultViewController: UIViewController, View {
     typealias Reactor = SearchResultReactor
@@ -15,6 +16,12 @@ final class SearchResultViewController: UIViewController, View {
 
     private var selectedSearchScope = SearchScopeType.title
     private var selectedBrand = BrandType.tj
+    private var bannerHeightConstraint: Constraint?
+    private var nativeAdLoader: AdLoader?
+    private var nativeAd: NativeAd?
+    private var nativeAdRetryWorkItem: DispatchWorkItem?
+    private var hasRetriedNativeAd = false
+    private var shouldShowNativeAd = false
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -53,8 +60,9 @@ final class SearchResultViewController: UIViewController, View {
         let label = UILabel()
         label.text = "검색 결과가 없습니다."
         label.font = .systemFont(ofSize: 16.0, weight: .medium)
-        label.sizeToFit()
         label.textColor = .customPrimaryText
+        label.textAlignment = .center
+        label.numberOfLines = 0
         label.isHidden = true
         return label
     }()
@@ -65,6 +73,8 @@ final class SearchResultViewController: UIViewController, View {
         indicator.startAnimating()
         return indicator
     }()
+    private lazy var bannerContainerView = BottomBannerAdView()
+    private lazy var nativeAdCardView = NativeAdCardView()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -79,12 +89,20 @@ final class SearchResultViewController: UIViewController, View {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
+        bannerContainerView.load(rootViewController: self)
         searchBar.searchTextField.addTarget(
             self,
             action: #selector(searchTextFieldDidSubmit),
             for: .editingDidEndOnExit
         )
         updateFilterMenu()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if shouldShowNativeAd {
+            loadNativeAd()
+        }
     }
     
     func bind(reactor: SearchResultReactor) {
@@ -111,22 +129,25 @@ final class SearchResultViewController: UIViewController, View {
         reactor.state.map{$0.songs}
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
+            .do(onNext: { [weak self] songs in
+                self?.updateNativeAdVisibility(hasResults: !songs.isEmpty)
+            })
             .bind(to: searchResultTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
                 cell.setup(rank: index, song: item)
             }
             .disposed(by: disposeBag)
-        reactor.state.map { state in
-            !(state.hasCompletedSearch && state.isEmpty)
+        reactor.state.map { state -> String? in
+            if let errorDescription = state.errorDescription {
+                return errorDescription
+            }
+            return state.hasCompletedSearch && state.isEmpty ? "검색 결과가 없습니다." : nil
         }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind(to: warningText.rx.isHidden)
-            .disposed(by: disposeBag)
-        reactor.state.compactMap{$0.errorDescription}
-            .observe(on: MainScheduler.instance)
             .withUnretained(self)
-            .bind { owner, msg in
-                owner.showAlert(header: "검색 실패", body: msg)
+            .bind { owner, message in
+                owner.warningText.text = message
+                owner.warningText.isHidden = message == nil
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
@@ -172,7 +193,7 @@ extension SearchResultViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
         
-        [searchBar, filterTitleLabel, filterButton, searchResultTableView, warningText, loadIndicator].forEach {
+        [searchBar, filterTitleLabel, filterButton, searchResultTableView, bannerContainerView, warningText, loadIndicator].forEach {
             view.addSubview($0)
         }
         searchBar.snp.makeConstraints {
@@ -190,11 +211,22 @@ extension SearchResultViewController {
             $0.left.greaterThanOrEqualToSuperview().inset(16.0)
         }
         searchResultTableView.snp.makeConstraints {
-            $0.left.right.bottom.equalToSuperview()
+            $0.left.right.equalToSuperview()
             $0.top.equalTo(filterButton.snp.bottom).offset(8.0)
+            $0.bottom.equalTo(bannerContainerView.snp.top)
+        }
+        bannerContainerView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            self.bannerHeightConstraint = $0.height.equalTo(0.0).constraint
+        }
+        bannerContainerView.onHeightChanged = { [weak self] height in
+            self?.bannerHeightConstraint?.update(offset: height)
+            self?.view.layoutIfNeeded()
         }
         warningText.snp.makeConstraints {
             $0.center.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(24.0)
         }
         loadIndicator.snp.makeConstraints {
             $0.center.equalTo(searchResultTableView)
@@ -251,6 +283,96 @@ extension SearchResultViewController {
     }
 
     @objc private func searchTextFieldDidSubmit() {
+        view.endEditing(true)
         reactor?.action.onNext(.search(searchBar.text))
     }
+
+    private func updateNativeAdVisibility(hasResults: Bool) {
+        shouldShowNativeAd = hasResults
+        guard hasResults else {
+            nativeAdRetryWorkItem?.cancel()
+            nativeAdRetryWorkItem = nil
+            hasRetriedNativeAd = false
+            searchResultTableView.tableHeaderView = nil
+            return
+        }
+
+        if let nativeAd {
+            showNativeAd(nativeAd)
+        } else {
+            loadNativeAd()
+        }
+    }
+
+    private func loadNativeAd() {
+        guard nativeAdLoader == nil,
+              nativeAd == nil,
+              let adUnitID = nativeAdUnitID else { return }
+
+        let loader = AdLoader(
+            adUnitID: adUnitID,
+            rootViewController: self,
+            adTypes: [.native],
+            options: nil
+        )
+        loader.delegate = self
+        nativeAdLoader = loader
+        loader.load(Request())
+    }
+
+    private func scheduleNativeAdRetry() {
+        guard shouldShowNativeAd,
+              !hasRetriedNativeAd,
+              nativeAd == nil else { return }
+
+        hasRetriedNativeAd = true
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self, self.shouldShowNativeAd else { return }
+            self.nativeAdRetryWorkItem = nil
+            self.loadNativeAd()
+        }
+        nativeAdRetryWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30.0, execute: workItem)
+    }
+
+    private func showNativeAd(_ nativeAd: NativeAd) {
+        guard shouldShowNativeAd else { return }
+
+        nativeAdCardView.populate(with: nativeAd)
+        view.layoutIfNeeded()
+        nativeAdCardView.sizeToFit(width: searchResultTableView.bounds.width)
+        searchResultTableView.tableHeaderView = nativeAdCardView
+        nativeAdCardView.associate(with: nativeAd)
+    }
+
+    private var nativeAdUnitID: String? {
+        #if DEBUG
+        return "ca-app-pub-3940256099942544/3986624511"
+        #else
+        guard let adUnitID = Bundle.main.object(
+            forInfoDictionaryKey: "GADNativeAdUnitID"
+        ) as? String,
+        !adUnitID.isEmpty else { return nil }
+        return adUnitID
+        #endif
+    }
 }
+
+extension SearchResultViewController: NativeAdLoaderDelegate, AdLoaderDelegate {
+    func adLoader(_ adLoader: AdLoader, didReceive nativeAd: NativeAd) {
+        nativeAd.delegate = self
+        self.nativeAd = nativeAd
+        showNativeAd(nativeAd)
+    }
+
+    func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
+        nativeAdLoader = nil
+        scheduleNativeAdRetry()
+    }
+
+    func adLoaderDidFinishLoading(_ adLoader: AdLoader) {
+        nativeAdLoader = nil
+    }
+}
+
+extension SearchResultViewController: NativeAdDelegate {}

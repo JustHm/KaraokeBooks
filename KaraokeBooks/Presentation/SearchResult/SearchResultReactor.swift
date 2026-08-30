@@ -90,9 +90,10 @@ final class SearchResultReactor: Reactor {
         switch mutation {
         case let .LoadState(isLoading):
             state.isLoading = isLoading
-            state.songs = []
             if isLoading {
+                state.songs = []
                 state.hasCompletedSearch = false
+                state.errorDescription = nil
             }
         case let .changeQuery(query):
             state.searchQuery = query
@@ -112,9 +113,11 @@ final class SearchResultReactor: Reactor {
             state.isEmpty = state.songs.isEmpty
             state.hasCompletedSearch = true
             state.currentPage += 1
+            state.errorDescription = nil
         case .clear:
             state.searchQuery = nil
         case let .alertError(error):
+            state.isLoading = false
             guard let error else {
                 state.errorDescription = nil
                 break
