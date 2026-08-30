@@ -10,6 +10,7 @@ import Alamofire
 import RxSwift
 
 enum NetworkError: Error {
+    case internetUnavailable
     case rankLoadFailed
     case searchFailed
 }
@@ -17,8 +18,12 @@ enum NetworkError: Error {
 extension NetworkError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .rankLoadFailed: return "인기차트 불러오기 실패."
-        case .searchFailed: return "노래 검색 실패."
+        case .internetUnavailable:
+            return "인터넷 연결을 확인한 뒤 다시 시도해 주세요."
+        case .rankLoadFailed:
+            return "인기차트를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        case .searchFailed:
+            return "노래를 검색하지 못했습니다. 잠시 후 다시 시도해 주세요."
         }
     }
 }
@@ -54,8 +59,8 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         switch await dataTask.result {
         case .success(let data):
             return data
-        case .failure:
-            throw NetworkError.rankLoadFailed
+        case let .failure(error):
+            throw networkError(for: error, fallback: .rankLoadFailed)
         }
     }
     func searchReqeust(brand: BrandType, query: String, searchType: SearchType, page: Int) async throws -> [Song] {
@@ -66,8 +71,8 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         switch await dataTask.result {
         case .success(let data):
             return data.data
-        case .failure:
-            throw NetworkError.searchFailed //AFError
+        case let .failure(error):
+            throw networkError(for: error, fallback: .searchFailed)
         }
     }
     func searchRequestAll(brand: BrandType, query: String, searchType: SearchType) async throws -> [Song] {
@@ -77,9 +82,22 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         case .success(let data):
             return data
         case .failure(let error):
-            print(error.localizedDescription)
-            throw NetworkError.searchFailed //AFError
+            throw networkError(for: error, fallback: .searchFailed)
         }
+    }
+
+    private func networkError(for error: Error, fallback: NetworkError) -> NetworkError {
+        let underlyingError = (error as? AFError)?.underlyingError ?? error
+        let errorCode = (underlyingError as NSError).code
+        let isConnectionError = [
+            URLError.Code.notConnectedToInternet.rawValue,
+            URLError.Code.networkConnectionLost.rawValue,
+            URLError.Code.cannotConnectToHost.rawValue,
+            URLError.Code.cannotFindHost.rawValue,
+            URLError.Code.dnsLookupFailed.rawValue
+        ].contains(errorCode)
+
+        return isConnectionError ? .internetUnavailable : fallback
     }
     
     func recentRequest(brand: BrandType, query: String, searchType: SearchType, page: Int) async throws -> [Song] {
