@@ -8,11 +8,14 @@
 import UIKit
 import SnapKit
 import ReactorKit
+import RxCocoa
 
 final class FavoriteSongViewController: UIViewController, View {
     typealias Reactor = FavoriteSongReactor
     var disposeBag = DisposeBag()
     private var bannerHeightConstraint: Constraint?
+    private var favoriteSongs: [Song] = []
+    private let displayItems = BehaviorRelay<[SongListDisplayItem]>(value: [])
     
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
@@ -29,6 +32,10 @@ final class FavoriteSongViewController: UIViewController, View {
         let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.register(SongTableViewCell.self,
                            forCellReuseIdentifier: SongTableViewCell.identifier)
+        tableView.register(
+            NativeAdTableViewCell.self,
+            forCellReuseIdentifier: NativeAdTableViewCell.identifier
+        )
         return tableView
     }()
     private lazy var warningText: UILabel = {
@@ -40,10 +47,13 @@ final class FavoriteSongViewController: UIViewController, View {
         return label
     }()
     private lazy var bannerContainerView = BottomBannerAdView()
-    private lazy var nativeAdPlacement = NativeAdPlacementController(
-        rootViewController: self,
-        tableView: favoriteSongTableView
-    )
+    private lazy var nativeAdPlacement: NativeAdPlacementController = {
+        let placement = NativeAdPlacementController(rootViewController: self)
+        placement.onAvailabilityChanged = { [weak self] in
+            self?.updateDisplayItems()
+        }
+        return placement
+    }()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -72,22 +82,53 @@ final class FavoriteSongViewController: UIViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         favoriteSongTableView.rx.itemSelected
-            .map{Reactor.Action.songDetail($0)}
+            .withLatestFrom(displayItems) { ($0, $1) }
+            .compactMap { indexPath, items in
+                guard items.indices.contains(indexPath.row) else { return nil }
+                return items[indexPath.row].song
+            }
+            .map(Reactor.Action.songDetail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         favoriteSongTableView.rx.itemDeleted
-            .map{Reactor.Action.deleteSong($0)}
+            .withLatestFrom(displayItems) { ($0, $1) }
+            .compactMap { indexPath, items in
+                guard items.indices.contains(indexPath.row) else { return nil }
+                return items[indexPath.row].song
+            }
+            .map(Reactor.Action.deleteSong)
             .bind(to: reactor.action)
             .disposed(by:disposeBag)
+        favoriteSongTableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
         
         //State
+        displayItems
+            .bind(to: favoriteSongTableView.rx.items) { [weak self] tableView, _, item in
+                switch item {
+                case let .song(song, rank):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: SongTableViewCell.identifier
+                    ) as! SongTableViewCell
+                    cell.setup(rank: rank, song: song)
+                    return cell
+                case let .nativeAd(slot):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: NativeAdTableViewCell.identifier
+                    ) as! NativeAdTableViewCell
+                    self?.nativeAdPlacement.configure(cell, slot: slot)
+                    return cell
+                }
+            }
+            .disposed(by: disposeBag)
         reactor.state.observe(on: MainScheduler.instance)
-            .map {$0.favoriteSongs}
-            .do(onNext: { [weak self] songs in
-                self?.updateNativeAdVisibility(hasResults: !songs.isEmpty)
-            })
-            .bind(to: favoriteSongTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
-                cell.setup(rank: index, song: item)
+            .map { $0.favoriteSongs }
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .bind { owner, songs in
+                owner.favoriteSongs = songs
+                owner.updateNativeAdVisibility(songs: songs)
+                owner.updateDisplayItems()
             }
             .disposed(by: disposeBag)
         reactor.state.map{!$0.isEmpty}
@@ -151,7 +192,24 @@ extension FavoriteSongViewController {
         present(alert, animated: true)
     }
 
-    private func updateNativeAdVisibility(hasResults: Bool) {
-        nativeAdPlacement.setEnabled(hasResults)
+    private func updateNativeAdVisibility(songs: [Song]) {
+        nativeAdPlacement.setEnabled(
+            !songs.isEmpty,
+            desiredAdCount: songs.nativeAdSlotCount
+        )
+    }
+
+    private func updateDisplayItems() {
+        displayItems.accept(
+            favoriteSongs.displayItems(nativeAdCount: nativeAdPlacement.availableAdCount)
+        )
+    }
+}
+
+extension FavoriteSongViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard displayItems.value.indices.contains(indexPath.row),
+              displayItems.value[indexPath.row].song != nil else { return .none }
+        return .delete
     }
 }

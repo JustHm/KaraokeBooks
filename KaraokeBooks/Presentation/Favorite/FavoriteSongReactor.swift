@@ -13,8 +13,8 @@ final class FavoriteSongReactor: Reactor {
     private let persistence = PersistenceManager.shared
     enum Action {
         case brandType(BrandType)
-        case deleteSong(IndexPath)
-        case songDetail(IndexPath)
+        case deleteSong(Song)
+        case songDetail(Song)
         case reload
     }
     enum Mutation {
@@ -46,11 +46,7 @@ final class FavoriteSongReactor: Reactor {
                     }
                 }
             return .concat([result, .just(.changeBrand(brand))])
-        case let .deleteSong(indexPath):
-            guard currentState.favoriteSongs.indices.contains(indexPath.row) else {
-                return .empty()
-            }
-            let song = currentState.favoriteSongs[indexPath.row]
+        case let .deleteSong(song):
             return persistence.rx.deleteSong(songID: song.id)
                 .asObservable()
                 .materialize()
@@ -73,11 +69,7 @@ final class FavoriteSongReactor: Reactor {
                     case let .error(error): return .alertError(error as? PersistenceError)
                     }
                 }
-        case let .songDetail(indexPath):
-            guard currentState.favoriteSongs.indices.contains(indexPath.row) else {
-                return .empty()
-            }
-            let song = currentState.favoriteSongs[indexPath.row]
+        case let .songDetail(song):
             return .concat([.just(.selected(song)), .just(.selected(nil))])
         }
     }

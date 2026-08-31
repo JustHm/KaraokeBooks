@@ -15,6 +15,8 @@ final class HomeViewController: UIViewController, View {
 
     private let contactEmail = "taggma12@icloud.com"
     private var bannerHeightConstraint: Constraint?
+    private var popularSongs: [Song] = []
+    private let displayItems = BehaviorRelay<[SongListDisplayItem]>(value: [])
     
     var disposeBag = DisposeBag()
 
@@ -120,15 +122,22 @@ final class HomeViewController: UIViewController, View {
         let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.register(SongTableViewCell.self,
                            forCellReuseIdentifier: SongTableViewCell.identifier)
+        tableView.register(
+            NativeAdTableViewCell.self,
+            forCellReuseIdentifier: NativeAdTableViewCell.identifier
+        )
         return tableView
     }()
 
     private lazy var bannerContainerView = BottomBannerAdView()
 
-    private lazy var nativeAdPlacement = NativeAdPlacementController(
-        rootViewController: self,
-        tableView: rankTableView
-    )
+    private lazy var nativeAdPlacement: NativeAdPlacementController = {
+        let placement = NativeAdPlacementController(rootViewController: self)
+        placement.onAvailabilityChanged = { [weak self] in
+            self?.updateDisplayItems()
+        }
+        return placement
+    }()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -143,7 +152,6 @@ final class HomeViewController: UIViewController, View {
         super.viewDidLoad()
         setupViews()
         bannerContainerView.load(rootViewController: self)
-        nativeAdPlacement.setEnabled(true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -237,7 +245,12 @@ extension HomeViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         rankTableView.rx.itemSelected
-            .map{Reactor.Action.songDetail($0)}
+            .withLatestFrom(displayItems) { ($0, $1) }
+            .compactMap { indexPath, items in
+                guard items.indices.contains(indexPath.row) else { return nil }
+                return items[indexPath.row].song
+            }
+            .map(Reactor.Action.songDetail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         rankTableHeader.currentTitle
@@ -280,10 +293,35 @@ extension HomeViewController {
                 owner.errorLabel.isHidden = message == nil
             }
             .disposed(by: disposeBag)
+        displayItems
+            .bind(to: rankTableView.rx.items) { [weak self] tableView, _, item in
+                switch item {
+                case let .song(song, rank):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: SongTableViewCell.identifier
+                    ) as! SongTableViewCell
+                    cell.setup(rank: rank, song: song)
+                    return cell
+                case let .nativeAd(slot):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: NativeAdTableViewCell.identifier
+                    ) as! NativeAdTableViewCell
+                    self?.nativeAdPlacement.configure(cell, slot: slot)
+                    return cell
+                }
+            }
+            .disposed(by: disposeBag)
         reactor.state.observe(on: MainScheduler.instance)
-            .map{ $0.popularList }
-            .bind(to: rankTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
-                cell.setup(rank: index, song: item)
+            .map { $0.popularList }
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .bind { owner, songs in
+                owner.popularSongs = songs
+                owner.nativeAdPlacement.setEnabled(
+                    !songs.isEmpty,
+                    desiredAdCount: songs.nativeAdSlotCount
+                )
+                owner.updateDisplayItems()
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
@@ -296,6 +334,12 @@ extension HomeViewController {
                 }
             }
             .disposed(by: disposeBag)
+    }
+
+    private func updateDisplayItems() {
+        displayItems.accept(
+            popularSongs.displayItems(nativeAdCount: nativeAdPlacement.availableAdCount)
+        )
     }
     
     private func showAlert(header: String, body: String) {

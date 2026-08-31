@@ -10,10 +10,14 @@ import ReactorKit
 
 final class SearchResultReactor: Reactor {
     var initialState = State()
-    private let service = KaraokeSearchManager.shared
+    private let service: KaraokeSongSearching
+
+    init(service: KaraokeSongSearching = AppEnvironment.makeKaraokeSearchService()) {
+        self.service = service
+    }
     enum Action {
         case searchQuery(String?)
-        case songDetail(IndexPath)
+        case songDetail(Song)
         case brandType(BrandType)
         case searchType(SearchScopeType)
         case currentRow(IndexPath)
@@ -73,11 +77,7 @@ final class SearchResultReactor: Reactor {
             case .title: return .just(.changeSearchType(.title))
             case .singer: return .just(.changeSearchType(.singer))
             }
-        case let .songDetail(indexPath):
-            guard currentState.songs.indices.contains(indexPath.row) else {
-                return .empty()
-            }
-            let song = currentState.songs[indexPath.row]
+        case let .songDetail(song):
             return .concat([.just(.songDetail(song)), .just(.songDetail(nil))])
         case .clear:
             return .just(.clear)
@@ -136,7 +136,7 @@ final class SearchResultReactor: Reactor {
                                     page: Int,
                                     reload: Bool
     ) -> Observable<Mutation> {
-        return service.rx.searchReqeustAll(brand: brand, searchType: type, query: query)
+        return service.searchSongsRequest(brand: brand, query: query, searchType: type)
             .asObservable()
             .materialize()
             .flatMap { event -> Observable<Mutation> in

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ReactorKit
+import RxCocoa
 
 final class SearchResultViewController: UIViewController, View {
     typealias Reactor = SearchResultReactor
@@ -16,6 +17,8 @@ final class SearchResultViewController: UIViewController, View {
     private var selectedSearchScope = SearchScopeType.title
     private var selectedBrand = BrandType.tj
     private var bannerHeightConstraint: Constraint?
+    private var songs: [Song] = []
+    private let displayItems = BehaviorRelay<[SongListDisplayItem]>(value: [])
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -48,6 +51,10 @@ final class SearchResultViewController: UIViewController, View {
     private lazy var searchResultTableView: SongTableView = {
         let tableView = SongTableView(frame: .zero, style: .plain)
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: SongTableViewCell.identifier)
+        tableView.register(
+            NativeAdTableViewCell.self,
+            forCellReuseIdentifier: NativeAdTableViewCell.identifier
+        )
         return tableView
     }()
     private lazy var warningText: UILabel = {
@@ -68,10 +75,13 @@ final class SearchResultViewController: UIViewController, View {
         return indicator
     }()
     private lazy var bannerContainerView = BottomBannerAdView()
-    private lazy var nativeAdPlacement = NativeAdPlacementController(
-        rootViewController: self,
-        tableView: searchResultTableView
-    )
+    private lazy var nativeAdPlacement: NativeAdPlacementController = {
+        let placement = NativeAdPlacementController(rootViewController: self)
+        placement.onAvailabilityChanged = { [weak self] in
+            self?.updateDisplayItems()
+        }
+        return placement
+    }()
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -102,7 +112,12 @@ final class SearchResultViewController: UIViewController, View {
     
     func bind(reactor: SearchResultReactor) {
         searchResultTableView.rx.itemSelected
-            .map{Reactor.Action.songDetail($0)}
+            .withLatestFrom(displayItems) { ($0, $1) }
+            .compactMap { indexPath, items in
+                guard items.indices.contains(indexPath.row) else { return nil }
+                return items[indexPath.row].song
+            }
+            .map(Reactor.Action.songDetail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 //        searchResultTableView.rx.prefetchRows
@@ -121,14 +136,32 @@ final class SearchResultViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         
+        displayItems
+            .bind(to: searchResultTableView.rx.items) { [weak self] tableView, _, item in
+                switch item {
+                case let .song(song, rank):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: SongTableViewCell.identifier
+                    ) as! SongTableViewCell
+                    cell.setup(rank: rank, song: song)
+                    return cell
+                case let .nativeAd(slot):
+                    let cell = tableView.dequeueReusableCell(
+                        withIdentifier: NativeAdTableViewCell.identifier
+                    ) as! NativeAdTableViewCell
+                    self?.nativeAdPlacement.configure(cell, slot: slot)
+                    return cell
+                }
+            }
+            .disposed(by: disposeBag)
         reactor.state.map{$0.songs}
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .do(onNext: { [weak self] songs in
-                self?.updateNativeAdVisibility(hasResults: !songs.isEmpty)
-            })
-            .bind(to: searchResultTableView.rx.items(cellIdentifier: SongTableViewCell.identifier, cellType: SongTableViewCell.self)) { index, item, cell in
-                cell.setup(rank: index, song: item)
+            .withUnretained(self)
+            .bind { owner, songs in
+                owner.songs = songs
+                owner.updateNativeAdVisibility(songs: songs)
+                owner.updateDisplayItems()
             }
             .disposed(by: disposeBag)
         reactor.state.map { state -> String? in
@@ -282,7 +315,16 @@ extension SearchResultViewController {
         reactor?.action.onNext(.search(searchBar.text))
     }
 
-    private func updateNativeAdVisibility(hasResults: Bool) {
-        nativeAdPlacement.setEnabled(hasResults)
+    private func updateNativeAdVisibility(songs: [Song]) {
+        nativeAdPlacement.setEnabled(
+            !songs.isEmpty,
+            desiredAdCount: songs.nativeAdSlotCount
+        )
+    }
+
+    private func updateDisplayItems() {
+        displayItems.accept(
+            songs.displayItems(nativeAdCount: nativeAdPlacement.availableAdCount)
+        )
     }
 }

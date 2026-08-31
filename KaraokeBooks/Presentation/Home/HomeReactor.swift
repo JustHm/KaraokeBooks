@@ -9,12 +9,16 @@ import ReactorKit
 
 class HomeReactor: Reactor {
     var initialState = State()
-    private let service = KaraokeSearchManager.shared
+    private let service: KaraokeSongSearching
+
+    init(service: KaraokeSongSearching = AppEnvironment.makeKaraokeSearchService()) {
+        self.service = service
+    }
     
     enum Action {
         case brandType(BrandType)
         case rankDateType(String?)
-        case songDetail(IndexPath)
+        case songDetail(Song)
     }
     
     enum Mutation {
@@ -42,7 +46,7 @@ class HomeReactor: Reactor {
         case let .brandType(brand):
             let changeBrand: Observable<Mutation> = .just(Mutation.changeBrand(brand))
             let changestate: Observable<Mutation> = .just(Mutation.LoadState(true))
-            let response: Observable<Mutation> = service.rx.rankSongsRequest(brand: brand, date: currentState.dateType)
+            let response: Observable<Mutation> = service.rankSongsRequest(brand: brand, date: currentState.dateType)
                 .asObservable().materialize() //Event<>로 감싸주는것
                 .map { result -> Mutation in
                     switch result {
@@ -54,7 +58,7 @@ class HomeReactor: Reactor {
             return .concat([changeBrand, changestate, response])
         case let .rankDateType(date):
             let date = (RankDateType(rawValue: date ?? "일간") ?? RankDateType.daily)
-            let response: Observable<Mutation> = service.rx.rankSongsRequest(brand: currentState.brandType, date: date)
+            let response: Observable<Mutation> = service.rankSongsRequest(brand: currentState.brandType, date: date)
                 .asObservable().materialize()
                 .map { result -> Mutation in
                     switch result {
@@ -67,11 +71,7 @@ class HomeReactor: Reactor {
                 .just(.changeDate(date)), .just(.LoadState(true)),
                 response
             ])
-        case let .songDetail(indexPath):
-            guard currentState.popularList.indices.contains(indexPath.row) else {
-                return .empty()
-            }
-            let song = currentState.popularList[indexPath.row]
+        case let .songDetail(song):
             return .concat([.just(.moveToDetail(song)), .just(.moveToDetail(nil))])
         }
     }

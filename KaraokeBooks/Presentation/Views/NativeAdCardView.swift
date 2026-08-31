@@ -118,6 +118,14 @@ final class NativeAdCardView: NativeAdView {
         self.nativeAd = nativeAd
     }
 
+    func reset() {
+        nativeAd = nil
+        headlineLabel.text = nil
+        bodyLabel.text = nil
+        iconImageView.image = nil
+        callToActionButton.setTitle(nil, for: .normal)
+    }
+
     func sizeToFit(width: CGFloat) {
         frame = CGRect(x: 0.0, y: 0.0, width: width, height: 0.0)
         setNeedsLayout()

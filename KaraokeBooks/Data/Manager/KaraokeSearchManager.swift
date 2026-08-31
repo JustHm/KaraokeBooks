@@ -47,6 +47,11 @@ protocol KaraokeSearchManagerProtocol {
                        page: Int) async throws -> [Song]
 }
 
+protocol KaraokeSongSearching {
+    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]>
+    func searchSongsRequest(brand: BrandType, query: String, searchType: SearchType) -> Single<[Song]>
+}
+
 final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtocol {
     static var shared: KaraokeSearchManager = KaraokeSearchManager()
     private let searchURL = KaraokeSearchInfo()
@@ -180,4 +185,14 @@ extension Reactive where Base == KaraokeSearchManager {
 //            }
 //        }
 //    }
+}
+
+extension KaraokeSearchManager: KaraokeSongSearching {
+    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]> {
+        rx.rankSongsRequest(brand: brand, date: date)
+    }
+
+    func searchSongsRequest(brand: BrandType, query: String, searchType: SearchType) -> Single<[Song]> {
+        rx.searchReqeustAll(brand: brand, searchType: searchType, query: query)
+    }
 }

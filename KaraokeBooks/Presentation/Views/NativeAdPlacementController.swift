@@ -10,50 +10,58 @@ import GoogleMobileAds
 
 final class NativeAdPlacementController: NSObject {
     private weak var rootViewController: UIViewController?
-    private weak var tableView: UITableView?
-    private let cardView = NativeAdCardView()
 
     private var nativeAdLoader: AdLoader?
-    private var nativeAd: NativeAd?
+    private var nativeAds: [NativeAd] = []
+    private var desiredAdCount = 0
     private var retryWorkItem: DispatchWorkItem?
     private var hasRetried = false
     private var isEnabled = false
 
-    init(rootViewController: UIViewController, tableView: UITableView) {
-        self.rootViewController = rootViewController
-        self.tableView = tableView
+    var onAvailabilityChanged: (() -> Void)?
+    var availableAdCount: Int {
+        isEnabled ? nativeAds.count : 0
     }
 
-    func setEnabled(_ isEnabled: Bool) {
+    init(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+    }
+
+    func setEnabled(_ isEnabled: Bool, desiredAdCount: Int) {
         self.isEnabled = isEnabled
+        self.desiredAdCount = desiredAdCount
 
         guard isEnabled else {
             retryWorkItem?.cancel()
             retryWorkItem = nil
             hasRetried = false
-            tableView?.tableHeaderView = nil
+            onAvailabilityChanged?()
             return
         }
 
-        if let nativeAd {
-            display(nativeAd)
-        } else {
-            loadIfNeeded()
-        }
+        loadIfNeeded()
+        onAvailabilityChanged?()
     }
 
     func loadIfNeeded() {
-        guard isEnabled,
+        guard !AppEnvironment.isUITesting,
+              isEnabled,
               nativeAdLoader == nil,
-              nativeAd == nil,
+              nativeAds.count < desiredAdCount,
               let rootViewController,
               let adUnitID = nativeAdUnitID else { return }
 
+        let loaderOptions: [MultipleAdsAdLoaderOptions]? = {
+            guard desiredAdCount > 1 else { return nil }
+            let options = MultipleAdsAdLoaderOptions()
+            options.numberOfAds = desiredAdCount
+            return [options]
+        }()
         let loader = AdLoader(
             adUnitID: adUnitID,
             rootViewController: rootViewController,
             adTypes: [.native],
-            options: nil
+            options: loaderOptions
         )
         loader.delegate = self
         nativeAdLoader = loader
@@ -63,7 +71,7 @@ final class NativeAdPlacementController: NSObject {
     private func scheduleRetry() {
         guard isEnabled,
               !hasRetried,
-              nativeAd == nil else { return }
+              nativeAds.isEmpty else { return }
 
         hasRetried = true
         let workItem = DispatchWorkItem { [weak self] in
@@ -77,16 +85,10 @@ final class NativeAdPlacementController: NSObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 30.0, execute: workItem)
     }
 
-    private func display(_ nativeAd: NativeAd) {
+    func configure(_ cell: NativeAdTableViewCell, slot: Int) {
         guard isEnabled,
-              let rootViewController,
-              let tableView else { return }
-
-        cardView.populate(with: nativeAd)
-        rootViewController.view.layoutIfNeeded()
-        cardView.sizeToFit(width: tableView.bounds.width)
-        tableView.tableHeaderView = cardView
-        cardView.associate(with: nativeAd)
+              nativeAds.indices.contains(slot) else { return }
+        cell.configure(with: nativeAds[slot])
     }
 
     private var nativeAdUnitID: String? {
@@ -105,8 +107,8 @@ final class NativeAdPlacementController: NSObject {
 extension NativeAdPlacementController: NativeAdLoaderDelegate, AdLoaderDelegate {
     func adLoader(_ adLoader: AdLoader, didReceive nativeAd: NativeAd) {
         nativeAd.delegate = self
-        self.nativeAd = nativeAd
-        display(nativeAd)
+        nativeAds.append(nativeAd)
+        onAvailabilityChanged?()
     }
 
     func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
