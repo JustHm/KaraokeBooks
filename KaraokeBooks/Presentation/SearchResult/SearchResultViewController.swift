@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import ReactorKit
-import GoogleMobileAds
 
 final class SearchResultViewController: UIViewController, View {
     typealias Reactor = SearchResultReactor
@@ -17,11 +16,6 @@ final class SearchResultViewController: UIViewController, View {
     private var selectedSearchScope = SearchScopeType.title
     private var selectedBrand = BrandType.tj
     private var bannerHeightConstraint: Constraint?
-    private var nativeAdLoader: AdLoader?
-    private var nativeAd: NativeAd?
-    private var nativeAdRetryWorkItem: DispatchWorkItem?
-    private var hasRetriedNativeAd = false
-    private var shouldShowNativeAd = false
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -74,7 +68,10 @@ final class SearchResultViewController: UIViewController, View {
         return indicator
     }()
     private lazy var bannerContainerView = BottomBannerAdView()
-    private lazy var nativeAdCardView = NativeAdCardView()
+    private lazy var nativeAdPlacement = NativeAdPlacementController(
+        rootViewController: self,
+        tableView: searchResultTableView
+    )
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -100,9 +97,7 @@ final class SearchResultViewController: UIViewController, View {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if shouldShowNativeAd {
-            loadNativeAd()
-        }
+        nativeAdPlacement.loadIfNeeded()
     }
     
     func bind(reactor: SearchResultReactor) {
@@ -288,91 +283,6 @@ extension SearchResultViewController {
     }
 
     private func updateNativeAdVisibility(hasResults: Bool) {
-        shouldShowNativeAd = hasResults
-        guard hasResults else {
-            nativeAdRetryWorkItem?.cancel()
-            nativeAdRetryWorkItem = nil
-            hasRetriedNativeAd = false
-            searchResultTableView.tableHeaderView = nil
-            return
-        }
-
-        if let nativeAd {
-            showNativeAd(nativeAd)
-        } else {
-            loadNativeAd()
-        }
-    }
-
-    private func loadNativeAd() {
-        guard nativeAdLoader == nil,
-              nativeAd == nil,
-              let adUnitID = nativeAdUnitID else { return }
-
-        let loader = AdLoader(
-            adUnitID: adUnitID,
-            rootViewController: self,
-            adTypes: [.native],
-            options: nil
-        )
-        loader.delegate = self
-        nativeAdLoader = loader
-        loader.load(Request())
-    }
-
-    private func scheduleNativeAdRetry() {
-        guard shouldShowNativeAd,
-              !hasRetriedNativeAd,
-              nativeAd == nil else { return }
-
-        hasRetriedNativeAd = true
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self, self.shouldShowNativeAd else { return }
-            self.nativeAdRetryWorkItem = nil
-            self.loadNativeAd()
-        }
-        nativeAdRetryWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30.0, execute: workItem)
-    }
-
-    private func showNativeAd(_ nativeAd: NativeAd) {
-        guard shouldShowNativeAd else { return }
-
-        nativeAdCardView.populate(with: nativeAd)
-        view.layoutIfNeeded()
-        nativeAdCardView.sizeToFit(width: searchResultTableView.bounds.width)
-        searchResultTableView.tableHeaderView = nativeAdCardView
-        nativeAdCardView.associate(with: nativeAd)
-    }
-
-    private var nativeAdUnitID: String? {
-        #if DEBUG
-        return "ca-app-pub-3940256099942544/3986624511"
-        #else
-        guard let adUnitID = Bundle.main.object(
-            forInfoDictionaryKey: "GADNativeAdUnitID"
-        ) as? String,
-        !adUnitID.isEmpty else { return nil }
-        return adUnitID
-        #endif
+        nativeAdPlacement.setEnabled(hasResults)
     }
 }
-
-extension SearchResultViewController: NativeAdLoaderDelegate, AdLoaderDelegate {
-    func adLoader(_ adLoader: AdLoader, didReceive nativeAd: NativeAd) {
-        nativeAd.delegate = self
-        self.nativeAd = nativeAd
-        showNativeAd(nativeAd)
-    }
-
-    func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
-        nativeAdLoader = nil
-        scheduleNativeAdRetry()
-    }
-
-    func adLoaderDidFinishLoading(_ adLoader: AdLoader) {
-        nativeAdLoader = nil
-    }
-}
-
-extension SearchResultViewController: NativeAdDelegate {}

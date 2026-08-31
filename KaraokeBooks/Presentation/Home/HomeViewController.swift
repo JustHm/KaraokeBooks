@@ -9,16 +9,11 @@ import UIKit
 import SnapKit
 import RxCocoa
 import ReactorKit
-import GoogleMobileAds
 
 final class HomeViewController: UIViewController, View {
     typealias Reactor = HomeReactor
 
     private let contactEmail = "taggma12@icloud.com"
-    private var nativeAdLoader: AdLoader?
-    private var nativeAd: NativeAd?
-    private var nativeAdRetryWorkItem: DispatchWorkItem?
-    private var hasRetriedNativeAd = false
     private var bannerHeightConstraint: Constraint?
     
     var disposeBag = DisposeBag()
@@ -130,7 +125,10 @@ final class HomeViewController: UIViewController, View {
 
     private lazy var bannerContainerView = BottomBannerAdView()
 
-    private lazy var nativeAdCardView = NativeAdCardView()
+    private lazy var nativeAdPlacement = NativeAdPlacementController(
+        rootViewController: self,
+        tableView: rankTableView
+    )
     
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -145,13 +143,13 @@ final class HomeViewController: UIViewController, View {
         super.viewDidLoad()
         setupViews()
         bannerContainerView.load(rootViewController: self)
-        loadNativeAd()
+        nativeAdPlacement.setEnabled(true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        loadNativeAd()
+        nativeAdPlacement.loadIfNeeded()
         if let reactor,
            reactor.currentState.popularList.isEmpty,
            !reactor.currentState.isLoading {
@@ -229,56 +227,6 @@ extension HomeViewController {
         present(ContactSheetViewController(email: contactEmail), animated: true)
     }
 
-    private func loadNativeAd() {
-        guard nativeAdLoader == nil,
-              nativeAd == nil,
-              let adUnitID = nativeAdUnitID else { return }
-        let loader = AdLoader(
-            adUnitID: adUnitID,
-            rootViewController: self,
-            adTypes: [.native],
-            options: nil
-        )
-        loader.delegate = self
-        nativeAdLoader = loader
-        loader.load(Request())
-    }
-
-    private func scheduleNativeAdRetry() {
-        guard !hasRetriedNativeAd,
-              nativeAd == nil else { return }
-
-        hasRetriedNativeAd = true
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self,
-                  self.isViewLoaded,
-                  self.view.window != nil else { return }
-            self.nativeAdRetryWorkItem = nil
-            self.loadNativeAd()
-        }
-        nativeAdRetryWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30.0, execute: workItem)
-    }
-
-    private func showNativeAd(_ nativeAd: NativeAd) {
-        nativeAdCardView.populate(with: nativeAd)
-        view.layoutIfNeeded()
-        nativeAdCardView.sizeToFit(width: rankTableView.bounds.width)
-        rankTableView.tableHeaderView = nativeAdCardView
-        nativeAdCardView.associate(with: nativeAd)
-    }
-
-    private var nativeAdUnitID: String? {
-        #if DEBUG
-        return "ca-app-pub-3940256099942544/3986624511"
-        #else
-        guard let adUnitID = Bundle.main.object(
-            forInfoDictionaryKey: "GADNativeAdUnitID"
-        ) as? String,
-        !adUnitID.isEmpty else { return nil }
-        return adUnitID
-        #endif
-    }
 }
 
 extension HomeViewController {
@@ -476,147 +424,5 @@ private final class ContactSheetViewController: UIViewController {
     @objc private func didTapCopyEmail() {
         UIPasteboard.general.string = email
         copyEmailButton.setTitle("  복사됨", for: .normal)
-    }
-}
-
-extension HomeViewController: NativeAdLoaderDelegate, AdLoaderDelegate {
-    func adLoader(_ adLoader: AdLoader, didReceive nativeAd: NativeAd) {
-        nativeAd.delegate = self
-        self.nativeAd = nativeAd
-        showNativeAd(nativeAd)
-    }
-
-    func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
-        nativeAdLoader = nil
-        scheduleNativeAdRetry()
-    }
-
-    func adLoaderDidFinishLoading(_ adLoader: AdLoader) {
-        nativeAdLoader = nil
-    }
-}
-
-extension HomeViewController: NativeAdDelegate {}
-
-final class NativeAdCardView: NativeAdView {
-    private lazy var adLabel: UILabel = {
-        let label = UILabel()
-        label.text = "광고"
-        label.font = .preferredFont(forTextStyle: .caption1)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .secondaryLabel
-        return label
-    }()
-
-    private lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 8.0
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .tertiarySystemFill
-        return imageView
-    }()
-
-    private lazy var headlineLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .customPrimaryText
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private lazy var bodyLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 2
-        return label
-    }()
-
-    private lazy var callToActionButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemPink
-        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = 10.0
-        button.isUserInteractionEnabled = false
-        return button
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setupViews() {
-        backgroundColor = .customForeground
-        [adLabel, iconImageView, headlineLabel, bodyLabel, callToActionButton].forEach {
-            addSubview($0)
-        }
-        adLabel.snp.makeConstraints {
-            $0.top.left.equalToSuperview().inset(16.0)
-            $0.right.lessThanOrEqualToSuperview().inset(64.0)
-        }
-        iconImageView.snp.makeConstraints {
-            $0.top.equalTo(adLabel.snp.bottom).offset(8.0)
-            $0.left.equalToSuperview().inset(16.0)
-            $0.size.equalTo(44.0)
-        }
-        headlineLabel.snp.makeConstraints {
-            $0.top.equalTo(iconImageView)
-            $0.left.equalTo(iconImageView.snp.right).offset(12.0)
-            $0.right.equalToSuperview().inset(16.0)
-        }
-        bodyLabel.snp.makeConstraints {
-            $0.top.equalTo(headlineLabel.snp.bottom).offset(4.0)
-            $0.left.right.equalTo(headlineLabel)
-        }
-        callToActionButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(iconImageView.snp.bottom).offset(14.0)
-            $0.top.greaterThanOrEqualTo(bodyLabel.snp.bottom).offset(14.0)
-            $0.left.right.equalToSuperview().inset(16.0)
-            $0.height.greaterThanOrEqualTo(40.0)
-            $0.bottom.equalToSuperview().inset(16.0)
-        }
-
-        headlineView = headlineLabel
-        bodyView = bodyLabel
-        callToActionView = callToActionButton
-        iconView = iconImageView
-    }
-
-    func populate(with nativeAd: NativeAd) {
-        self.nativeAd = nil
-        headlineLabel.text = nativeAd.headline
-        bodyLabel.text = nativeAd.body
-        bodyLabel.isHidden = nativeAd.body == nil
-        iconImageView.image = nativeAd.icon?.image
-        iconImageView.isHidden = nativeAd.icon == nil
-        callToActionButton.setTitle(nativeAd.callToAction, for: .normal)
-        callToActionButton.isHidden = nativeAd.callToAction == nil
-    }
-
-    func associate(with nativeAd: NativeAd) {
-        self.nativeAd = nativeAd
-    }
-
-    func sizeToFit(width: CGFloat) {
-        frame = CGRect(x: 0.0, y: 0.0, width: width, height: 0.0)
-        setNeedsLayout()
-        layoutIfNeeded()
-        let size = systemLayoutSizeFitting(
-            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-        frame.size.height = ceil(size.height)
-        layoutIfNeeded()
     }
 }
