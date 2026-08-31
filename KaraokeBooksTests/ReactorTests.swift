@@ -1,0 +1,118 @@
+//
+//  ReactorTests.swift
+//  KaraokeBooksTests
+//
+//  Created by 안정흠 on 2026/08/31.
+//
+
+import XCTest
+import RxSwift
+@testable import KaraokeBooks
+
+final class ReactorTests: XCTestCase {
+    private let disposeBag = DisposeBag()
+
+    func testHomeReactorUsesSelectedRankDateAndStoresSongs() {
+        let songs = makeSongs(count: 2)
+        let service = StubKaraokeSongSearchService(rankResult: .success(songs))
+        let reactor = HomeReactor(service: service)
+        let expectation = expectation(description: "차트 요청 완료")
+
+        reactor.state
+            .filter { $0.popularList == songs && !$0.isLoading }
+            .take(1)
+            .subscribe(onNext: { _ in expectation.fulfill() })
+            .disposed(by: disposeBag)
+
+        reactor.action.onNext(.rankDateType(RankDateType.weekly.rawValue))
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(service.requestedRankDates, [.weekly])
+    }
+
+    func testSearchReactorReturnsSearchFailureAsInlineErrorState() {
+        let service = StubKaraokeSongSearchService(searchResult: .failure(NetworkError.internetUnavailable))
+        let reactor = SearchResultReactor(service: service)
+        let expectation = expectation(description: "검색 실패 상태")
+
+        reactor.state
+            .compactMap(\.errorDescription)
+            .take(1)
+            .subscribe(onNext: { message in
+                XCTAssertEqual(message, NetworkError.internetUnavailable.localizedDescription)
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        reactor.action.onNext(.search("테스트"))
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testSearchReactorPassesSongObjectToDetailSelection() {
+        let songs = makeSongs(count: 6)
+        let service = StubKaraokeSongSearchService(searchResult: .success(songs))
+        let reactor = SearchResultReactor(service: service)
+        let expectation = expectation(description: "선택 곡")
+
+        reactor.state
+            .compactMap(\.selectedSong)
+            .take(1)
+            .subscribe(onNext: { song in
+                XCTAssertEqual(song, songs[5])
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        reactor.action.onNext(.songDetail(songs[5]))
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    private func makeSongs(count: Int) -> [Song] {
+        (0..<count).map { index in
+            Song(
+                brand: .tj,
+                no: "\(index)",
+                title: "노래 \(index)",
+                singer: "가수 \(index)",
+                composer: "작곡가",
+                lyricist: "작사가",
+                release: "2026"
+            )
+        }
+    }
+}
+
+private final class StubKaraokeSongSearchService: KaraokeSongSearching {
+    var requestedRankDates: [RankDateType] = []
+    private let rankResult: Result<[Song], Error>
+    private let searchResult: Result<[Song], Error>
+
+    init(
+        rankResult: Result<[Song], Error> = .success([]),
+        searchResult: Result<[Song], Error> = .success([])
+    ) {
+        self.rankResult = rankResult
+        self.searchResult = searchResult
+    }
+
+    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]> {
+        requestedRankDates.append(date)
+        return single(from: rankResult)
+    }
+
+    func searchSongsRequest(brand: BrandType, query: String, searchType: SearchType) -> Single<[Song]> {
+        single(from: searchResult)
+    }
+
+    private func single(from result: Result<[Song], Error>) -> Single<[Song]> {
+        Single.create { single in
+            switch result {
+            case let .success(songs):
+                single(.success(songs))
+            case let .failure(error):
+                single(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
+}
