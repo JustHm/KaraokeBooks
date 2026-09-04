@@ -7,18 +7,30 @@
 
 import Foundation
 /// 인기 순위 노래 검색시 날짜 구분 (URL에 들어감)
-enum RankDateType: String, CaseIterable {
-    case daily = "일간"
-    case weekly = "주간"
-    case monthly = "월간"
+enum RankDateType: CaseIterable {
+    case daily
+    case weekly
+    case monthly
+
+    var localizedTitle: String {
+        switch self {
+        case .daily:
+            return String(localized: "chart.daily")
+        case .weekly:
+            return String(localized: "chart.weekly")
+        case .monthly:
+            return String(localized: "chart.monthly")
+        }
+    }
+
     var replace: String {
-            switch self {
-            case .daily:
-                return "daily"
-            case .weekly:
-                return "weekly"
-            case .monthly:
-                return "monthly"
-            }
+        switch self {
+        case .daily:
+            return "daily"
+        case .weekly:
+            return "weekly"
+        case .monthly:
+            return "monthly"
+        }
         }
 }

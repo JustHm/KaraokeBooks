@@ -24,7 +24,7 @@ final class HomeItemCollectionViewCell: UICollectionViewCell {
     private lazy var gradientLayer = CAGradientLayer()
     
     func setup(title: HomeList) {
-        titleLabel.text = title.rawValue
+        titleLabel.text = title.localizedTitle
         titleIcon.image = title == .favourite ? UIImage(systemName: "star") : UIImage(systemName: "magnifyingglass")
         setupLayout()
     }
@@ -57,4 +57,3 @@ private extension HomeItemCollectionViewCell {
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
     }
 }
-

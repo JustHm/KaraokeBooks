@@ -51,7 +51,13 @@ final class SongTableViewCell: UITableViewCell {
         titleLabel.text = song.title
         singerLabel.text = song.singer
         numberLabel.text = song.no
-        accessibilityLabel = "번호 \(song.no), \(song.title), \(song.singer)"
+        accessibilityLabel = String(
+            format: String(localized: "accessibility.song"),
+            locale: .current,
+            song.no,
+            song.title,
+            song.singer
+        )
     }
     
     private func setupViews() {

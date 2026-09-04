@@ -22,13 +22,13 @@ final class SearchResultViewController: UIViewController, View {
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = SearchScopeType.title.name
+        searchBar.placeholder = SearchScopeType.title.localizedTitle
         searchBar.searchBarStyle = .minimal
         return searchBar
     }()
     private lazy var filterTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "필터"
+        label.text = String(localized: "search.filter")
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondaryLabel
@@ -59,7 +59,7 @@ final class SearchResultViewController: UIViewController, View {
     }()
     private lazy var warningText: UILabel = {
         let label = UILabel()
-        label.text = "검색 결과가 없습니다."
+        label.text = String(localized: "search.empty")
         label.font = .systemFont(ofSize: 16.0, weight: .medium)
         label.textColor = .customPrimaryText
         label.textAlignment = .center
@@ -168,7 +168,7 @@ final class SearchResultViewController: UIViewController, View {
             if let errorDescription = state.errorDescription {
                 return errorDescription
             }
-            return state.hasCompletedSearch && state.isEmpty ? "검색 결과가 없습니다." : nil
+            return state.hasCompletedSearch && state.isEmpty ? String(localized: "search.empty") : nil
         }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -261,14 +261,14 @@ extension SearchResultViewController {
         }
     }
     func setupNavigationBar() {
-        navigationItem.title = SearchScopeType.title.name
+        navigationItem.title = String(localized: "search.title")
         navigationItem.largeTitleDisplayMode = .never
     }
 
     private func updateFilterMenu() {
         let scopeActions = SearchScopeType.allCases.map { scope in
             UIAction(
-                title: scope.name,
+                title: scope.localizedTitle,
                 state: scope == selectedSearchScope ? .on : .off
             ) { [weak self] _ in
                 self?.changeSearchScope(scope)
@@ -283,11 +283,11 @@ extension SearchResultViewController {
             }
         }
         filterButton.menu = UIMenu(children: [
-            UIMenu(title: "검색 기준", options: .displayInline, children: scopeActions),
-            UIMenu(title: "서비스", options: .displayInline, children: brandActions)
+            UIMenu(title: String(localized: "search.criteria"), options: .displayInline, children: scopeActions),
+            UIMenu(title: String(localized: "search.service"), options: .displayInline, children: brandActions)
         ])
         filterButton.setTitle(
-            "\(selectedSearchScope.name) · \(selectedBrand.name)  ",
+            "\(selectedSearchScope.localizedTitle) · \(selectedBrand.name)  ",
             for: .normal
         )
     }
@@ -305,7 +305,7 @@ extension SearchResultViewController {
     }
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: String(localized: "action.ok"), style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
     }

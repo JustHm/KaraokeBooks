@@ -11,7 +11,7 @@ import SnapKit
 final class CustomTitleView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "노래방Book"
+        label.text = String(localized: "app.title")
         label.font = .systemFont(ofSize: 16.0, weight: .bold)
         label.textColor = .customPrimaryText
         return label

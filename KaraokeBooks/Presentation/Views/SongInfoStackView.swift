@@ -66,8 +66,16 @@ final class SongInfoStackView: UIStackView {
         titleLabel.text = song.title
         singerLabel.text = song.singer
         numberLabel.text = "\(song.brand.name) · \(song.no)"
-        composerLabel.text = "작곡  \(song.composer)"
-        lyricistLabel.text = "작사  \(song.lyricist)"
+        composerLabel.text = String(
+            format: String(localized: "metadata.composer"),
+            locale: .current,
+            song.composer
+        )
+        lyricistLabel.text = String(
+            format: String(localized: "metadata.lyricist"),
+            locale: .current,
+            song.lyricist
+        )
     }
     
     required init(coder: NSCoder) {

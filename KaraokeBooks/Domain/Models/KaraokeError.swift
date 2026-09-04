@@ -7,6 +7,15 @@
 
 import Foundation
 
-enum KaraokeError: String, Error {
-    case invalidURL = "주소가 유효하지 않습니다."
+enum KaraokeError: Error {
+    case invalidURL
+}
+
+extension KaraokeError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return String(localized: "error.invalidURL")
+        }
+    }
 }

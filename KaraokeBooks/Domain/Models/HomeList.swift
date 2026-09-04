@@ -7,10 +7,17 @@
 
 import Foundation
 
-enum HomeList: String, CaseIterable {
-    case favourite = "애창곡"
-    case search = "노래 검색"
-//    case newSong = "최신곡" //최신곡 API 지원 중지...
-}
+enum HomeList: CaseIterable {
+    case favourite
+    case search
 
+    var localizedTitle: String {
+        switch self {
+        case .favourite:
+            return String(localized: "favorite.title")
+        case .search:
+            return String(localized: "home.searchSongs")
+        }
+    }
+}
 

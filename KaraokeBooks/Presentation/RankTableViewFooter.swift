@@ -12,7 +12,7 @@ final class RankTableViewFooter: UITableViewHeaderFooterView {
     static let identifier = "RankTableViewFooter"
     private lazy var detailButton: UIButton = {
         let button = UIButton()
-        button.setTitle("자세히보기 →", for: .normal)
+        button.setTitle(String(localized: "table.showMore"), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 12.0)
         button.setTitleColor(.tintColor, for: .normal)
         return button

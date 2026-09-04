@@ -24,7 +24,7 @@ final class ReactorTests: XCTestCase {
             .subscribe(onNext: { _ in expectation.fulfill() })
             .disposed(by: disposeBag)
 
-        reactor.action.onNext(.rankDateType(RankDateType.weekly.rawValue))
+        reactor.action.onNext(.rankDateType(.weekly))
         wait(for: [expectation], timeout: 1.0)
 
         XCTAssertEqual(service.requestedRankDates, [.weekly])

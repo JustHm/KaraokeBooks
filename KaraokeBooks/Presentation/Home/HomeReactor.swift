@@ -17,7 +17,7 @@ class HomeReactor: Reactor {
     
     enum Action {
         case brandType(BrandType)
-        case rankDateType(String?)
+        case rankDateType(RankDateType)
         case songDetail(Song)
     }
     
@@ -57,7 +57,6 @@ class HomeReactor: Reactor {
                 }
             return .concat([changeBrand, changestate, response])
         case let .rankDateType(date):
-            let date = (RankDateType(rawValue: date ?? "일간") ?? RankDateType.daily)
             let response: Observable<Mutation> = service.rankSongsRequest(brand: currentState.brandType, date: date)
                 .asObservable().materialize()
                 .map { result -> Mutation in

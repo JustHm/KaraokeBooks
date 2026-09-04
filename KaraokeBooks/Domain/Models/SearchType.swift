@@ -13,17 +13,15 @@ enum SearchType: String {
     case popular, release//, no
 }
 
-enum SearchScopeType: String, CaseIterable {
+enum SearchScopeType: CaseIterable {
     case title, singer
-    
-    var name: String {
+
+    var localizedTitle: String {
         switch self {
         case .title:
-            return "노래 검색"
+            return String(localized: "search.bySong")
         case .singer:
-            return "가수 검색"
-//        default:
-//            return ""
+            return String(localized: "search.byArtist")
         }
     }
 }

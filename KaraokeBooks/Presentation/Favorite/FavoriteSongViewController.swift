@@ -40,7 +40,7 @@ final class FavoriteSongViewController: UIViewController, View {
     }()
     private lazy var warningText: UILabel = {
         let label = UILabel()
-        label.text = "저장한 애창곡이 없습니다."
+        label.text = String(localized: "favorite.empty")
         label.font = .systemFont(ofSize: 16.0, weight: .medium)
         label.textColor = .customPrimaryText
         label.isHidden = true
@@ -139,7 +139,7 @@ final class FavoriteSongViewController: UIViewController, View {
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
             .withUnretained(self)
             .bind { owner, msg in
-                owner.showAlert(header: "Error", body: msg)
+                owner.showAlert(header: String(localized: "alert.errorTitle"), body: msg)
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
@@ -158,7 +158,7 @@ final class FavoriteSongViewController: UIViewController, View {
 extension FavoriteSongViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
-        navigationItem.title = HomeList.favourite.rawValue
+        navigationItem.title = HomeList.favourite.localizedTitle
         [favoriteSongTableView, brandSegmentedControl, bannerContainerView, warningText].forEach {
             view.addSubview($0)
         }
@@ -187,7 +187,7 @@ extension FavoriteSongViewController {
     
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: String(localized: "action.ok"), style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
     }

@@ -24,7 +24,7 @@ final class HomeViewController: UIViewController, View {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "questionmark.circle.fill"), for: .normal)
         button.tintColor = .customPrimaryText
-        button.accessibilityLabel = "문의하기"
+        button.accessibilityLabel = String(localized: "accessibility.contact")
         return button
     }()
 
@@ -33,13 +33,13 @@ final class HomeViewController: UIViewController, View {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 8.0
         imageView.clipsToBounds = true
-        imageView.accessibilityLabel = "노래방BOOK"
+        imageView.accessibilityLabel = String(localized: "app.title")
         return imageView
     }()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "노래방BOOK"
+        label.text = String(localized: "app.title")
         label.font = UIFontMetrics(forTextStyle: .title1).scaledFont(
             for: .systemFont(ofSize: 30.0, weight: .bold)
         )
@@ -76,12 +76,12 @@ final class HomeViewController: UIViewController, View {
     }()
     
     private lazy var favoriteListButton: MoveSceneButton = {
-        let button = MoveSceneButton(title: "애창곡", symbol: "star")
+        let button = MoveSceneButton(title: String(localized: "favorite.title"), symbol: "star")
         return button
     }()
     
     private lazy var searchButton: MoveSceneButton = {
-        let button = MoveSceneButton(title: "노래검색", symbol: "magnifyingglass")
+        let button = MoveSceneButton(title: String(localized: "home.searchSongs"), symbol: "magnifyingglass")
         return button
     }()
     
@@ -161,7 +161,7 @@ final class HomeViewController: UIViewController, View {
         if let reactor,
            reactor.currentState.popularList.isEmpty,
            !reactor.currentState.isLoading {
-            reactor.action.onNext(.rankDateType(reactor.currentState.dateType.rawValue))
+            reactor.action.onNext(.rankDateType(reactor.currentState.dateType))
         }
     }
 
@@ -253,7 +253,7 @@ extension HomeViewController {
             .map(Reactor.Action.songDetail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        rankTableHeader.currentTitle
+        rankTableHeader.currentDate
             .map {Reactor.Action.rankDateType($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -344,7 +344,7 @@ extension HomeViewController {
     
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: String(localized: "action.ok"), style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
     }
@@ -355,7 +355,7 @@ private final class ContactSheetViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "문의하기"
+        label.text = String(localized: "contact.title")
         label.font = .preferredFont(forTextStyle: .title3)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .customPrimaryText
@@ -374,7 +374,7 @@ private final class ContactSheetViewController: UIViewController {
     private lazy var openMailButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "envelope.fill"), for: .normal)
-        button.setTitle("  메일 앱 열기", for: .normal)
+        button.setTitle("  " + String(localized: "action.openMail"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.tintColor = .white
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
@@ -388,7 +388,7 @@ private final class ContactSheetViewController: UIViewController {
     private lazy var copyEmailButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
-        button.setTitle("  메일 주소 복사", for: .normal)
+        button.setTitle("  " + String(localized: "action.copyEmail"), for: .normal)
         button.setTitleColor(.customPrimaryText, for: .normal)
         button.tintColor = .customPrimaryText
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
@@ -467,6 +467,6 @@ private final class ContactSheetViewController: UIViewController {
 
     @objc private func didTapCopyEmail() {
         UIPasteboard.general.string = email
-        copyEmailButton.setTitle("  복사됨", for: .normal)
+        copyEmailButton.setTitle("  " + String(localized: "action.copied"), for: .normal)
     }
 }

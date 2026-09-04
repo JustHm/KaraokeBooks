@@ -11,26 +11,26 @@ import RxSwift
 import RxCocoa
 
 final class RankTableViewHeader: UIView {
-    var currentTitle: BehaviorRelay<String> = BehaviorRelay<String>(value: "일간")
+    var currentDate: BehaviorRelay<RankDateType> = BehaviorRelay(value: .daily)
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22.0, weight: .bold)
-        label.text = "인기 차트"
+        label.text = String(localized: "chart.popular")
         return label
     }()
     lazy var dateMenu: UIButton = {
         let button = UIButton()
-        let actions = RankDateType.allCases.map {
-            UIAction(title: $0.rawValue, handler: { [weak self] action in
-                button.setTitle(action.title, for: .normal)
-                self?.currentTitle.accept(action.title)
+        let actions = RankDateType.allCases.map { dateType in
+            UIAction(title: dateType.localizedTitle, handler: { [weak self] _ in
+                button.setTitle(dateType.localizedTitle, for: .normal)
+                self?.currentDate.accept(dateType)
             })
         }
         let menu = UIMenu(children: actions)
         button.menu = menu
         button.showsMenuAsPrimaryAction = true
-        button.setTitle("일간", for: .normal)
+        button.setTitle(RankDateType.daily.localizedTitle, for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 22.0, weight: .bold)
         

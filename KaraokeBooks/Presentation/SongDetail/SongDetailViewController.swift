@@ -34,7 +34,7 @@ final class SongDetailViewController: UIViewController, View {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "play.rectangle.fill")
         button.setImage(image, for: .normal)
-        button.setTitle("  YouTube 보기", for: .normal)
+        button.setTitle("  " + String(localized: "action.showYouTube"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.tintColor = .white
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
@@ -47,7 +47,7 @@ final class SongDetailViewController: UIViewController, View {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "star")
         button.setImage(image, for: .normal)
-        button.setTitle("  애창곡", for: .normal)
+        button.setTitle("  " + String(localized: "favorite.add"), for: .normal)
         button.setTitleColor(.customPrimaryText, for: .normal)
         button.tintColor = .systemYellow
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
@@ -62,7 +62,7 @@ final class SongDetailViewController: UIViewController, View {
         button.tintColor = .secondaryLabel
         button.backgroundColor = .tertiarySystemFill
         button.layer.cornerRadius = 16.0
-        button.accessibilityLabel = "닫기"
+        button.accessibilityLabel = String(localized: "accessibility.close")
         return button
     }()
     private lazy var interactionButtonStackView: UIStackView = {
@@ -126,7 +126,7 @@ final class SongDetailViewController: UIViewController, View {
             .compactMap{$0} //compactMap은 nil만 필터링 하기 때문에 두 번 호출되지 않음.
             .withUnretained(self)
             .bind { owner, msg in
-                owner.showAlert(header: "Error", body: msg)
+                owner.showAlert(header: String(localized: "alert.errorTitle"), body: msg)
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.song}
@@ -197,7 +197,7 @@ extension SongDetailViewController {
     }
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: String(localized: "action.ok"), style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
     }

@@ -12,7 +12,7 @@ import GoogleMobileAds
 final class NativeAdCardView: NativeAdView {
     private lazy var adLabel: UILabel = {
         let label = UILabel()
-        label.text = "광고"
+        label.text = String(localized: "ad.label")
         label.font = .preferredFont(forTextStyle: .caption1)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .secondaryLabel

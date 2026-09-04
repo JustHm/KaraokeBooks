@@ -1,0 +1,636 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "accessibility.close" : {
+      "comment" : "Accessibility label for the song detail sheet close button.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "닫기"
+          }
+        }
+      }
+    },
+    "accessibility.contact" : {
+      "comment" : "Accessibility label for the contact button on the home screen.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact us"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문의하기"
+          }
+        }
+      }
+    },
+    "accessibility.song" : {
+      "comment" : "VoiceOver description for a song list row. %@ are song number, title, and artist.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number %@, %@, %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "번호 %@, %@, %@"
+          }
+        }
+      }
+    },
+    "action.copied" : {
+      "comment" : "Button title after the support email address has been copied.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복사됨"
+          }
+        }
+      }
+    },
+    "action.copyEmail" : {
+      "comment" : "Button that copies the support email address.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy email address"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메일 주소 복사"
+          }
+        }
+      }
+    },
+    "action.ok" : {
+      "comment" : "Confirmation button on alerts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
+          }
+        }
+      }
+    },
+    "action.openMail" : {
+      "comment" : "Button that opens the default mail app.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Mail"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메일 앱 열기"
+          }
+        }
+      }
+    },
+    "action.showYouTube" : {
+      "comment" : "Button that opens YouTube results for a song.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Karaoke"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MR 검색"
+          }
+        }
+      }
+    },
+    "ad.label" : {
+      "comment" : "Disclosure label above a native advertisement.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ad"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광고"
+          }
+        }
+      }
+    },
+    "alert.errorTitle" : {
+      "comment" : "Title for an error alert.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류"
+          }
+        }
+      }
+    },
+    "app.title" : {
+      "comment" : "App name used as the in-app home title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karaoke Book"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래방BOOK"
+          }
+        }
+      }
+    },
+    "chart.daily" : {
+      "comment" : "Daily period option for popular charts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일간"
+          }
+        }
+      }
+    },
+    "chart.monthly" : {
+      "comment" : "Monthly period option for popular charts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "월간"
+          }
+        }
+      }
+    },
+    "chart.popular" : {
+      "comment" : "Section title for popular karaoke charts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Popular Charts"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인기 차트"
+          }
+        }
+      }
+    },
+    "chart.weekly" : {
+      "comment" : "Weekly period option for popular charts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간"
+          }
+        }
+      }
+    },
+    "contact.title" : {
+      "comment" : "Title of the contact sheet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact us"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문의하기"
+          }
+        }
+      }
+    },
+    "error.favoriteMissingData" : {
+      "comment" : "Error when a song cannot be saved because required data is missing.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This song is missing information and couldn’t be saved."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래의 데이터가 누락되어 저장하지 못했습니다."
+          }
+        }
+      }
+    },
+    "error.favoriteStorage" : {
+      "comment" : "Error when local favorite-song storage cannot be accessed.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t access local storage."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장소를 찾을 수 없습니다."
+          }
+        }
+      }
+    },
+    "error.fetchFailed" : {
+      "comment" : "Generic local data retrieval error.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t retrieve the data."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가져오기 실패."
+          }
+        }
+      }
+    },
+    "error.internetUnavailable" : {
+      "comment" : "Error shown when the device has no network connection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your internet connection and try again."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인터넷 연결을 확인한 뒤 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "error.invalidURL" : {
+      "comment" : "Error when an internal request URL cannot be created.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The request URL is invalid."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주소가 유효하지 않습니다."
+          }
+        }
+      }
+    },
+    "error.rankLoadFailed" : {
+      "comment" : "Error shown when popular charts cannot be loaded.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load popular charts. Try again later."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인기차트를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "error.searchFailed" : {
+      "comment" : "Error shown when a song search request fails.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t search for songs. Try again later."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래를 검색하지 못했습니다. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "favorite.add" : {
+      "comment" : "Button that adds or removes a song from favorites.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorite"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡"
+          }
+        }
+      }
+    },
+    "favorite.empty" : {
+      "comment" : "Empty-state message for the favorites list.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No favorites saved yet."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장한 애창곡이 없습니다."
+          }
+        }
+      }
+    },
+    "favorite.title" : {
+      "comment" : "Title for the favorites screen and home shortcut.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorites"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡"
+          }
+        }
+      }
+    },
+    "home.searchSongs" : {
+      "comment" : "Home-screen shortcut that opens song search.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Songs"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래검색"
+          }
+        }
+      }
+    },
+    "metadata.composer" : {
+      "comment" : "Song metadata label followed by a composer name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Composer: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작곡  %@"
+          }
+        }
+      }
+    },
+    "metadata.lyricist" : {
+      "comment" : "Song metadata label followed by a lyricist name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lyricist: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작사  %@"
+          }
+        }
+      }
+    },
+    "search.byArtist" : {
+      "comment" : "Filter option to search by artist name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search by Artist"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가수 검색"
+          }
+        }
+      }
+    },
+    "search.bySong" : {
+      "comment" : "Filter option to search by song title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search by Song"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래 검색"
+          }
+        }
+      }
+    },
+    "search.criteria" : {
+      "comment" : "Inline heading for search criterion menu options.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search by"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색 기준"
+          }
+        }
+      }
+    },
+    "search.empty" : {
+      "comment" : "Message shown after a completed search returns no songs.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No search results."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색 결과가 없습니다."
+          }
+        }
+      }
+    },
+    "search.filter" : {
+      "comment" : "Static label displayed next to the search filter button.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "필터"
+          }
+        }
+      }
+    },
+    "search.service" : {
+      "comment" : "Inline heading for karaoke-service menu options.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Service"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서비스"
+          }
+        }
+      }
+    },
+    "search.title" : {
+      "comment" : "Navigation title for the search screen.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색"
+          }
+        }
+      }
+    },
+    "table.showMore" : {
+      "comment" : "Button that opens the full list of chart songs.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See More →"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세히보기 →"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

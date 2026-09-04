@@ -190,9 +190,9 @@ enum PersistenceError: Error {
 extension PersistenceError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .addError: return "노래의 데이터가 누락되어 저장하지 못했습니다."
-        case .entityError: return "저장소를 찾을 수 없습니다."
-        case .fetchError: return "가져오기 실패."
+        case .addError: return String(localized: "error.favoriteMissingData")
+        case .entityError: return String(localized: "error.favoriteStorage")
+        case .fetchError: return String(localized: "error.fetchFailed")
         }
     }
 }
