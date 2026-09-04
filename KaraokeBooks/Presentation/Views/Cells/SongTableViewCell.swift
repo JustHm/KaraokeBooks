@@ -32,6 +32,8 @@ final class SongTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .headline)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .customPrimaryText
@@ -41,10 +43,22 @@ final class SongTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        updateTextLayoutForPreferredContentSizeCategory()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        updateTextLayoutForPreferredContentSizeCategory()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateTextLayoutForPreferredContentSizeCategory()
     }
 
     func setup(rank _: Int, song: Song) {
@@ -58,12 +72,16 @@ final class SongTableViewCell: UITableViewCell {
             song.title,
             song.singer
         )
+        accessibilityHint = String(localized: "accessibility.songHint")
     }
     
     private func setupViews() {
+        isAccessibilityElement = true
+        accessibilityTraits = .button
         backgroundColor = .customForeground
         contentView.backgroundColor = .customForeground
         [numberLabel, titleLabel, singerLabel].forEach {
+            $0.isAccessibilityElement = false
             contentView.addSubview($0)
         }
         numberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -84,5 +102,14 @@ final class SongTableViewCell: UITableViewCell {
             $0.bottom.equalTo(contentView).inset(8.0)
             $0.left.right.equalTo(titleLabel)
         }
+    }
+
+    private func updateTextLayoutForPreferredContentSizeCategory() {
+        let usesExpandedLayout = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+            || titleLabel.font.pointSize >= 20.0
+        titleLabel.numberOfLines = usesExpandedLayout ? 0 : 1
+        singerLabel.numberOfLines = usesExpandedLayout ? 0 : 1
+        titleLabel.lineBreakMode = usesExpandedLayout ? .byWordWrapping : .byTruncatingTail
+        singerLabel.lineBreakMode = usesExpandedLayout ? .byWordWrapping : .byTruncatingTail
     }
 }

@@ -91,6 +91,13 @@ final class SongDetailViewController: UIViewController, View {
         setupViews()
         reactor?.action.onNext(.viewDidLoad)
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        updateInteractionLayout()
+        configureSheet()
+    }
     func bind(reactor: SongDetailReactor) {
         starButton.rx.tap
             .map{ Reactor.Action.starTapped }
@@ -112,6 +119,9 @@ final class SongDetailViewController: UIViewController, View {
             .bind { owner, isStar in
                 let symbol = isStar ? "star.fill" : "star"
                 owner.starButton.setImage(UIImage(systemName: symbol), for: .normal)
+                owner.starButton.setTitle("  " + String(localized: isStar ? "favorite.remove" : "favorite.add"), for: .normal)
+                owner.starButton.accessibilityLabel = String(localized: isStar ? "favorite.remove" : "favorite.add")
+                owner.starButton.accessibilityTraits = isStar ? [.button, .selected] : .button
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.youtubeURL}
@@ -148,6 +158,15 @@ final class SongDetailViewController: UIViewController, View {
 extension SongDetailViewController {
     private func configureSheet() {
         guard #available(iOS 15.0, *), let sheet = sheetPresentationController else { return }
+
+        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+            sheet.detents = [.large()]
+            sheet.selectedDetentIdentifier = .large
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 24.0
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            return
+        }
 
         let compactDetentIdentifier = UISheetPresentationController.Detent.Identifier("songDetail")
         if #available(iOS 16.0, *) {
@@ -194,6 +213,13 @@ extension SongDetailViewController {
             $0.height.greaterThanOrEqualTo(48.0)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
+        updateInteractionLayout()
+    }
+
+    private func updateInteractionLayout() {
+        let usesAccessibilityLayout = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        interactionButtonStackView.axis = usesAccessibilityLayout ? .vertical : .horizontal
+        interactionButtonStackView.spacing = usesAccessibilityLayout ? 8.0 : 12.0
     }
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)

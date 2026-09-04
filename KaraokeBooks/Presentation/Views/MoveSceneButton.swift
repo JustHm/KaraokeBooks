@@ -48,7 +48,10 @@ final class MoveSceneButton: UIButton {
     func setProperties() {
         self.tintColor = .black
         setTitle(title, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 16.0, weight: .bold)
+        titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        titleLabel?.adjustsFontForContentSizeCategory = true
+        titleLabel?.numberOfLines = 2
+        titleLabel?.textAlignment = .center
         if let symbol {
             setImage(UIImage(systemName: symbol)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         }

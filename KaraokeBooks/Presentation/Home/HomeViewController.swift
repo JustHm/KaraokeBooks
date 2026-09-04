@@ -15,6 +15,7 @@ final class HomeViewController: UIViewController, View {
 
     private let contactEmail = "taggma12@icloud.com"
     private var bannerHeightConstraint: Constraint?
+    private var actionStackHeightConstraint: Constraint?
     private var popularSongs: [Song] = []
     private let displayItems = BehaviorRelay<[SongListDisplayItem]>(value: [])
     
@@ -33,7 +34,7 @@ final class HomeViewController: UIViewController, View {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 8.0
         imageView.clipsToBounds = true
-        imageView.accessibilityLabel = String(localized: "app.title")
+        imageView.isAccessibilityElement = false
         return imageView
     }()
 
@@ -169,6 +170,12 @@ final class HomeViewController: UIViewController, View {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        updateActionStackLayout()
+    }
 }
 
 extension HomeViewController {
@@ -195,7 +202,7 @@ extension HomeViewController {
         stackView.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(16.0)
             $0.top.equalTo(headerStackView.snp.bottom).offset(16.0)
-            $0.height.equalTo(84.0)
+            self.actionStackHeightConstraint = $0.height.equalTo(84.0).constraint
         }
         
         rankTableHeader.snp.makeConstraints {
@@ -229,6 +236,7 @@ extension HomeViewController {
             $0.center.equalTo(rankTableView)
             $0.left.right.equalTo(rankTableView).inset(24.0)
         }
+        updateActionStackLayout()
     }
 
     @objc private func didTapHelp() {
@@ -238,6 +246,13 @@ extension HomeViewController {
 }
 
 extension HomeViewController {
+    private func updateActionStackLayout() {
+        let usesAccessibilityLayout = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        stackView.axis = usesAccessibilityLayout ? .vertical : .horizontal
+        stackView.spacing = usesAccessibilityLayout ? 8.0 : 16.0
+        actionStackHeightConstraint?.update(offset: usesAccessibilityLayout ? 112.0 : 84.0)
+    }
+
     func bind(reactor: HomeReactor) {
         //Action
         brandSegmentedControl.rx.selectedSegmentIndex
@@ -291,6 +306,9 @@ extension HomeViewController {
             .bind { owner, message in
                 owner.errorLabel.text = message
                 owner.errorLabel.isHidden = message == nil
+                if let message {
+                    UIAccessibility.post(notification: .announcement, argument: message)
+                }
             }
             .disposed(by: disposeBag)
         displayItems

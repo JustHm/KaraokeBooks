@@ -41,7 +41,8 @@ final class FavoriteSongViewController: UIViewController, View {
     private lazy var warningText: UILabel = {
         let label = UILabel()
         label.text = String(localized: "favorite.empty")
-        label.font = .systemFont(ofSize: 16.0, weight: .medium)
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .customPrimaryText
         label.isHidden = true
         return label

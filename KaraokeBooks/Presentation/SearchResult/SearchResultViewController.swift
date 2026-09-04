@@ -60,7 +60,8 @@ final class SearchResultViewController: UIViewController, View {
     private lazy var warningText: UILabel = {
         let label = UILabel()
         label.text = String(localized: "search.empty")
-        label.font = .systemFont(ofSize: 16.0, weight: .medium)
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .customPrimaryText
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -176,6 +177,9 @@ final class SearchResultViewController: UIViewController, View {
             .bind { owner, message in
                 owner.warningText.text = message
                 owner.warningText.isHidden = message == nil
+                if let message {
+                    UIAccessibility.post(notification: .announcement, argument: message)
+                }
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}

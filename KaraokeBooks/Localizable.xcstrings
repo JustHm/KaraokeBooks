@@ -52,6 +52,40 @@
         }
       }
     },
+    "accessibility.songHint" : {
+      "comment" : "VoiceOver hint for a song list row that opens song details.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens song details."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "노래 상세 정보를 엽니다."
+          }
+        }
+      }
+    },
+    "accessibility.selected" : {
+      "comment" : "Accessibility value for a selected custom segmented control item.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택됨"
+          }
+        }
+      }
+    },
     "action.copied" : {
       "comment" : "Button title after the support email address has been copied.",
       "localizations" : {
@@ -422,6 +456,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "저장한 애창곡이 없습니다."
+          }
+        }
+      }
+    },
+    "favorite.remove" : {
+      "comment" : "Button that removes a song from favorites.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Favorite"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡 해제"
           }
         }
       }

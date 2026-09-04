@@ -72,6 +72,7 @@ final class ClearSegmentedControl: UIControl {
 
 private extension ClearSegmentedControl {
     func configureViews() {
+        isAccessibilityElement = false
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
@@ -102,6 +103,8 @@ private extension ClearSegmentedControl {
             button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
             button.titleLabel?.adjustsFontForContentSizeCategory = true
             button.setTitle(title, for: .normal)
+            button.accessibilityLabel = title
+            button.accessibilityUserInputLabels = [title]
             button.addTarget(self, action: #selector(didTapSegment(_:)), for: .touchUpInside)
             stackView.addArrangedSubview(button)
             return button
@@ -129,6 +132,7 @@ private extension ClearSegmentedControl {
             let isSelected = index == selectedIndex
             button.setTitleColor(isSelected ? .systemRed : .secondaryLabel, for: .normal)
             button.accessibilityTraits = isSelected ? [.button, .selected] : .button
+            button.accessibilityValue = isSelected ? String(localized: "accessibility.selected") : nil
         }
     }
 
