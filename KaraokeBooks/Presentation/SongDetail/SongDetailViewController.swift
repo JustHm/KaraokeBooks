@@ -125,7 +125,6 @@ final class SongDetailViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.youtubeURL}
-            .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, url in
                 let viewController = SFSafariViewController(url: url.absoluteURL)

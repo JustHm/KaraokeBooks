@@ -14,12 +14,22 @@ final class SongDetailReactor: Reactor {
     private var youtube: URL? {
         get {
             let song = currentState.song
+            let path: String
             switch song.brand {
             case .kumyoung:
-                return URL(string: "https://m.youtube.com/@KARAOKEKY/search?query=\(song.no)")
+                path = "/@KARAOKEKY/search"
             case .tj:
-                return URL(string: "https://m.youtube.com/user/ziller/search?query=\(song.no)")
+                path = "/user/ziller/search"
             }
+
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "www.youtube.com"
+            components.path = path
+            components.queryItems = [
+                URLQueryItem(name: "query", value: String(song.no))
+            ]
+            return components.url
         }
     }
     enum Action {
