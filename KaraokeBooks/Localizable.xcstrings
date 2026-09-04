@@ -35,6 +35,23 @@
         }
       }
     },
+    "accessibility.selected" : {
+      "comment" : "Accessibility value for a selected custom segmented control item.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택됨"
+          }
+        }
+      }
+    },
     "accessibility.song" : {
       "comment" : "VoiceOver description for a song list row. %@ are song number, title, and artist.",
       "localizations" : {
@@ -65,23 +82,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "노래 상세 정보를 엽니다."
-          }
-        }
-      }
-    },
-    "accessibility.selected" : {
-      "comment" : "Accessibility value for a selected custom segmented control item.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selected"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "선택됨"
           }
         }
       }
@@ -462,6 +462,7 @@
     },
     "favorite.remove" : {
       "comment" : "Button that removes a song from favorites.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
