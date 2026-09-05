@@ -36,15 +36,22 @@ final class SearchResultViewController: UIViewController, View {
     }()
     private lazy var filterButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle"), for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.tintColor = .systemBlue
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage(systemName: "line.3.horizontal.decrease.circle")
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 8.0
+        configuration.baseForegroundColor = .systemBlue
+        configuration.contentInsets = NSDirectionalEdgeInsets(
+            top: 0.0,
+            leading: 16.0,
+            bottom: 0.0,
+            trailing: 16.0
+        )
+        button.configuration = configuration
         button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.backgroundColor = .tertiarySystemFill
         button.layer.cornerRadius = 12.0
-        button.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
-        button.semanticContentAttribute = .forceRightToLeft
         button.showsMenuAsPrimaryAction = true
         return button
     }()

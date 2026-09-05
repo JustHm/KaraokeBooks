@@ -56,15 +56,6 @@ final class SongDetailViewController: UIViewController, View {
         button.layer.cornerRadius = 12.0
         return button
     }()
-    private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = .secondaryLabel
-        button.backgroundColor = .tertiarySystemFill
-        button.layer.cornerRadius = 16.0
-        button.accessibilityLabel = String(localized: "accessibility.close")
-        return button
-    }()
     private lazy var interactionButtonStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [youtubeLinkButton, starButton]
@@ -107,28 +98,29 @@ final class SongDetailViewController: UIViewController, View {
             .map{ Reactor.Action.youtubeTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        closeButton.rx.tap
-            .map{ Reactor.Action.closeTapped }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         reactor.state.map{$0.isStar}
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .bind { owner, isStar in
                 let symbol = isStar ? "star.fill" : "star"
+                let favoriteTitle = isStar
+                    ? String(localized: "favorite.remove")
+                    : String(localized: "favorite.add")
                 owner.starButton.setImage(UIImage(systemName: symbol), for: .normal)
-                owner.starButton.setTitle("  " + String(localized: isStar ? "favorite.remove" : "favorite.add"), for: .normal)
-                owner.starButton.accessibilityLabel = String(localized: isStar ? "favorite.remove" : "favorite.add")
+                owner.starButton.setTitle("  " + favoriteTitle, for: .normal)
+                owner.starButton.accessibilityLabel = favoriteTitle
                 owner.starButton.accessibilityTraits = isStar ? [.button, .selected] : .button
             }
             .disposed(by: disposeBag)
-        reactor.state.compactMap{$0.youtubeURL}
+        reactor.pulse(\.$youtubeURL)
+            .compactMap { $0 }
             .withUnretained(self)
             .bind { owner, url in
-                let viewController = SFSafariViewController(url: url.absoluteURL)
-                owner.present(viewController, animated: true)
+                MRSearchInterstitialAdController.shared.presentIfEligible(from: owner) {
+                    let viewController = SFSafariViewController(url: url.absoluteURL)
+                    owner.present(viewController, animated: true)
+                }
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.errorMessage}
@@ -143,12 +135,6 @@ final class SongDetailViewController: UIViewController, View {
             .withUnretained(self)
             .bind { owner, song in
                 owner.songInfoStackView.setupLabelText(song: song)
-            }
-            .disposed(by: disposeBag)
-        reactor.state.filter{$0.isDismiss}
-            .withUnretained(self)
-            .bind { owner, isDismiss in
-                owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
     }
@@ -188,7 +174,6 @@ extension SongDetailViewController {
         view.backgroundColor = .customForeground
         [
             titleImage,
-            closeButton,
             songInfoStackView,
             interactionButtonStackView
         ].forEach {
@@ -197,10 +182,6 @@ extension SongDetailViewController {
         titleImage.snp.makeConstraints {
             $0.size.equalTo(32.0)
             $0.top.left.equalToSuperview().inset(16.0)
-        }
-        closeButton.snp.makeConstraints {
-            $0.size.equalTo(32.0)
-            $0.top.right.equalToSuperview().inset(16.0)
         }
         songInfoStackView.snp.makeConstraints {
             $0.top.equalTo(titleImage.snp.bottom).offset(16.0)

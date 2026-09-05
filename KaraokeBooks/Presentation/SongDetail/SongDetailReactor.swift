@@ -36,20 +36,17 @@ final class SongDetailReactor: Reactor {
         case viewDidLoad
         case starTapped
         case youtubeTapped
-        case closeTapped
     }
     enum Mutation {
         case changeStar(Bool)
         case moveToYoutube(URL?)
-        case close
         case alertError(String?)
     }
     struct State {
-        var youtubeURL: URL?
+        @Pulse var youtubeURL: URL?
         var isStar: Bool = false
         var song: Song
         var errorMessage: String?
-        var isDismiss = false
     }
     init(song: Song) {
         self.initialState = State(song: song)
@@ -81,8 +78,6 @@ final class SongDetailReactor: Reactor {
                 }
         case .youtubeTapped:
             return .just(Mutation.moveToYoutube(youtube))
-        case .closeTapped:
-            return .just(Mutation.close)
         case .viewDidLoad:
             let isStar = persistence.rx.checkExistSong(songID: currentState.song.id)
                 .asObservable().materialize()
@@ -106,8 +101,6 @@ final class SongDetailReactor: Reactor {
         switch mutation {
         case let .changeStar(isStar):
             state.isStar = isStar
-        case .close:
-            state.isDismiss = true
         case let .moveToYoutube(url):
             state.youtubeURL = url
         case let .alertError(msg):

@@ -14,6 +14,7 @@
 		222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */; };
 		222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */; };
 		222C1B72304473B1003D8C86 /* SongListDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */; };
+		D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* MRSearchInterstitialAdController.swift */; };
 		222C1B74304473B1003D8C86 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B73304473B1003D8C86 /* AppEnvironment.swift */; };
 		222C1B76304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B75304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift */; };
 		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
@@ -79,6 +80,7 @@
 		222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdPlacementController.swift; sourceTree = "<group>"; };
 		222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdTableViewCell.swift; sourceTree = "<group>"; };
 		222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListDisplayItem.swift; sourceTree = "<group>"; };
+		D20000000000000000000002 /* MRSearchInterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRSearchInterstitialAdController.swift; sourceTree = "<group>"; };
 		222C1B73304473B1003D8C86 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		222C1B75304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport/UITestingKaraokeSearchService.swift; sourceTree = "<group>"; };
 		22333BE529ADE9A800C0A56D /* KaraokeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeError.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */,
 				222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */,
 				222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */,
+				D20000000000000000000002 /* MRSearchInterstitialAdController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */,
 				222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */,
 				222C1B72304473B1003D8C86 /* SongListDisplayItem.swift in Sources */,
+				D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */,
 				222C1B74304473B1003D8C86 /* AppEnvironment.swift in Sources */,
 				222C1B76304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift in Sources */,
 				22B501672993F40F00677964 /* HomeList.swift in Sources */,

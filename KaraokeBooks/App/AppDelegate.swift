@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         // Initialize the Google Mobile Ads SDK.
         MobileAds.shared.start()
+        MRSearchInterstitialAdController.shared.preload()
         return true
     }
 

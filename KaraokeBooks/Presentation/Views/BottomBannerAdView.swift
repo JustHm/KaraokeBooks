@@ -66,7 +66,7 @@ final class BottomBannerAdView: UIView, BannerViewDelegate {
         isLoadingAd = true
         requestedWidth = availableWidth
         let bannerView = BannerView(
-            adSize: currentOrientationAnchoredAdaptiveBanner(width: availableWidth)
+            adSize: largeAnchoredAdaptiveBanner(width: availableWidth)
         )
         bannerView.adUnitID = adUnitID
         bannerView.rootViewController = rootViewController

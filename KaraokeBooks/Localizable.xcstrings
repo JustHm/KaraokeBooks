@@ -1,23 +1,6 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
-    "accessibility.close" : {
-      "comment" : "Accessibility label for the song detail sheet close button.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Close"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "닫기"
-          }
-        }
-      }
-    },
     "accessibility.contact" : {
       "comment" : "Accessibility label for the contact button on the home screen.",
       "localizations" : {
@@ -462,7 +445,6 @@
     },
     "favorite.remove" : {
       "comment" : "Button that removes a song from favorites.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -666,8 +648,8 @@
       }
     },
     "table.showMore" : {
-      "comment" : "Button that opens the full list of chart songs.",
-      "extractionState" : "stale",
+      "comment" : "Retained translation for the inactive ranking footer.",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
