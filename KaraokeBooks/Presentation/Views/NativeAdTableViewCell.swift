@@ -29,6 +29,11 @@ final class NativeAdTableViewCell: UITableViewCell {
         clearAd()
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        // Native ads are interactive content, not selectable songs.
+        super.setEditing(false, animated: animated)
+    }
+
     func clearAd() {
         pendingNativeAd = nil
         nativeAdCardView.reset()
