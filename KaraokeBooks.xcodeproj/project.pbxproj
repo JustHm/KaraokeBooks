@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000031 /* BrandSongPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000030 /* BrandSongPagerViewController.swift */; };
 		D10000000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D10000000000000000000002 /* Localizable.xcstrings */; };
 		222C1B68304422D2003D8C86 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 222C1B67304422D2003D8C86 /* GoogleMobileAds */; };
 		222C1B6A304473B1003D8C86 /* BottomBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000030 /* BrandSongPagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandSongPagerViewController.swift; sourceTree = "<group>"; };
 		D10000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBannerAdView.swift; sourceTree = "<group>"; };
 		222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdCardView.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				22C277DC2D7966B600B740C1 /* SongTableView.swift */,
 				222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */,
 				222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */,
+				AA0000000000000000000030 /* BrandSongPagerViewController.swift */,
 				222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */,
 				222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */,
 				222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */,
@@ -483,6 +486,7 @@
 				22AE3BFC2CDDFD5C00CFE787 /* HomeReactor.swift in Sources */,
 				222C1B6A304473B1003D8C86 /* BottomBannerAdView.swift in Sources */,
 				222C1B6C304473B1003D8C86 /* NativeAdCardView.swift in Sources */,
+				AA0000000000000000000031 /* BrandSongPagerViewController.swift in Sources */,
 				222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */,
 				222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */,
 				222C1B72304473B1003D8C86 /* SongListDisplayItem.swift in Sources */,

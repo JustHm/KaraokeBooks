@@ -9,102 +9,107 @@ import Foundation
 import ReactorKit
 
 final class FavoriteSongReactor: Reactor {
-    var initialState: State = State()
+    var initialState = State()
     private let persistence = PersistenceManager.shared
+
     enum Action {
         case brandType(BrandType)
         case deleteSong(Song)
+        case deleteSongs([Song])
         case songDetail(Song)
         case reload
     }
+
     enum Mutation {
-        case favoriteList([Song])
+        case loading(BrandType)
+        case favoriteList(BrandType, [Song])
         case changeBrand(BrandType)
-        case alertError(PersistenceError?)
+        case failed(BrandType, String)
         case selected(Song?)
     }
+
     struct State {
-        var favoriteSongs: [Song] = []
+        var pages: [BrandType: SongListPageState] = [:]
         var selectedSong: Song?
         var currentBrand: BrandType = .tj
-        var isEmpty = true
-        var errorDescription: String? = nil
+
+        func page(for brand: BrandType) -> SongListPageState {
+            pages[brand] ?? SongListPageState()
+        }
+
+        var favoriteSongs: [Song] { page(for: currentBrand).songs }
+        var isEmpty: Bool { favoriteSongs.isEmpty }
+        var errorDescription: String? { page(for: currentBrand).errorDescription }
     }
-    
+
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .brandType(brand):
-            let result = persistence.rx.fetchFavoriteSongs(brand: brand.name)
-                .asObservable()
-                .materialize()
-                .map { event -> FavoriteSongReactor.Mutation in
-                    switch event {
-                    case .completed: return .alertError(nil)
-                    case let .next(songs):
-                        return .favoriteList(songs)
-                    case let .error(error): return .alertError(error as? PersistenceError)
-                    }
-                }
-            return .concat([result, .just(.changeBrand(brand))])
+            return .concat(.just(.changeBrand(brand)), loadPages(startingWith: brand))
         case let .deleteSong(song):
-            return persistence.rx.deleteSong(songID: song.id)
-                .asObservable()
-                .materialize()
-                .map { event -> FavoriteSongReactor.Mutation in
-                    switch event {
-                    case .completed: return Mutation.alertError(nil)
-                    case .next: return Mutation.alertError(nil)
-                    case let .error(error): return Mutation.alertError(error as? PersistenceError)
-                    }
-                }
+            return persistence.rx.deleteSong(songID: song.id).asObservable()
+                .flatMap { _ -> Observable<Mutation> in .empty() }
+                .catch { .just(.failed(song.brand, $0.localizedDescription)) }
+        case let .deleteSongs(songs):
+            return persistence.rx.deleteSongs(songIDs: songs.map(\.id)).asObservable()
+                .flatMap { _ -> Observable<Mutation> in .empty() }
+                .catch { .just(.failed(self.currentState.currentBrand, $0.localizedDescription)) }
         case .reload:
-            let brand = currentState.currentBrand.name
-            return persistence.rx.fetchFavoriteSongs(brand: brand)
-                .asObservable()
-                .materialize()
-                .map { event -> FavoriteSongReactor.Mutation in
-                    switch event {
-                    case .completed: return .alertError(nil)
-                    case let .next(songs): return .favoriteList(songs)
-                    case let .error(error): return .alertError(error as? PersistenceError)
-                    }
-                }
+            return loadPages(startingWith: currentState.currentBrand)
         case let .songDetail(song):
-            return .concat([.just(.selected(song)), .just(.selected(nil))])
+            return .concat(.just(.selected(song)), .just(.selected(nil)))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
-        case let .favoriteList(songs):
-            state.favoriteSongs = songs
-            state.isEmpty = songs.isEmpty
-        case let .changeBrand(brand):
-            state.currentBrand = brand
-        case let .selected(song):
-            state.selectedSong = song
-        case let .alertError(error):
-            if let error {
-                state.errorDescription = error.localizedDescription
-            }
+        case let .favoriteList(brand, songs):
+            state.pages[brand] = SongListPageState(songs: songs, hasLoaded: true)
+        case let .changeBrand(brand): state.currentBrand = brand
+        case let .selected(song): state.selectedSong = song
+        case let .loading(brand):
+            var page = state.page(for: brand)
+            page.isLoading = true
+            page.errorDescription = nil
+            state.pages[brand] = page
+        case let .failed(brand, message):
+            var page = state.page(for: brand)
+            page.isLoading = false
+            page.errorDescription = message
+            state.pages[brand] = page
         }
         return state
     }
-    
+
     func transform(action: Observable<Action>) -> Observable<Action> {
-        let eventAction =  persistence.event.flatMap { event -> Observable<Action> in
-            switch event {
-            case let .deleted(isDeleted):
-                return isDeleted ? .just(.reload) : .empty()
+        // Core Data emits deletion while the delete action is still being handled.
+        // Queue the reload so ReactorKit receives non-overlapping action events.
+        let eventAction = persistence.event.observe(on: MainScheduler.asyncInstance)
+            .flatMap { event -> Observable<Action> in
+                switch event {
+                case let .deleted(isDeleted): return isDeleted ? .just(.reload) : .empty()
+                }
             }
-        }
         return Observable.merge(action, eventAction)
     }
-    
-    // FavoriteSongReactor에서 SongDetailReactor를 return해 주어야 값 처리가 가능함.
+
     func reactorForSetting() -> SongDetailReactor? {
         guard let song = currentState.selectedSong else { return nil }
         return SongDetailReactor(song: song)
+    }
+
+    private func loadPages(startingWith brand: BrandType) -> Observable<Mutation> {
+        let opposite: BrandType = brand == .tj ? .kumyoung : .tj
+        return .concat(loadPage(brand), loadPage(opposite))
+    }
+
+    private func loadPage(_ brand: BrandType) -> Observable<Mutation> {
+        .concat(
+            .just(.loading(brand)),
+            persistence.rx.fetchFavoriteSongs(brand: brand.name).asObservable()
+                .map { .favoriteList(brand, $0) }
+                .catch { .just(.failed(brand, $0.localizedDescription)) }
+        )
     }
 }

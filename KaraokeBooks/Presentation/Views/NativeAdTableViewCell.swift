@@ -26,6 +26,10 @@ final class NativeAdTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        clearAd()
+    }
+
+    func clearAd() {
         pendingNativeAd = nil
         nativeAdCardView.reset()
     }

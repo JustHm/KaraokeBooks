@@ -17,104 +17,97 @@ class HomeReactor: Reactor {
     ) {
         self.rankCharts = rankCharts ?? RankChartRepository(service: service)
     }
-    
+
     enum Action {
         case brandType(BrandType)
         case rankDateType(RankDateType)
         case songDetail(Song)
     }
-    
+
     enum Mutation {
         case changeBrand(BrandType)
         case changeDate(RankDateType)
-        case popularList([Song])
-        case LoadState(Bool)
+        case loading(RankChartCacheKey)
+        case loaded(RankChartCacheKey, [Song])
+        case failed(RankChartCacheKey, String)
         case moveToDetail(Song?)
-        case alertError(NetworkError?)
-        case null
     }
-    
+
     struct State {
         var selectedSong: Song?
-        var popularList: [Song] = []
         var brandType: BrandType = .tj
         var dateType: RankDateType = .daily
-        var isLoading: Bool = false
-        var errorDescription: String? = nil
+        var charts: [RankChartCacheKey: SongListPageState] = [:]
+
+        func page(for brand: BrandType) -> SongListPageState {
+            charts[RankChartCacheKey(brand: brand, date: dateType)] ?? SongListPageState()
+        }
+
+        var popularList: [Song] { page(for: brandType).songs }
+        var isLoading: Bool { page(for: brandType).isLoading }
+        var errorDescription: String? { page(for: brandType).errorDescription }
     }
-    
-    
-    func mutate(action: Action) -> Observable<Mutation> { //service 및 데이터 변환
+
+    func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .brandType(brand):
-            let changeBrand: Observable<Mutation> = .just(Mutation.changeBrand(brand))
-            let changestate: Observable<Mutation> = .just(Mutation.LoadState(true))
-            let response = loadChart(brand: brand, date: currentState.dateType)
-            return .concat([changeBrand, changestate, response])
+            return .concat(.just(.changeBrand(brand)), loadPair(brand: brand, date: currentState.dateType))
         case let .rankDateType(date):
-            let response = loadChart(brand: currentState.brandType, date: date)
-            return .concat([
-                .just(.changeDate(date)), .just(.LoadState(true)),
-                response
-            ])
+            return .concat(.just(.changeDate(date)), loadPair(brand: currentState.brandType, date: date))
         case let .songDetail(song):
-            return .concat([.just(.moveToDetail(song)), .just(.moveToDetail(nil))])
+            return .concat(.just(.moveToDetail(song)), .just(.moveToDetail(nil)))
         }
     }
-    
-    func reduce(state: State, mutation: Mutation) -> State { // state data 주입
+
+    func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
-        case let .moveToDetail(song):
-            state.selectedSong = song
-        case let .LoadState(isLoading):
-            state.isLoading = isLoading
-            if isLoading {
-                state.errorDescription = nil
-            }
-        case let .changeDate(date):
-            state.dateType = date
-        case let .changeBrand(brand):
-            state.brandType = brand
-        case let .popularList(songs):
-            state.popularList = songs
-            state.isLoading = false
-            state.errorDescription = nil
-        case let .alertError(error):
-            state.isLoading = false
-            if let error {
-                state.errorDescription = error.errorDescription
-            }
-            else { state.errorDescription = nil }
-        case .null: break
+        case let .changeBrand(brand): state.brandType = brand
+        case let .changeDate(date): state.dateType = date
+        case let .moveToDetail(song): state.selectedSong = song
+        case let .loading(key):
+            var page = state.charts[key] ?? SongListPageState()
+            page.isLoading = true
+            page.errorDescription = nil
+            state.charts[key] = page
+        case let .loaded(key, songs):
+            state.charts[key] = SongListPageState(songs: songs, hasLoaded: true)
+        case let .failed(key, message):
+            var page = state.charts[key] ?? SongListPageState()
+            page.isLoading = false
+            page.errorDescription = message
+            state.charts[key] = page
         }
         return state
     }
-    
+
     func reactorForSetting(song: Song) -> SongDetailReactor? {
-        return SongDetailReactor(song: song)
+        SongDetailReactor(song: song)
     }
-}
 
-private extension HomeReactor {
-    func loadChart(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
-        rankCharts.chart(brand: brand, date: date)
-            .do(onSuccess: { [weak self] _ in
-                self?.prefetchOppositeBrand(from: brand, date: date)
-            })
-            .asObservable()
-            .materialize()
-            .map { result -> Mutation in
-                switch result {
-                case .completed: return .null
-                case let .next(songs): return .popularList(songs)
-                case let .error(error): return .alertError(error as? NetworkError)
-                }
+    private func loadPair(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
+        let opposite: BrandType = brand == .tj ? .kumyoung : .tj
+        // The visible chart always subscribes first. The repository shares in-flight
+        // requests and caches both pages; a failed prefetch only affects its own page.
+        return .concat(loadChart(brand: brand, date: date), Observable.deferred { [weak self] in
+            guard let self else { return .empty() }
+            return self.loadChart(brand: opposite, date: date)
+        })
+    }
+
+    private func loadChart(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
+        Observable.deferred { [weak self] in
+            guard let self else { return .empty() }
+            let key = RankChartCacheKey(brand: brand, date: date)
+            if let page = self.currentState.charts[key], page.hasLoaded || page.isLoading {
+                return .empty()
             }
-    }
-
-    func prefetchOppositeBrand(from brand: BrandType, date: RankDateType) {
-        let oppositeBrand: BrandType = brand == .tj ? .kumyoung : .tj
-        rankCharts.prefetch(brand: oppositeBrand, date: date)
+            return .concat(
+                .just(.loading(key)),
+                self.rankCharts.chart(brand: brand, date: date).asObservable()
+                    .map { .loaded(key, $0) }
+                    .catch { .just(.failed(key, $0.localizedDescription)) }
+            )
+        }
     }
 }

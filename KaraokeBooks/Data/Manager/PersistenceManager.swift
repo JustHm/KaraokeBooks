@@ -85,6 +85,26 @@ final class PersistenceManager: ReactiveCompatible {
             throw PersistenceError.fetchError
         }
     }
+
+    @discardableResult
+    func deleteSongs(ids: [String]) throws -> Bool {
+        guard !ids.isEmpty else { return false }
+
+        let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
+        request.predicate = NSPredicate(format: "id IN %@", ids)
+
+        do {
+            let songs = try context.fetch(request)
+            guard !songs.isEmpty else { return false }
+            songs.forEach(context.delete)
+            try context.save()
+            event.onNext(.deleted(true))
+            return true
+        } catch {
+            event.onNext(.deleted(false))
+            throw PersistenceError.fetchError
+        }
+    }
     
     // 애창곡으로 되어 있는지만 확인하기 위한 용도
     func isExist(songID id: String) throws -> Bool {
@@ -148,6 +168,17 @@ extension Reactive where Base == PersistenceManager {
                 single(.success(try self.base.deleteSong(id: id)))
             }
             catch {
+                single(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
+
+    func deleteSongs(songIDs ids: [String]) -> Single<Bool> {
+        Single.create { single in
+            do {
+                single(.success(try self.base.deleteSongs(ids: ids)))
+            } catch {
                 single(.failure(error))
             }
             return Disposables.create()

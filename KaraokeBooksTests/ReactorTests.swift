@@ -104,6 +104,65 @@ final class ReactorTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func testHomePagesKeepLateResponsesWithTheirBrandAndDate() {
+        let charts = ControlledRankCharts()
+        let reactor = HomeReactor(rankCharts: charts)
+        reactor.state.subscribe().disposed(by: disposeBag)
+        reactor.action.onNext(.rankDateType(.daily))
+        reactor.action.onNext(.brandType(.kumyoung))
+        reactor.action.onNext(.rankDateType(.weekly))
+
+        let oldSongs = makeSongs(count: 1)
+        charts.succeed(.tj, .daily, songs: oldSongs)
+        XCTAssertEqual(reactor.currentState.brandType, .kumyoung)
+        XCTAssertEqual(reactor.currentState.dateType, .weekly)
+        XCTAssertTrue(reactor.currentState.popularList.isEmpty)
+        XCTAssertTrue(reactor.currentState.isLoading)
+        XCTAssertEqual(reactor.currentState.charts[RankChartCacheKey(brand: .tj, date: .daily)]?.songs, oldSongs)
+
+        var ky = oldSongs[0]
+        ky = Song(brand: .kumyoung, no: ky.no, title: "KY weekly", singer: ky.singer,
+                  composer: ky.composer, lyricist: ky.lyricist, release: ky.release)
+        charts.succeed(.kumyoung, .weekly, songs: [ky])
+        XCTAssertEqual(reactor.currentState.popularList, [ky])
+        charts.fail(.kumyoung, .daily)
+        XCTAssertEqual(reactor.currentState.popularList, [ky])
+        XCTAssertNil(reactor.currentState.errorDescription)
+    }
+
+    func testPrefetchWaitsForSelectedChartAndFailureStaysOnOppositePage() {
+        let charts = ControlledRankCharts()
+        let reactor = HomeReactor(rankCharts: charts)
+        reactor.state.subscribe().disposed(by: disposeBag)
+        reactor.action.onNext(.rankDateType(.monthly))
+        XCTAssertEqual(charts.requests, [RankChartCacheKey(brand: .tj, date: .monthly)])
+        let songs = makeSongs(count: 1)
+        charts.succeed(.tj, .monthly, songs: songs)
+        XCTAssertEqual(charts.requests.count, 2)
+        charts.fail(.kumyoung, .monthly)
+        XCTAssertEqual(reactor.currentState.popularList, songs)
+        XCTAssertNil(reactor.currentState.errorDescription)
+        XCTAssertNotNil(reactor.currentState.page(for: .kumyoung).errorDescription)
+        XCTAssertFalse(reactor.currentState.page(for: .kumyoung).isLoading)
+    }
+
+    func testFavoritePageMutationDoesNotReplaceOtherBrandOrItsError() {
+        let reactor = FavoriteSongReactor()
+        let songs = makeSongs(count: 2)
+        var state = reactor.reduce(state: reactor.initialState, mutation: .favoriteList(.tj, songs))
+        state = reactor.reduce(state: state, mutation: .failed(.kumyoung, "KY error"))
+        state = reactor.reduce(state: state, mutation: .changeBrand(.kumyoung))
+        XCTAssertTrue(state.favoriteSongs.isEmpty)
+        XCTAssertEqual(state.errorDescription, "KY error")
+        state = reactor.reduce(state: state, mutation: .favoriteList(.tj, [songs[1]]))
+        XCTAssertEqual(state.errorDescription, "KY error")
+        XCTAssertEqual(state.page(for: .tj).songs, [songs[1]])
+        state = reactor.reduce(state: state, mutation: .favoriteList(.kumyoung, []))
+        XCTAssertTrue(state.page(for: .kumyoung).hasLoaded)
+        XCTAssertNil(state.errorDescription)
+        XCTAssertFalse(state.page(for: .kumyoung).isLoading)
+    }
+
     private func makeSongs(count: Int) -> [Song] {
         (0..<count).map { index in
             Song(
@@ -153,5 +212,28 @@ private final class StubKaraokeSongSearchService: KaraokeSongSearching {
             }
             return Disposables.create()
         }
+    }
+}
+
+private final class ControlledRankCharts: RankChartProviding {
+    private var subjects: [RankChartCacheKey: PublishSubject<[Song]>] = [:]
+    private(set) var requests: [RankChartCacheKey] = []
+
+    func chart(brand: BrandType, date: RankDateType) -> Single<[Song]> {
+        let key = RankChartCacheKey(brand: brand, date: date)
+        requests.append(key)
+        let subject = PublishSubject<[Song]>()
+        subjects[key] = subject
+        return subject.take(1).asSingle()
+    }
+
+    func prefetch(brand: BrandType, date: RankDateType) {}
+
+    func succeed(_ brand: BrandType, _ date: RankDateType, songs: [Song]) {
+        subjects[RankChartCacheKey(brand: brand, date: date)]?.onNext(songs)
+    }
+
+    func fail(_ brand: BrandType, _ date: RankDateType) {
+        subjects[RankChartCacheKey(brand: brand, date: date)]?.onError(NetworkError.internetUnavailable)
     }
 }

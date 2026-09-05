@@ -9,6 +9,8 @@ import UIKit
 import GoogleMobileAds
 
 final class NativeAdPlacementController: NSObject {
+    private static let maximumAdsPerRequest = 5
+
     private weak var rootViewController: UIViewController?
 
     private var nativeAdLoader: AdLoader?
@@ -17,6 +19,9 @@ final class NativeAdPlacementController: NSObject {
     private var retryWorkItem: DispatchWorkItem?
     private var hasRetried = false
     private var isEnabled = false
+    private var adsRequestedInCurrentLoad = 0
+    private var adCountBeforeCurrentLoad = 0
+    private let registeredCells = NSMapTable<NSNumber, NativeAdTableViewCell>.strongToWeakObjects()
 
     var onAvailabilityChanged: (() -> Void)?
     var availableAdCount: Int {
@@ -32,9 +37,13 @@ final class NativeAdPlacementController: NSObject {
         self.desiredAdCount = desiredAdCount
 
         guard isEnabled else {
+            registeredCells.objectEnumerator()?.allObjects.forEach { ($0 as? NativeAdTableViewCell)?.clearAd() }
+            registeredCells.removeAllObjects()
             retryWorkItem?.cancel()
             retryWorkItem = nil
             hasRetried = false
+            adsRequestedInCurrentLoad = 0
+            adCountBeforeCurrentLoad = 0
             onAvailabilityChanged?()
             return
         }
@@ -51,10 +60,16 @@ final class NativeAdPlacementController: NSObject {
               let rootViewController,
               let adUnitID = nativeAdUnitID else { return }
 
+        let requestedAdCount = min(
+            desiredAdCount - nativeAds.count,
+            Self.maximumAdsPerRequest
+        )
+        guard requestedAdCount > 0 else { return }
+
         let loaderOptions: [MultipleAdsAdLoaderOptions]? = {
-            guard desiredAdCount > 1 else { return nil }
+            guard requestedAdCount > 1 else { return nil }
             let options = MultipleAdsAdLoaderOptions()
-            options.numberOfAds = desiredAdCount
+            options.numberOfAds = requestedAdCount
             return [options]
         }()
         let loader = AdLoader(
@@ -65,6 +80,8 @@ final class NativeAdPlacementController: NSObject {
         )
         loader.delegate = self
         nativeAdLoader = loader
+        adsRequestedInCurrentLoad = requestedAdCount
+        adCountBeforeCurrentLoad = nativeAds.count
         loader.load(Request())
     }
 
@@ -88,6 +105,16 @@ final class NativeAdPlacementController: NSObject {
     func configure(_ cell: NativeAdTableViewCell, slot: Int) {
         guard isEnabled,
               nativeAds.indices.contains(slot) else { return }
+        // A reused cell must no longer be registered under its previous slot.
+        for oldKey in registeredCells.keyEnumerator().allObjects.compactMap({ $0 as? NSNumber })
+            where registeredCells.object(forKey: oldKey) === cell {
+            registeredCells.removeObject(forKey: oldKey)
+        }
+        let key = NSNumber(value: slot)
+        if let previous = registeredCells.object(forKey: key), previous !== cell {
+            previous.clearAd()
+        }
+        registeredCells.setObject(cell, forKey: key)
         cell.configure(with: nativeAds[slot])
     }
 
@@ -118,6 +145,9 @@ extension NativeAdPlacementController: NativeAdLoaderDelegate, AdLoaderDelegate 
 
     func adLoaderDidFinishLoading(_ adLoader: AdLoader) {
         nativeAdLoader = nil
+        let receivedAdCount = nativeAds.count - adCountBeforeCurrentLoad
+        guard receivedAdCount == adsRequestedInCurrentLoad else { return }
+        loadIfNeeded()
     }
 }
 

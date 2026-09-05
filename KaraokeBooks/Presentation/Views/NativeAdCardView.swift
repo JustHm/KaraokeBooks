@@ -10,6 +10,9 @@ import SnapKit
 import GoogleMobileAds
 
 final class NativeAdCardView: NativeAdView {
+    private let adMediaView = MediaView()
+    private var mediaHeightConstraint: Constraint?
+
     private lazy var adLabel: UILabel = {
         let label = UILabel()
         label.text = String(localized: "ad.label")
@@ -68,7 +71,7 @@ final class NativeAdCardView: NativeAdView {
 
     private func setupViews() {
         backgroundColor = .customForeground
-        [adLabel, iconImageView, headlineLabel, bodyLabel, callToActionButton].forEach {
+        [adLabel, iconImageView, headlineLabel, bodyLabel, adMediaView, callToActionButton].forEach {
             addSubview($0)
         }
         adLabel.snp.makeConstraints {
@@ -89,14 +92,21 @@ final class NativeAdCardView: NativeAdView {
             $0.top.equalTo(headlineLabel.snp.bottom).offset(4.0)
             $0.left.right.equalTo(headlineLabel)
         }
-        callToActionButton.snp.makeConstraints {
+        adMediaView.contentMode = .scaleAspectFit
+        adMediaView.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(iconImageView.snp.bottom).offset(14.0)
             $0.top.greaterThanOrEqualTo(bodyLabel.snp.bottom).offset(14.0)
+            $0.left.right.equalToSuperview().inset(16.0)
+            mediaHeightConstraint = $0.height.equalTo(180.0).constraint
+        }
+        callToActionButton.snp.makeConstraints {
+            $0.top.equalTo(adMediaView.snp.bottom).offset(14.0)
             $0.left.right.equalToSuperview().inset(16.0)
             $0.height.greaterThanOrEqualTo(40.0)
             $0.bottom.equalToSuperview().inset(16.0)
         }
 
+        mediaView = adMediaView
         headlineView = headlineLabel
         bodyView = bodyLabel
         callToActionView = callToActionButton
@@ -105,6 +115,10 @@ final class NativeAdCardView: NativeAdView {
 
     func populate(with nativeAd: NativeAd) {
         self.nativeAd = nil
+        let hasMedia = nativeAd.mediaContent.hasVideoContent || !(nativeAd.images?.isEmpty ?? true)
+        adMediaView.mediaContent = nativeAd.mediaContent
+        adMediaView.isHidden = !hasMedia
+        mediaHeightConstraint?.update(offset: hasMedia ? 180.0 : 0.0)
         headlineLabel.text = nativeAd.headline
         bodyLabel.text = nativeAd.body
         bodyLabel.isHidden = nativeAd.body == nil
@@ -120,6 +134,7 @@ final class NativeAdCardView: NativeAdView {
 
     func reset() {
         nativeAd = nil
+        adMediaView.mediaContent = nil
         headlineLabel.text = nil
         bodyLabel.text = nil
         iconImageView.image = nil

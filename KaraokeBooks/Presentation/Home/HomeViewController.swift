@@ -16,8 +16,7 @@ final class HomeViewController: UIViewController, View {
     private let contactEmail = "taggma12@icloud.com"
     private var bannerHeightConstraint: Constraint?
     private var actionStackHeightConstraint: Constraint?
-    private var popularSongs: [Song] = []
-    private let displayItems = BehaviorRelay<[SongListDisplayItem]>(value: [])
+    private let songPager = BrandSongPagerViewController()
     
     var disposeBag = DisposeBag()
 
@@ -88,25 +87,6 @@ final class HomeViewController: UIViewController, View {
     
     private lazy var rankTableHeader = RankTableViewHeader()
     
-    private lazy var loadIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.color = .customPrimaryText
-        indicator.isHidden = true
-        indicator.startAnimating()
-        return indicator
-    }()
-
-    private lazy var errorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .secondaryLabel
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.isHidden = true
-        return label
-    }()
-    
     private lazy var brandSegmentedControl: ClearSegmentedControl = {
         let segmentedControl = ClearSegmentedControl()
         BrandType.allCases.enumerated().forEach { (index, value) in
@@ -119,27 +99,8 @@ final class HomeViewController: UIViewController, View {
         return segmentedControl
     }()
     
-    private lazy var rankTableView: SongTableView = {
-        let tableView = SongTableView(frame: .zero, style: .plain)
-        tableView.register(SongTableViewCell.self,
-                           forCellReuseIdentifier: SongTableViewCell.identifier)
-        tableView.register(
-            NativeAdTableViewCell.self,
-            forCellReuseIdentifier: NativeAdTableViewCell.identifier
-        )
-        return tableView
-    }()
-
     private lazy var bannerContainerView = BottomBannerAdView()
 
-    private lazy var nativeAdPlacement: NativeAdPlacementController = {
-        let placement = NativeAdPlacementController(rootViewController: self)
-        placement.onAvailabilityChanged = { [weak self] in
-            self?.updateDisplayItems()
-        }
-        return placement
-    }()
-    
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
@@ -158,7 +119,6 @@ final class HomeViewController: UIViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        nativeAdPlacement.loadIfNeeded()
         if let reactor,
            reactor.currentState.popularList.isEmpty,
            !reactor.currentState.isLoading {
@@ -182,7 +142,7 @@ extension HomeViewController {
     func setupViews() {
         [favoriteListButton, searchButton].forEach { stackView.addArrangedSubview($0) }
         helpButton.addTarget(self, action: #selector(didTapHelp), for: .touchUpInside)
-        [headerStackView, stackView, rankTableHeader, brandSegmentedControl, rankTableView, bannerContainerView, errorLabel, loadIndicator].forEach {
+        [headerStackView, stackView, rankTableHeader, brandSegmentedControl, bannerContainerView].forEach {
             view.addSubview($0)
         }
 
@@ -215,9 +175,12 @@ extension HomeViewController {
             $0.left.right.equalToSuperview().inset(32.0)
         }
         
-        rankTableView.snp.makeConstraints {
+        addChild(songPager)
+        view.addSubview(songPager.view)
+        songPager.didMove(toParent: self)
+        songPager.view.snp.makeConstraints {
             $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(2.0)
-            $0.left.right.equalToSuperview().inset(16.0)
+            $0.left.right.equalToSuperview()
             $0.bottom.equalTo(bannerContainerView.snp.top)
         }
         bannerContainerView.snp.makeConstraints {
@@ -228,13 +191,6 @@ extension HomeViewController {
         bannerContainerView.onHeightChanged = { [weak self] height in
             self?.bannerHeightConstraint?.update(offset: height)
             self?.view.layoutIfNeeded()
-        }
-        loadIndicator.snp.makeConstraints {
-            $0.center.equalTo(rankTableView)
-        }
-        errorLabel.snp.makeConstraints {
-            $0.center.equalTo(rankTableView)
-            $0.left.right.equalTo(rankTableView).inset(24.0)
         }
         updateActionStackLayout()
     }
@@ -259,12 +215,11 @@ extension HomeViewController {
             .map{Reactor.Action.brandType(BrandType.allCases[$0])}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        rankTableView.rx.itemSelected
-            .withLatestFrom(displayItems) { ($0, $1) }
-            .compactMap { indexPath, items in
-                guard items.indices.contains(indexPath.row) else { return nil }
-                return items[indexPath.row].song
-            }
+        songPager.selectedBrand
+            .map(Reactor.Action.brandType)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        songPager.selectedSong
             .map(Reactor.Action.songDetail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -290,56 +245,20 @@ extension HomeViewController {
             .disposed(by: disposeBag)
         //State
         reactor.state.observe(on: MainScheduler.instance)
-            .map{$0.isLoading}
-            .distinctUntilChanged()
             .withUnretained(self)
-            .bind { owner, isLoading in
-                owner.loadIndicator.isHidden = !isLoading
-                isLoading ? owner.loadIndicator.startAnimating() : owner.loadIndicator.stopAnimating()
+            .bind { owner, state in
+                for brand in BrandType.allCases {
+                    owner.songPager.render(state.page(for: brand), for: brand)
+                }
             }
             .disposed(by: disposeBag)
-        reactor.state
-            .map { $0.errorDescription }
+        reactor.state.map { $0.brandType }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
-            .bind { owner, message in
-                owner.errorLabel.text = message
-                owner.errorLabel.isHidden = message == nil
-                if let message {
-                    UIAccessibility.post(notification: .announcement, argument: message)
-                }
-            }
-            .disposed(by: disposeBag)
-        displayItems
-            .bind(to: rankTableView.rx.items) { [weak self] tableView, _, item in
-                switch item {
-                case let .song(song, rank):
-                    let cell = tableView.dequeueReusableCell(
-                        withIdentifier: SongTableViewCell.identifier
-                    ) as! SongTableViewCell
-                    cell.setup(rank: rank, song: song)
-                    return cell
-                case let .nativeAd(slot):
-                    let cell = tableView.dequeueReusableCell(
-                        withIdentifier: NativeAdTableViewCell.identifier
-                    ) as! NativeAdTableViewCell
-                    self?.nativeAdPlacement.configure(cell, slot: slot)
-                    return cell
-                }
-            }
-            .disposed(by: disposeBag)
-        reactor.state.observe(on: MainScheduler.instance)
-            .map { $0.popularList }
-            .distinctUntilChanged()
-            .withUnretained(self)
-            .bind { owner, songs in
-                owner.popularSongs = songs
-                owner.nativeAdPlacement.setEnabled(
-                    !songs.isEmpty,
-                    desiredAdCount: songs.nativeAdSlotCount
-                )
-                owner.updateDisplayItems()
+            .bind { owner, brand in
+                owner.brandSegmentedControl.selectedSegmentIndex = BrandType.allCases.firstIndex(of: brand) ?? 0
+                owner.songPager.select(brand)
             }
             .disposed(by: disposeBag)
         reactor.state.compactMap{$0.selectedSong}
@@ -354,12 +273,6 @@ extension HomeViewController {
             .disposed(by: disposeBag)
     }
 
-    private func updateDisplayItems() {
-        displayItems.accept(
-            popularSongs.displayItems(nativeAdCount: nativeAdPlacement.availableAdCount)
-        )
-    }
-    
     private func showAlert(header: String, body: String) {
         let alert = UIAlertController(title: header, message: body, preferredStyle: .alert)
         let action = UIAlertAction(title: String(localized: "action.ok"), style: .default, handler: nil)
