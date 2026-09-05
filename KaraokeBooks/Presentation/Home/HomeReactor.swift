@@ -9,10 +9,13 @@ import ReactorKit
 
 class HomeReactor: Reactor {
     var initialState = State()
-    private let service: KaraokeSongSearching
+    private let rankCharts: RankChartProviding
 
-    init(service: KaraokeSongSearching = AppEnvironment.makeKaraokeSearchService()) {
-        self.service = service
+    init(
+        service: KaraokeSongSearching = AppEnvironment.makeKaraokeSearchService(),
+        rankCharts: RankChartProviding? = nil
+    ) {
+        self.rankCharts = rankCharts ?? RankChartRepository(service: service)
     }
     
     enum Action {
@@ -46,26 +49,10 @@ class HomeReactor: Reactor {
         case let .brandType(brand):
             let changeBrand: Observable<Mutation> = .just(Mutation.changeBrand(brand))
             let changestate: Observable<Mutation> = .just(Mutation.LoadState(true))
-            let response: Observable<Mutation> = service.rankSongsRequest(brand: brand, date: currentState.dateType)
-                .asObservable().materialize() //Event<>로 감싸주는것
-                .map { result -> Mutation in
-                    switch result {
-                    case .completed: return .null
-                    case let .next(songs): return .popularList(songs)
-                    case let .error(error): return .alertError(error as? NetworkError)
-                    }
-                }
+            let response = loadChart(brand: brand, date: currentState.dateType)
             return .concat([changeBrand, changestate, response])
         case let .rankDateType(date):
-            let response: Observable<Mutation> = service.rankSongsRequest(brand: currentState.brandType, date: date)
-                .asObservable().materialize()
-                .map { result -> Mutation in
-                    switch result {
-                    case .completed: return .null
-                    case let .next(songs): return .popularList(songs)
-                    case let .error(error): return .alertError(error as? NetworkError)
-                    }
-                }
+            let response = loadChart(brand: currentState.brandType, date: date)
             return .concat([
                 .just(.changeDate(date)), .just(.LoadState(true)),
                 response
@@ -106,5 +93,28 @@ class HomeReactor: Reactor {
     
     func reactorForSetting(song: Song) -> SongDetailReactor? {
         return SongDetailReactor(song: song)
+    }
+}
+
+private extension HomeReactor {
+    func loadChart(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
+        rankCharts.chart(brand: brand, date: date)
+            .do(onSuccess: { [weak self] _ in
+                self?.prefetchOppositeBrand(from: brand, date: date)
+            })
+            .asObservable()
+            .materialize()
+            .map { result -> Mutation in
+                switch result {
+                case .completed: return .null
+                case let .next(songs): return .popularList(songs)
+                case let .error(error): return .alertError(error as? NetworkError)
+                }
+            }
+    }
+
+    func prefetchOppositeBrand(from brand: BrandType, date: RankDateType) {
+        let oppositeBrand: BrandType = brand == .tj ? .kumyoung : .tj
+        rankCharts.prefetch(brand: oppositeBrand, date: date)
     }
 }

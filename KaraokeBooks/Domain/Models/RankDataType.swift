@@ -7,7 +7,7 @@
 
 import Foundation
 /// 인기 순위 노래 검색시 날짜 구분 (URL에 들어감)
-enum RankDateType: CaseIterable {
+enum RankDateType: CaseIterable, Hashable {
     case daily
     case weekly
     case monthly
@@ -32,5 +32,9 @@ enum RankDateType: CaseIterable {
         case .monthly:
             return "monthly"
         }
-        }
+    }
+
+    var cacheIdentifier: String {
+        replace
+    }
 }

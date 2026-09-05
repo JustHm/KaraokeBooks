@@ -27,7 +27,44 @@ final class ReactorTests: XCTestCase {
         reactor.action.onNext(.rankDateType(.weekly))
         wait(for: [expectation], timeout: 1.0)
 
-        XCTAssertEqual(service.requestedRankDates, [.weekly])
+        XCTAssertEqual(service.requestedRankDates, [.weekly, .weekly])
+        XCTAssertEqual(service.requestedRankKeys, ["tj.weekly", "kumyoung.weekly"])
+    }
+
+    func testRankChartRepositoryReusesCachedChartForSameBrandAndDate() {
+        let songs = makeSongs(count: 2)
+        let service = StubKaraokeSongSearchService(rankResult: .success(songs))
+        let repository = RankChartRepository(service: service)
+
+        repository.chart(brand: .tj, date: .daily)
+            .subscribe()
+            .disposed(by: disposeBag)
+        repository.chart(brand: .tj, date: .daily)
+            .subscribe()
+            .disposed(by: disposeBag)
+
+        XCTAssertEqual(service.requestedRankKeys, ["tj.daily"])
+    }
+
+    func testRankChartRepositoryStoresChartsByBrandAndDateSeparately() {
+        let songs = makeSongs(count: 2)
+        let service = StubKaraokeSongSearchService(rankResult: .success(songs))
+        let repository = RankChartRepository(service: service)
+
+        repository.chart(brand: .tj, date: .daily)
+            .subscribe()
+            .disposed(by: disposeBag)
+        repository.chart(brand: .kumyoung, date: .daily)
+            .subscribe()
+            .disposed(by: disposeBag)
+        repository.chart(brand: .tj, date: .weekly)
+            .subscribe()
+            .disposed(by: disposeBag)
+
+        XCTAssertEqual(
+            service.requestedRankKeys,
+            ["tj.daily", "kumyoung.daily", "tj.weekly"]
+        )
     }
 
     func testSearchReactorReturnsSearchFailureAsInlineErrorState() {
@@ -84,6 +121,7 @@ final class ReactorTests: XCTestCase {
 
 private final class StubKaraokeSongSearchService: KaraokeSongSearching {
     var requestedRankDates: [RankDateType] = []
+    var requestedRankKeys: [String] = []
     private let rankResult: Result<[Song], Error>
     private let searchResult: Result<[Song], Error>
 
@@ -97,6 +135,7 @@ private final class StubKaraokeSongSearchService: KaraokeSongSearching {
 
     func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]> {
         requestedRankDates.append(date)
+        requestedRankKeys.append("\(brand.rawValue).\(date.cacheIdentifier)")
         return single(from: rankResult)
     }
 
