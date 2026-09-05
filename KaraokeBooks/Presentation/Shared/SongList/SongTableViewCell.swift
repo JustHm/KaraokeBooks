@@ -76,6 +76,9 @@ final class SongTableViewCell: UITableViewCell {
     }
     
     private func setupViews() {
+        let selectedBackground = UIView()
+        selectedBackground.backgroundColor = .customForeground
+        selectedBackgroundView = selectedBackground
         isAccessibilityElement = true
         accessibilityTraits = .button
         backgroundColor = .customForeground

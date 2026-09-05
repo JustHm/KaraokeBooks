@@ -40,6 +40,18 @@
   > RxSwift를 도입하고 기존 서비스(CoreData, API통신) 코드는 그대로 두고 Rx용 custom extension으로 기존 메서드를 감싸 Single타입을 반환하도록 변경
 
 
+## 소스 폴더 구조
+
+- `App`: 앱 시작과 환경 구성
+- `Data`: API, 차트 캐시, 로컬 저장소
+- `Domain`: 곡·검색 모델과 Core Data 모델
+- `Presentation/<화면>`: 화면별 ViewController와 Reactor. 화면 전용 뷰는 각 `Views`에 배치
+- `Presentation/Shared/Ads`: 배너·네이티브·전면 광고
+- `Presentation/Shared/SongList`: 공용 곡 목록, 페이저, 곡 셀과 표시 모델
+- `Presentation/Shared/Controls`: 여러 화면에서 사용하는 컨트롤
+
+파일을 이동할 때는 실제 폴더와 Xcode 그룹 경로를 함께 수정합니다.
+
 ## Preview
 
 <img width="250" src="https://github.com/user-attachments/assets/8bc8d832-aed3-4299-9da9-53aba4d3d22d">
