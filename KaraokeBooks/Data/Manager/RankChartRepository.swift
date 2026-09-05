@@ -57,7 +57,10 @@ final class RankChartRepository: RankChartProviding {
         guard cache.object(forKey: key.cacheKey) == nil else { return }
 
         requestChart(for: key)
-            .subscribe()
+            .subscribe(
+                onSuccess: { _ in },
+                onFailure: { _ in }
+            )
             .disposed(by: prefetchDisposeBag)
     }
 }
