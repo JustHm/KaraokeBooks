@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GADNativeAdValidatorEnabled</key>
-	<true/>
+	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6311732110812806~8600869384</string>
 	<key>GADBannerAdUnitID</key>
