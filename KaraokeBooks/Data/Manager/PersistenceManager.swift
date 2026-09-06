@@ -17,6 +17,10 @@ final class PersistenceManager: ReactiveCompatible {
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "SongModel")
         
+        container.persistentStoreDescriptions.forEach {
+            $0.shouldMigrateStoreAutomatically = true
+            $0.shouldInferMappingModelAutomatically = true
+        }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -25,8 +29,35 @@ final class PersistenceManager: ReactiveCompatible {
         
         return container
     }()
+    init(container: NSPersistentContainer? = nil) {
+        if let container { persistentContainer = container }
+    }
+
     var context: NSManagedObjectContext {
         return self.persistentContainer.viewContext
+    }
+
+    func memo(songID: String) throws -> String? {
+        let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", songID)
+        return try context.fetch(request).compactMap { $0.memo }.first
+    }
+
+    func saveMemo(_ memo: String, songID: String) throws {
+        let request: NSFetchRequest<FavoriteSong> = FavoriteSong.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", songID)
+        let songs = try context.fetch(request)
+        guard !songs.isEmpty else { throw PersistenceError.fetchError }
+        let text = memo.trimmingCharacters(in: .whitespacesAndNewlines)
+        let previous = songs.map { $0.memo }
+        songs.forEach { $0.memo = text.isEmpty ? nil : text }
+        do {
+            try context.save()
+            event.onNext(.deleted(true))
+        } catch {
+            zip(songs, previous).forEach { $0.0.memo = $0.1 }
+            throw error
+        }
     }
 
     @discardableResult
@@ -140,7 +171,8 @@ extension Reactive where Base == PersistenceManager {
                                 composer: composer,
                                 lyricist: lyricist,
                                 release: "",
-                                isStar: true)
+                                isStar: true,
+                                memo: song.memo)
                 }
                 single(.success(songs))
             }

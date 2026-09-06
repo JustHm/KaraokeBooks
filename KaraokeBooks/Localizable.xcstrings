@@ -1,6 +1,22 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
     "accessibility.contact" : {
       "comment" : "Accessibility label for the contact button on the home screen.",
       "localizations" : {
@@ -14,6 +30,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "문의하기"
+          }
+        }
+      }
+    },
+    "accessibility.editDone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish editing"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "편집 완료"
+          }
+        }
+      }
+    },
+    "accessibility.favoriteEdit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit favorites"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡 편집"
+          }
+        }
+      }
+    },
+    "accessibility.roulette" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorite song roulette"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡 룰렛"
+          }
+        }
+      }
+    },
+    "accessibility.rouletteResult" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draw result: %@, number %@, %@, %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추첨 결과, %@, 번호 %@, %@, %@"
           }
         }
       }
@@ -65,6 +145,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "노래 상세 정보를 엽니다."
+          }
+        }
+      }
+    },
+    "accessibility.songSelectHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to select or deselect this song."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 번 탭하여 선택하거나 선택을 해제합니다."
           }
         }
       }
@@ -411,6 +507,7 @@
     },
     "favorite.add" : {
       "comment" : "Button that adds or removes a song from favorites.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -494,6 +591,54 @@
         }
       }
     },
+    "memo.edit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit note"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메모 편집"
+          }
+        }
+      }
+    },
+    "memo.favoriteRequired" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add this song to favorites to write a note."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애창곡에 추가하면 메모를 남길 수 있어요"
+          }
+        }
+      }
+    },
+    "memo.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note the key or anything to remember when singing."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키 조절이나 부를 때 기억할 내용을 적어보세요"
+          }
+        }
+      }
+    },
     "metadata.composer" : {
       "comment" : "Song metadata label followed by a composer name.",
       "localizations" : {
@@ -524,6 +669,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "작사  %@"
+          }
+        }
+      }
+    },
+    "roulette.cycleComplete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All songs have been drawn. The next draw starts a new round."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 곡을 뽑았어요. 다음에는 새로 시작해요."
+          }
+        }
+      }
+    },
+    "roulette.detail" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song details"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "곡 상세"
+          }
+        }
+      }
+    },
+    "roulette.draw" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draw again"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 뽑기"
+          }
+        }
+      }
+    },
+    "roulette.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No favorites to draw from."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추첨할 애창곡이 없어요"
+          }
+        }
+      }
+    },
+    "roulette.exclusionHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drawn songs stay out until every song has been drawn."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번에 뽑은 곡은 다음 추첨에서 제외해요."
+          }
+        }
+      }
+    },
+    "roulette.retry" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draw another song."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 뽑아보세요"
           }
         }
       }
@@ -661,6 +902,71 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "자세히보기 →"
+          }
+        }
+      }
+    },
+    "나만의 메모" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My note"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나만의 메모"
+          }
+        }
+      }
+    },
+    "나만의 메모 입력" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your note"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나만의 메모 입력"
+          }
+        }
+      }
+    },
+    "저장" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장"
+          }
+        }
+      }
+    },
+    "취소" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
           }
         }
       }

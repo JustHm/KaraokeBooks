@@ -5,80 +5,21 @@
 //  Created by 안정흠 on 2023/02/10.
 //
 
-import UIKit
+import SwiftUI
 
-final class SongInfoStackView: UIStackView {
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFontMetrics(forTextStyle: .title3).scaledFont(
-            for: .systemFont(ofSize: 20.0, weight: .bold)
-        )
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .customPrimaryText
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var singerLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .customSecondaryText
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var numberLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .systemRed
-        return label
-    }()
-    private lazy var composerLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .customSecondaryText
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var lyricistLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .customSecondaryText
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        [
-            titleLabel,
-            singerLabel,
-            numberLabel,
-            composerLabel,
-            lyricistLabel
-        ].forEach {
-            addArrangedSubview($0)
+struct SongInfoStackView: View {
+    let song: Song
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(song.title)
+                .font(.title2.weight(.bold))
+                .foregroundColor(Color(uiColor: .customPrimaryText ?? .label))
+                .fixedSize(horizontal: false, vertical: true)
+            Text(song.singer)
+                .font(.subheadline)
+                .foregroundColor(Color(uiColor: .customSecondaryText ?? .secondaryLabel))
         }
-    }
-    func setupLabelText(song: Song) {
-        titleLabel.text = song.title
-        singerLabel.text = song.singer
-        numberLabel.text = "\(song.brand.name) · \(song.no)"
-        composerLabel.text = String(
-            format: String(localized: "metadata.composer"),
-            locale: .current,
-            song.composer
-        )
-        lyricistLabel.text = String(
-            format: String(localized: "metadata.lyricist"),
-            locale: .current,
-            song.lyricist
-        )
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

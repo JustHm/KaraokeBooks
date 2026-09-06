@@ -9,7 +9,7 @@ import Foundation
 import ReactorKit
 
 final class SongDetailReactor: Reactor {
-    private let persistence = PersistenceManager.shared
+    private let persistence: PersistenceManager
     var initialState: State
     private var youtube: URL? {
         get {
@@ -33,11 +33,14 @@ final class SongDetailReactor: Reactor {
         }
     }
     enum Action {
+        case saveMemo(String)
         case viewDidLoad
         case starTapped
         case youtubeTapped
     }
     enum Mutation {
+        case memoLoaded(String?)
+        case memoSaved(String?)
         case changeStar(Bool)
         case moveToYoutube(URL?)
         case alertError(String?)
@@ -45,14 +48,22 @@ final class SongDetailReactor: Reactor {
     struct State {
         @Pulse var youtubeURL: URL?
         var isStar: Bool = false
+        var memo: String?
+        var memoSaveRevision = 0
         var song: Song
-        var errorMessage: String?
+        @Pulse var errorMessage: String?
     }
-    init(song: Song) {
+    init(song: Song, persistence: PersistenceManager = .shared) {
+        self.persistence = persistence
         self.initialState = State(song: song)
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case let .saveMemo(text):
+            do {
+                try persistence.saveMemo(text, songID: currentState.song.id)
+                return .just(.memoSaved(try persistence.memo(songID: currentState.song.id)))
+            } catch { return .just(.alertError(error.localizedDescription)) }
         case .starTapped:
             var result: Observable<Event<Bool>>
             if currentState.isStar {
@@ -92,15 +103,24 @@ final class SongDetailReactor: Reactor {
                         return Mutation.alertError(nil)
                     }
                 }
-            return isStar
+            let memo: Observable<Mutation> = .deferred { [self] in
+                do { return .just(.memoLoaded(try persistence.memo(songID: currentState.song.id))) }
+                catch { return .just(.alertError(error.localizedDescription)) }
+            }
+            return .concat(isStar, memo)
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
+        case let .memoLoaded(memo): state.memo = memo
+        case let .memoSaved(memo):
+            state.memo = memo
+            state.memoSaveRevision += 1
         case let .changeStar(isStar):
             state.isStar = isStar
+            if !isStar { state.memo = nil }
         case let .moveToYoutube(url):
             state.youtubeURL = url
         case let .alertError(msg):

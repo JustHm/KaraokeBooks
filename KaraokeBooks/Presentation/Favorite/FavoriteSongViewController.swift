@@ -31,6 +31,9 @@ final class FavoriteSongViewController: UIViewController, View {
         action: #selector(didTapRemoveSelected)
     )
 
+    private lazy var rouletteButton = UIBarButtonItem(image: UIImage(systemName: "dice"), style: .plain, target: self, action: #selector(showRoulette))
+    private lazy var selectionEditButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(toggleSelectionEditing))
+
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
@@ -43,7 +46,9 @@ final class FavoriteSongViewController: UIViewController, View {
         setupViews()
         bannerContainerView.load(rootViewController: self)
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = editButtonItem
+        rouletteButton.accessibilityLabel = String(localized: "accessibility.roulette")
+        selectionEditButton.accessibilityLabel = String(localized: "accessibility.favoriteEdit")
+        navigationItem.rightBarButtonItems = [selectionEditButton, rouletteButton]
         toolbarItems = [
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             removeSelectedButton,
@@ -84,7 +89,8 @@ final class FavoriteSongViewController: UIViewController, View {
                     owner.songPager.render(state.page(for: brand), for: brand)
                 }
                 let hasFavorites = BrandType.allCases.contains { !state.page(for: $0).songs.isEmpty }
-                owner.editButtonItem.isEnabled = hasFavorites
+                owner.selectionEditButton.isEnabled = hasFavorites
+                owner.rouletteButton.isEnabled = !state.favoriteSongs.isEmpty
                 if !hasFavorites, owner.isEditing {
                     owner.setEditing(false, animated: true)
                 }
@@ -122,7 +128,7 @@ final class FavoriteSongViewController: UIViewController, View {
         songPager.view.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalTo(bannerContainerView.snp.top)
-            $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(8.0)
+            $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(2.0)
         }
         bannerContainerView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -137,6 +143,9 @@ final class FavoriteSongViewController: UIViewController, View {
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        selectionEditButton.image = UIImage(systemName: editing ? "checkmark" : "square.and.pencil")
+        selectionEditButton.accessibilityLabel = editing ? String(localized: "accessibility.editDone") : String(localized: "accessibility.favoriteEdit")
+        navigationItem.rightBarButtonItems = editing ? [selectionEditButton] : [selectionEditButton, rouletteButton]
         songPager.setTableEditing(editing, animated: animated)
         navigationController?.setToolbarHidden(!editing, animated: animated)
         updateRemoveSelectedButton(songs: songPager.selectedSongs)
@@ -152,6 +161,15 @@ final class FavoriteSongViewController: UIViewController, View {
         removeSelectedButton.title = songs.isEmpty
             ? String(localized: "favorite.remove")
             : "\(String(localized: "favorite.remove")) (\(songs.count))"
+    }
+
+    @objc private func toggleSelectionEditing() {
+        setEditing(!isEditing, animated: true)
+    }
+
+    @objc private func showRoulette() {
+        guard !isEditing, let songs = reactor?.currentState.favoriteSongs, !songs.isEmpty else { return }
+        present(FavoriteRouletteViewController(reactor: FavoriteRouletteReactor(songs: songs)), animated: true)
     }
 
     @objc private func didTapRemoveSelected() {

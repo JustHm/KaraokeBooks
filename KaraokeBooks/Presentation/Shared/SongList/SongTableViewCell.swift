@@ -40,6 +40,31 @@ final class SongTableViewCell: UITableViewCell {
         return label
     }()
 
+    private let textStack = UIStackView()
+    private let memoRow = UIStackView()
+    private var emptyMemoHeight: Constraint?
+    private var memoTopConstraint: Constraint?
+    private lazy var memoIconView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "note.text"))
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(textStyle: .caption1)
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        imageView.tintColor = .customSecondaryText
+        imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.isAccessibilityElement = false
+        return imageView
+    }()
+    private lazy var memoLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .customSecondaryText
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        return label
+    }()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -65,6 +90,12 @@ final class SongTableViewCell: UITableViewCell {
         titleLabel.text = song.title
         singerLabel.text = song.singer
         numberLabel.text = song.no
+        memoLabel.text = song.memo?.components(separatedBy: .newlines).joined(separator: " ")
+        let hasMemo = song.memo?.isEmpty == false
+        memoRow.isHidden = !hasMemo
+        memoTopConstraint?.update(offset: hasMemo ? 4.0 : 0.0)
+        if hasMemo { emptyMemoHeight?.deactivate() }
+        else { emptyMemoHeight?.activate() }
         accessibilityLabel = String(
             format: String(localized: "accessibility.song"),
             locale: .current,
@@ -72,9 +103,23 @@ final class SongTableViewCell: UITableViewCell {
             song.title,
             song.singer
         )
-        accessibilityHint = String(localized: "accessibility.songHint")
+        if let memo = song.memo, !memo.isEmpty {
+            accessibilityLabel = (accessibilityLabel ?? "") + ", " + memo
+        }
+        updateAccessibilityHint()
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        updateAccessibilityHint()
+    }
+
+    private func updateAccessibilityHint() {
+        accessibilityHint = isEditing
+            ? String(localized: "accessibility.songSelectHint")
+            : String(localized: "accessibility.songHint")
+    }
+
     private func setupViews() {
         let selectedBackground = UIView()
         selectedBackground.backgroundColor = .customForeground
@@ -83,7 +128,7 @@ final class SongTableViewCell: UITableViewCell {
         accessibilityTraits = .button
         backgroundColor = .customForeground
         contentView.backgroundColor = .customForeground
-        [numberLabel, titleLabel, singerLabel].forEach {
+        [numberLabel, textStack, memoRow].forEach {
             $0.isAccessibilityElement = false
             contentView.addSubview($0)
         }
@@ -91,20 +136,36 @@ final class SongTableViewCell: UITableViewCell {
         numberLabel.setContentHuggingPriority(.required, for: .horizontal)
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         singerLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        numberLabel.snp.makeConstraints {
-            $0.centerY.equalTo(contentView)
-            $0.width.equalTo(70.0)
-            $0.left.equalTo(contentView).inset(16.0)
+
+        textStack.axis = .vertical
+        textStack.spacing = 4.0
+        [titleLabel, singerLabel].forEach {
+            $0.isAccessibilityElement = false
+            textStack.addArrangedSubview($0)
         }
-        titleLabel.snp.makeConstraints {
+        textStack.snp.makeConstraints {
             $0.left.equalTo(numberLabel.snp.right).offset(8.0)
             $0.top.right.equalTo(contentView).inset(8.0)
         }
-        singerLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(4.0)
-            $0.bottom.equalTo(contentView).inset(8.0)
-            $0.left.right.equalTo(titleLabel)
+        numberLabel.snp.makeConstraints {
+            $0.centerY.equalTo(textStack)
+            $0.width.equalTo(70.0)
+            $0.left.equalTo(contentView).inset(16.0)
         }
+        memoRow.axis = .horizontal
+        memoRow.alignment = .center
+        memoRow.spacing = 5
+        memoLabel.isAccessibilityElement = false
+        memoLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        [memoIconView, memoLabel].forEach { memoRow.addArrangedSubview($0) }
+        memoRow.snp.makeConstraints {
+            $0.left.equalTo(contentView).inset(16.0)
+            $0.right.equalTo(contentView).inset(8.0)
+            memoTopConstraint = $0.top.equalTo(textStack.snp.bottom).constraint
+            $0.bottom.equalTo(contentView).inset(8.0)
+            emptyMemoHeight = $0.height.equalTo(0).constraint
+        }
+        memoRow.isHidden = true
     }
 
     private func updateTextLayoutForPreferredContentSizeCategory() {

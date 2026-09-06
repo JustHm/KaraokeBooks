@@ -23,6 +23,7 @@ struct Song: Codable, Identifiable, Equatable {
     let lyricist: String
     let release: String
     var isStar: Bool = false
+    var memo: String? = nil
     
     enum CodingKeys: String, CodingKey {
         case brand, no, title, singer, composer, lyricist, release
