@@ -7,16 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA0000000000000000000031 /* BrandSongPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000030 /* BrandSongPagerViewController.swift */; };
-		D10000000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D10000000000000000000002 /* Localizable.xcstrings */; };
 		222C1B68304422D2003D8C86 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 222C1B67304422D2003D8C86 /* GoogleMobileAds */; };
 		222C1B6A304473B1003D8C86 /* BottomBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */; };
 		222C1B6C304473B1003D8C86 /* NativeAdCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */; };
 		222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */; };
 		222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */; };
 		222C1B72304473B1003D8C86 /* SongListDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */; };
-		D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* MRSearchInterstitialAdController.swift */; };
-		D30000000000000000000001 /* RankChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30000000000000000000002 /* RankChartRepository.swift */; };
 		222C1B74304473B1003D8C86 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B73304473B1003D8C86 /* AppEnvironment.swift */; };
 		222C1B76304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B75304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift */; };
 		22333BE629ADE9A800C0A56D /* KaraokeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22333BE529ADE9A800C0A56D /* KaraokeError.swift */; };
@@ -58,6 +54,10 @@
 		AA0000000000000000000001 /* KaraokeSearchInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */; };
 		AA000000000000000000000F /* SongListDisplayItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000E /* SongListDisplayItemTests.swift */; };
 		AA0000000000000000000011 /* ReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000010 /* ReactorTests.swift */; };
+		AA0000000000000000000031 /* BrandSongPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000030 /* BrandSongPagerViewController.swift */; };
+		D10000000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D10000000000000000000002 /* Localizable.xcstrings */; };
+		D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* MRSearchInterstitialAdController.swift */; };
+		D30000000000000000000001 /* RankChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30000000000000000000002 /* RankChartRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,15 +71,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AA0000000000000000000030 /* BrandSongPagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandSongPagerViewController.swift; sourceTree = "<group>"; };
-		D10000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBannerAdView.swift; sourceTree = "<group>"; };
 		222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdCardView.swift; sourceTree = "<group>"; };
 		222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdPlacementController.swift; sourceTree = "<group>"; };
 		222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdTableViewCell.swift; sourceTree = "<group>"; };
 		222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListDisplayItem.swift; sourceTree = "<group>"; };
-		D20000000000000000000002 /* MRSearchInterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRSearchInterstitialAdController.swift; sourceTree = "<group>"; };
-		D30000000000000000000002 /* RankChartRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankChartRepository.swift; sourceTree = "<group>"; };
 		222C1B73304473B1003D8C86 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		222C1B75304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport/UITestingKaraokeSearchService.swift; sourceTree = "<group>"; };
 		22333BE529ADE9A800C0A56D /* KaraokeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeError.swift; sourceTree = "<group>"; };
@@ -118,6 +114,10 @@
 		AA0000000000000000000003 /* KaraokeBooksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaraokeBooksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000000000000000000000E /* SongListDisplayItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListDisplayItemTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000010 /* ReactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorTests.swift; sourceTree = "<group>"; };
+		AA0000000000000000000030 /* BrandSongPagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandSongPagerViewController.swift; sourceTree = "<group>"; };
+		D10000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		D20000000000000000000002 /* MRSearchInterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRSearchInterstitialAdController.swift; sourceTree = "<group>"; };
+		D30000000000000000000002 /* RankChartRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankChartRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,16 +298,6 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		AA0000000000000000000004 /* KaraokeBooksTests */ = {
-			isa = PBXGroup;
-			children = (
-				AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */,
-				AA000000000000000000000E /* SongListDisplayItemTests.swift */,
-				AA0000000000000000000010 /* ReactorTests.swift */,
-			);
-			path = KaraokeBooksTests;
-			sourceTree = "<group>";
-		};
 		323C72DA7977A637E78B519E /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,18 +306,6 @@
 				429C7F90EF3585DBD7CB690E /* Controls */,
 			);
 			path = Shared;
-			sourceTree = "<group>";
-		};
-		6134D9D134A43BACD002F673 /* Ads */ = {
-			isa = PBXGroup;
-			children = (
-				222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */,
-				222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */,
-				222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */,
-				222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */,
-				D20000000000000000000002 /* MRSearchInterstitialAdController.swift */,
-			);
-			path = Ads;
 			sourceTree = "<group>";
 		};
 		39302F2DA5E205357BCA7D07 /* SongList */ = {
@@ -341,6 +319,15 @@
 			path = SongList;
 			sourceTree = "<group>";
 		};
+		3C3C8DFC9F6DF728D8030089 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				22C277D92D7966B600B740C1 /* MoveSceneButton.swift */,
+				22C277DA2D7966B600B740C1 /* RankTableViewHeader.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		429C7F90EF3585DBD7CB690E /* Controls */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,13 +336,26 @@
 			path = Controls;
 			sourceTree = "<group>";
 		};
-		3C3C8DFC9F6DF728D8030089 /* Views */ = {
+		6134D9D134A43BACD002F673 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
-				22C277D92D7966B600B740C1 /* MoveSceneButton.swift */,
-				22C277DA2D7966B600B740C1 /* RankTableViewHeader.swift */,
+				222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */,
+				222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */,
+				222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */,
+				222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */,
+				D20000000000000000000002 /* MRSearchInterstitialAdController.swift */,
 			);
-			path = Views;
+			path = Ads;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000004 /* KaraokeBooksTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */,
+				AA000000000000000000000E /* SongListDisplayItemTests.swift */,
+				AA0000000000000000000010 /* ReactorTests.swift */,
+			);
+			path = KaraokeBooksTests;
 			sourceTree = "<group>";
 		};
 		C6CC459CCCF362042C556918 /* Views */ = {

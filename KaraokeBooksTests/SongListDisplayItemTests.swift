@@ -63,14 +63,16 @@ final class SongListDisplayItemTests: XCTestCase {
         XCTAssertEqual(items.compactMap(\.song), songs)
     }
 
-    func testInsertsNativeAdEveryFiveSongsWithoutANumericLimit() {
-        let songs = makeSongs(count: 20)
+    func testInsertsNativeAdAfterFifthSongAndEveryTenthSong() {
+        let songs = makeSongs(count: 30)
         let items = songs.displayItems(nativeAdCount: songs.nativeAdSlotCount)
 
         XCTAssertEqual(items[5], .nativeAd(slot: 0))
         XCTAssertEqual(items[11], .nativeAd(slot: 1))
-        XCTAssertEqual(items[17], .nativeAd(slot: 2))
-        XCTAssertEqual(items[23], .nativeAd(slot: 3))
+        XCTAssertEqual(songs.nativeAdSlotCount, 4)
+        XCTAssertEqual(items.count, 34)
+        XCTAssertEqual(items[22], .nativeAd(slot: 2))
+        XCTAssertEqual(items[33], .nativeAd(slot: 3))
         XCTAssertEqual(items.compactMap(\.song), songs)
     }
 
