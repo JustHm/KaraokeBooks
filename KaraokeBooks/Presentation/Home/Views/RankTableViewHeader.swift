@@ -11,11 +11,15 @@ import RxSwift
 import RxCocoa
 
 final class RankTableViewHeader: UIView {
+    private let contentStack = UIStackView()
     var currentDate: BehaviorRelay<RankDateType> = BehaviorRelay(value: .daily)
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22.0, weight: .bold)
+        label.font = UIFontMetrics(forTextStyle: .title2).scaledFont(for: .systemFont(ofSize: 22.0, weight: .bold))
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.accessibilityTraits = .header
         label.text = String(localized: "chart.popular")
         return label
     }()
@@ -32,7 +36,9 @@ final class RankTableViewHeader: UIView {
         button.showsMenuAsPrimaryAction = true
         button.setTitle(RankDateType.daily.localizedTitle, for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 22.0, weight: .bold)
+        button.titleLabel?.font = UIFontMetrics(forTextStyle: .title2).scaledFont(for: .systemFont(ofSize: 22.0, weight: .bold))
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.numberOfLines = 0
         
         return button
     }()
@@ -46,18 +52,26 @@ final class RankTableViewHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            updateLayout()
+        }
+    }
+
     private func setupViews() {
-        [dateMenu, titleLabel].forEach {
-            addSubview($0)
-        }
-        dateMenu.snp.makeConstraints {
-            $0.left.equalToSuperview()
-            $0.top.bottom.equalToSuperview()
-        }
-        titleLabel.snp.makeConstraints {
-            $0.left.equalTo(dateMenu.snp.right).offset(8.0)
-            $0.top.bottom.equalToSuperview()
-        }
+        addSubview(contentStack)
+        [dateMenu, titleLabel].forEach { contentStack.addArrangedSubview($0) }
+        contentStack.spacing = 8
+        contentStack.snp.makeConstraints { $0.edges.equalToSuperview() }
+        updateLayout()
+    }
+
+    private func updateLayout() {
+        let expanded = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        contentStack.axis = expanded ? .vertical : .horizontal
+        contentStack.alignment = expanded ? .leading : .center
+        dateMenu.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 }
 

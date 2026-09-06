@@ -283,12 +283,15 @@ extension HomeViewController {
 
 private final class ContactSheetViewController: UIViewController {
     private let email: String
+    private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = String(localized: "contact.title")
         label.font = .preferredFont(forTextStyle: .title3)
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.textColor = .customPrimaryText
         return label
     }()
@@ -298,6 +301,7 @@ private final class ContactSheetViewController: UIViewController {
         label.text = email
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.textColor = .secondaryLabel
         return label
     }()
@@ -310,6 +314,8 @@ private final class ContactSheetViewController: UIViewController {
         button.tintColor = .white
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .center
         button.backgroundColor = .systemPink
         button.layer.cornerRadius = 12.0
         button.addTarget(self, action: #selector(didTapOpenMail), for: .touchUpInside)
@@ -324,6 +330,8 @@ private final class ContactSheetViewController: UIViewController {
         button.tintColor = .customPrimaryText
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .center
         button.backgroundColor = .tertiarySystemFill
         button.layer.cornerRadius = 12.0
         button.addTarget(self, action: #selector(didTapCopyEmail), for: .touchUpInside)
@@ -347,19 +355,30 @@ private final class ContactSheetViewController: UIViewController {
         setupViews()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            configureSheet()
+        }
+    }
+
     private func configureSheet() {
         guard #available(iOS 15.0, *), let sheet = sheetPresentationController else { return }
 
         let contactDetentIdentifier = UISheetPresentationController.Detent.Identifier("contact")
-        if #available(iOS 16.0, *) {
+        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+            sheet.detents = [.large()]
+            sheet.selectedDetentIdentifier = .large
+        } else if #available(iOS 16.0, *) {
             sheet.detents = [
                 .custom(identifier: contactDetentIdentifier) { context in
                     min(280.0, context.maximumDetentValue)
-                }
+                },
+                .large()
             ]
             sheet.selectedDetentIdentifier = contactDetentIdentifier
         } else {
-            sheet.detents = [.medium()]
+            sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
         }
         sheet.prefersGrabberVisible = true
@@ -368,26 +387,22 @@ private final class ContactSheetViewController: UIViewController {
 
     private func setupViews() {
         view.backgroundColor = .customForeground
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
+        scrollView.addSubview(contentStack)
+        contentStack.axis = .vertical
+        contentStack.spacing = 10
         [titleLabel, emailLabel, openMailButton, copyEmailButton].forEach {
-            view.addSubview($0)
+            contentStack.addArrangedSubview($0)
         }
-        titleLabel.snp.makeConstraints {
-            $0.top.left.right.equalTo(view.safeAreaLayoutGuide).inset(20.0)
+        contentStack.setCustomSpacing(6, after: titleLabel)
+        contentStack.setCustomSpacing(22, after: emailLabel)
+        contentStack.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
+            $0.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(6.0)
-            $0.left.right.equalToSuperview().inset(20.0)
-        }
-        openMailButton.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(22.0)
-            $0.left.right.equalToSuperview().inset(20.0)
-            $0.height.greaterThanOrEqualTo(52.0)
-        }
-        copyEmailButton.snp.makeConstraints {
-            $0.top.equalTo(openMailButton.snp.bottom).offset(10.0)
-            $0.left.right.equalToSuperview().inset(20.0)
-            $0.height.greaterThanOrEqualTo(52.0)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        [openMailButton, copyEmailButton].forEach { button in
+            button.snp.makeConstraints { $0.height.greaterThanOrEqualTo(52) }
         }
     }
 
