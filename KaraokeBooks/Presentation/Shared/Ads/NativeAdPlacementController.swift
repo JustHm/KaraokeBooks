@@ -16,6 +16,7 @@ final class NativeAdPlacementController: NSObject {
     private var nativeAdLoader: AdLoader?
     private var nativeAds: [NativeAd] = []
     private var desiredAdCount = 0
+    private var maximumAdCount = 0
     private var retryWorkItem: DispatchWorkItem?
     private var hasRetried = false
     private var isEnabled = false
@@ -25,16 +26,16 @@ final class NativeAdPlacementController: NSObject {
 
     var onAvailabilityChanged: (() -> Void)?
     var availableAdCount: Int {
-        isEnabled ? nativeAds.count : 0
+        isEnabled ? min(nativeAds.count, desiredAdCount) : 0
     }
 
     init(rootViewController: UIViewController) {
         self.rootViewController = rootViewController
     }
 
-    func setEnabled(_ isEnabled: Bool, desiredAdCount: Int) {
+    func setEnabled(_ isEnabled: Bool, maximumAdCount: Int) {
         self.isEnabled = isEnabled
-        self.desiredAdCount = desiredAdCount
+        self.maximumAdCount = maximumAdCount
 
         guard isEnabled else {
             registeredCells.objectEnumerator()?.allObjects.forEach { ($0 as? NativeAdTableViewCell)?.clearAd() }
@@ -44,12 +45,22 @@ final class NativeAdPlacementController: NSObject {
             hasRetried = false
             adsRequestedInCurrentLoad = 0
             adCountBeforeCurrentLoad = 0
+            desiredAdCount = 0
             onAvailabilityChanged?()
             return
         }
 
+        desiredAdCount = min(1, maximumAdCount)
         loadIfNeeded()
         onAvailabilityChanged?()
+    }
+
+    func requestAds(upTo requestedAdCount: Int) {
+        guard isEnabled else { return }
+        let targetCount = min(requestedAdCount, maximumAdCount)
+        guard targetCount > desiredAdCount else { return }
+        desiredAdCount = targetCount
+        loadIfNeeded()
     }
 
     func loadIfNeeded() {

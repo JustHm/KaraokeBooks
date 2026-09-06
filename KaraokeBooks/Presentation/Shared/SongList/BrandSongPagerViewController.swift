@@ -152,7 +152,7 @@ extension BrandSongPagerViewController: UIPageViewControllerDataSource, UIPageVi
     }
 }
 
-private final class BrandSongPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+private final class BrandSongPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITableViewDataSourcePrefetching {
     let brand: BrandType
     var onSelect: ((Song) -> Void)?
     var onSelectionChanged: (() -> Void)?
@@ -186,6 +186,7 @@ private final class BrandSongPageViewController: UIViewController, UITableViewDa
         tableView.register(NativeAdTableViewCell.self, forCellReuseIdentifier: NativeAdTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.prefetchDataSource = self
         tableView.allowsMultipleSelectionDuringEditing = true
         messageLabel.font = .preferredFont(forTextStyle: .body)
         messageLabel.adjustsFontForContentSizeCategory = true
@@ -232,7 +233,7 @@ private final class BrandSongPageViewController: UIViewController, UITableViewDa
     func setAdActive(_ active: Bool) {
         guard isAdActive != active else { return }
         isAdActive = active
-        ads.setEnabled(active && !state.songs.isEmpty, desiredAdCount: state.songs.nativeAdSlotCount)
+        ads.setEnabled(active && !state.songs.isEmpty, maximumAdCount: state.songs.nativeAdSlotCount)
     }
 
     private func updateContent() {
@@ -240,7 +241,7 @@ private final class BrandSongPageViewController: UIViewController, UITableViewDa
         if isWaiting && state.songs.isEmpty { indicator.startAnimating() } else { indicator.stopAnimating() }
         messageLabel.text = state.errorDescription ?? (state.hasLoaded && state.songs.isEmpty ? emptyMessage : nil)
         messageLabel.isHidden = messageLabel.text == nil
-        ads.setEnabled(isAdActive && !state.songs.isEmpty, desiredAdCount: state.songs.nativeAdSlotCount)
+        ads.setEnabled(isAdActive && !state.songs.isEmpty, maximumAdCount: state.songs.nativeAdSlotCount)
         updateItems()
     }
 
@@ -273,6 +274,18 @@ private final class BrandSongPageViewController: UIViewController, UITableViewDa
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         (cell as? NativeAdTableViewCell)?.clearAd()
+    }
+
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        let requestedAdCount = indexPaths.compactMap { indexPath -> Int? in
+            guard items.indices.contains(indexPath.row), case let .song(_, rank) = items[indexPath.row] else {
+                return nil
+            }
+            return state.songs.nativeAdCountToRequest(prefetchingSongAt: rank)
+        }.max()
+        if let requestedAdCount {
+            ads.requestAds(upTo: requestedAdCount)
+        }
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {

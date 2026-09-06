@@ -10,7 +10,7 @@ import SnapKit
 import ReactorKit
 import RxCocoa
 
-final class SearchResultViewController: UIViewController, View {
+final class SearchResultViewController: UIViewController, View, UITableViewDataSourcePrefetching {
     typealias Reactor = SearchResultReactor
     var disposeBag = DisposeBag()
 
@@ -104,6 +104,7 @@ final class SearchResultViewController: UIViewController, View {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
+        searchResultTableView.prefetchDataSource = self
         bannerContainerView.load(rootViewController: self)
         searchBar.searchTextField.addTarget(
             self,
@@ -329,7 +330,7 @@ extension SearchResultViewController {
     private func updateNativeAdVisibility(songs: [Song]) {
         nativeAdPlacement.setEnabled(
             !songs.isEmpty,
-            desiredAdCount: songs.nativeAdSlotCount
+            maximumAdCount: songs.nativeAdSlotCount
         )
     }
 
@@ -337,5 +338,18 @@ extension SearchResultViewController {
         displayItems.accept(
             songs.displayItems(nativeAdCount: nativeAdPlacement.availableAdCount)
         )
+    }
+
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        let requestedAdCount = indexPaths.compactMap { indexPath -> Int? in
+            let items = displayItems.value
+            guard items.indices.contains(indexPath.row), case let .song(_, rank) = items[indexPath.row] else {
+                return nil
+            }
+            return songs.nativeAdCountToRequest(prefetchingSongAt: rank)
+        }.max()
+        if let requestedAdCount {
+            nativeAdPlacement.requestAds(upTo: requestedAdCount)
+        }
     }
 }

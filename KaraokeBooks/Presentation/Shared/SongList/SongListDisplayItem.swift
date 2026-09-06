@@ -41,6 +41,14 @@ extension Array where Element == Song {
         nativeAdInsertionIndices.count
     }
 
+    func nativeAdCountToRequest(prefetchingSongAt rank: Int, lookAheadSongCount: Int = 3) -> Int? {
+        let prefetchedSongPosition = rank + 1
+        guard let lastSlot = nativeAdInsertionIndices.lastIndex(where: {
+            $0 <= prefetchedSongPosition + lookAheadSongCount
+        }) else { return nil }
+        return lastSlot + 1
+    }
+
     private var nativeAdInsertionIndices: [Int] {
         switch count {
         case 0:
