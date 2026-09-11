@@ -57,7 +57,6 @@
 		AA0000000000000000000011 /* ReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000010 /* ReactorTests.swift */; };
 		AA0000000000000000000031 /* BrandSongPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000030 /* BrandSongPagerViewController.swift */; };
 		D10000000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D10000000000000000000002 /* Localizable.xcstrings */; };
-		D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* MRSearchInterstitialAdController.swift */; };
 		D30000000000000000000001 /* RankChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30000000000000000000002 /* RankChartRepository.swift */; };
 		E60000000000000000000003 /* FavoriteRouletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000002 /* FavoriteRouletteViewController.swift */; };
 		E60000000000000000000005 /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000004 /* SongDetailView.swift */; };
@@ -120,7 +119,6 @@
 		AA0000000000000000000010 /* ReactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000030 /* BrandSongPagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandSongPagerViewController.swift; sourceTree = "<group>"; };
 		D10000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		D20000000000000000000002 /* MRSearchInterstitialAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRSearchInterstitialAdController.swift; sourceTree = "<group>"; };
 		D30000000000000000000002 /* RankChartRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankChartRepository.swift; sourceTree = "<group>"; };
 		E60000000000000000000001 /* SongModel-v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SongModel-v2.xcdatamodel"; sourceTree = "<group>"; };
 		E60000000000000000000002 /* FavoriteRouletteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouletteViewController.swift; sourceTree = "<group>"; };
@@ -352,7 +350,6 @@
 				222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */,
 				222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */,
 				222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */,
-				D20000000000000000000002 /* MRSearchInterstitialAdController.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -505,7 +502,6 @@
 				222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */,
 				222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */,
 				222C1B72304473B1003D8C86 /* SongListDisplayItem.swift in Sources */,
-				D20000000000000000000001 /* MRSearchInterstitialAdController.swift in Sources */,
 				D30000000000000000000001 /* RankChartRepository.swift in Sources */,
 				222C1B74304473B1003D8C86 /* AppEnvironment.swift in Sources */,
 				222C1B76304473B1003D8C86 /* TestSupport/UITestingKaraokeSearchService.swift in Sources */,

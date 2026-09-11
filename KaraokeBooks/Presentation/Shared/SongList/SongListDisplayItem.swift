@@ -58,7 +58,7 @@ extension Array where Element == Song {
         case 2...4:
             return [2]
         default:
-            return [5] + [Int](stride(from: 10, through: count, by: 10))
+            return [5] + [Int](stride(from: 25, through: count, by: 20))
         }
     }
 }

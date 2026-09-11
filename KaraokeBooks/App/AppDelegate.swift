@@ -20,10 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-    
+
         // Initialize the Google Mobile Ads SDK.
         MobileAds.shared.start()
-        MRSearchInterstitialAdController.shared.preload()
         return true
     }
 

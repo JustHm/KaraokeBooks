@@ -39,9 +39,7 @@ final class SongDetailViewController: UIHostingController<SongDetailView> {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] url in
                 guard let self else { return }
-                MRSearchInterstitialAdController.shared.presentIfEligible(from: self) {
-                    self.present(SFSafariViewController(url: url), animated: true)
-                }
+                self.present(SFSafariViewController(url: url), animated: true)
             }).disposed(by: disposeBag)
         reactor.pulse(\.$errorMessage).compactMap { $0 }
             .observe(on: MainScheduler.instance)
