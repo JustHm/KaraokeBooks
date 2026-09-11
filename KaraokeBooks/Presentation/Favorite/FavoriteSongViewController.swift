@@ -44,7 +44,6 @@ final class FavoriteSongViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        bannerContainerView.load(rootViewController: self)
         navigationItem.largeTitleDisplayMode = .never
         rouletteButton.accessibilityLabel = String(localized: "accessibility.roulette")
         selectionEditButton.accessibilityLabel = String(localized: "accessibility.favoriteEdit")
@@ -91,6 +90,7 @@ final class FavoriteSongViewController: UIViewController, View {
                 let hasFavorites = BrandType.allCases.contains { !state.page(for: $0).songs.isEmpty }
                 owner.selectionEditButton.isEnabled = hasFavorites
                 owner.rouletteButton.isEnabled = !state.favoriteSongs.isEmpty
+                owner.bannerContainerView.setEnabled(!state.favoriteSongs.isEmpty, rootViewController: owner)
                 if !hasFavorites, owner.isEditing {
                     owner.setEditing(false, animated: true)
                 }

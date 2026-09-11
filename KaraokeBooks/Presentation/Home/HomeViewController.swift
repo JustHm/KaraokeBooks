@@ -14,7 +14,6 @@ final class HomeViewController: UIViewController, View {
     typealias Reactor = HomeReactor
 
     private let contactEmail = "taggma12@icloud.com"
-    private var bannerHeightConstraint: Constraint?
     private var actionStackHeightConstraint: Constraint?
     private let songPager = BrandSongPagerViewController()
     
@@ -99,8 +98,6 @@ final class HomeViewController: UIViewController, View {
         return segmentedControl
     }()
     
-    private lazy var bannerContainerView = BottomBannerAdView()
-
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
@@ -113,7 +110,6 @@ final class HomeViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        bannerContainerView.load(rootViewController: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -142,7 +138,7 @@ extension HomeViewController {
     func setupViews() {
         [favoriteListButton, searchButton].forEach { stackView.addArrangedSubview($0) }
         helpButton.addTarget(self, action: #selector(didTapHelp), for: .touchUpInside)
-        [headerStackView, stackView, rankTableHeader, brandSegmentedControl, bannerContainerView].forEach {
+        [headerStackView, stackView, rankTableHeader, brandSegmentedControl].forEach {
             view.addSubview($0)
         }
 
@@ -181,16 +177,7 @@ extension HomeViewController {
         songPager.view.snp.makeConstraints {
             $0.top.equalTo(brandSegmentedControl.snp.bottom).offset(2.0)
             $0.left.right.equalToSuperview()
-            $0.bottom.equalTo(bannerContainerView.snp.top)
-        }
-        bannerContainerView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            self.bannerHeightConstraint = $0.height.equalTo(0.0).constraint
-        }
-        bannerContainerView.onHeightChanged = { [weak self] height in
-            self?.bannerHeightConstraint?.update(offset: height)
-            self?.view.layoutIfNeeded()
         }
         updateActionStackLayout()
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 final class SongDetailViewModel: ObservableObject {
     @Published var state: SongDetailReactor.State
@@ -19,6 +20,7 @@ struct SongDetailView: View {
     var onEditingChanged: (Bool) -> Void = { _ in }
     @State private var isEditing = false
     @State private var draft = ""
+    @State private var inlineBannerHeight: CGFloat = 0.0
     @FocusState private var editorFocused: Bool
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -36,6 +38,11 @@ struct SongDetailView: View {
                     VStack(alignment: .leading, spacing: sectionSpacing) {
                         SongInfoStackView(song: state.song)
                         memoSection.id("memo")
+                        if !isEditing {
+                            InlineBannerAd(height: $inlineBannerHeight)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: inlineBannerHeight)
+                        }
                         credits
                     }
                     .padding(.horizontal, horizontalPadding)
@@ -165,6 +172,23 @@ struct SongDetailView: View {
         isEditing = false
         onEditingChanged(false)
     }
+}
+
+private struct InlineBannerAd: UIViewRepresentable {
+    @Binding var height: CGFloat
+
+    func makeUIView(context: Context) -> InlineBannerAdView {
+        let view = InlineBannerAdView()
+        let height = $height
+        view.onHeightChanged = { newHeight in
+            DispatchQueue.main.async {
+                height.wrappedValue = newHeight
+            }
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: InlineBannerAdView, context: Context) {}
 }
 
 struct SongDetailView_Previews: PreviewProvider {

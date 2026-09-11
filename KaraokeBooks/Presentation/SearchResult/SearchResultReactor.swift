@@ -91,7 +91,6 @@ final class SearchResultReactor: Reactor {
         case let .LoadState(isLoading):
             state.isLoading = isLoading
             if isLoading {
-                state.songs = []
                 state.hasCompletedSearch = false
                 state.errorDescription = nil
             }

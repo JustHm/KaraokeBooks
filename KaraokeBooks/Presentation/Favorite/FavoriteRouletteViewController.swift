@@ -23,6 +23,8 @@ final class FavoriteRouletteViewController: UIViewController, View {
     private let drawButton = UIButton(type: .system)
     private let detailButton = UIButton(type: .system)
     private let buttonStack = UIStackView()
+    private let inlineBannerView = InlineBannerAdView()
+    private var inlineBannerHeightConstraint: Constraint?
 
     init(reactor: FavoriteRouletteReactor) {
         super.init(nibName: nil, bundle: nil)
@@ -98,9 +100,17 @@ final class FavoriteRouletteViewController: UIViewController, View {
         buttonStack.axis = .horizontal
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 12
-        [numberLabel, titleLabel, singerLabel, memoRow, buttonStack, statusLabel].forEach {
+        inlineBannerView.snp.makeConstraints {
+            inlineBannerHeightConstraint = $0.height.equalTo(0.0).constraint
+        }
+        inlineBannerView.onHeightChanged = { [weak self] height in
+            self?.inlineBannerHeightConstraint?.update(offset: height)
+            self?.view.layoutIfNeeded()
+        }
+        [numberLabel, titleLabel, singerLabel, memoRow, buttonStack, inlineBannerView, statusLabel].forEach {
             stack.addArrangedSubview($0)
         }
+        stack.setCustomSpacing(32, after: buttonStack)
         updateButtonLayout()
         reactor?.action.onNext(.draw)
     }

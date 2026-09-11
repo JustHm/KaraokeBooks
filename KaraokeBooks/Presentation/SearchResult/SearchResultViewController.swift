@@ -105,7 +105,6 @@ final class SearchResultViewController: UIViewController, View, UITableViewDataS
         setupNavigationBar()
         setupViews()
         searchResultTableView.prefetchDataSource = self
-        bannerContainerView.load(rootViewController: self)
         searchBar.searchTextField.addTarget(
             self,
             action: #selector(searchTextFieldDidSubmit),
@@ -171,6 +170,7 @@ final class SearchResultViewController: UIViewController, View, UITableViewDataS
                 owner.songs = songs
                 owner.updateNativeAdVisibility(songs: songs)
                 owner.updateDisplayItems()
+                owner.bannerContainerView.setEnabled(!songs.isEmpty, rootViewController: owner)
             }
             .disposed(by: disposeBag)
         reactor.state.map { state -> String? in

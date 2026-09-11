@@ -18,6 +18,7 @@ final class BottomBannerAdView: UIView, BannerViewDelegate {
     private var hasRetriedAd = false
     private var requestedWidth = 0.0
     private var retryWorkItem: DispatchWorkItem?
+    private var isBannerEnabled = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,8 +29,28 @@ final class BottomBannerAdView: UIView, BannerViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func load(rootViewController: UIViewController) {
+    func setEnabled(_ isEnabled: Bool, rootViewController: UIViewController) {
         self.rootViewController = rootViewController
+
+        guard isBannerEnabled != isEnabled else {
+            if isEnabled { setNeedsLayout() }
+            return
+        }
+
+        isBannerEnabled = isEnabled
+        guard isEnabled else {
+            retryWorkItem?.cancel()
+            retryWorkItem = nil
+            bannerView?.delegate = nil
+            bannerView?.removeFromSuperview()
+            bannerView = nil
+            isLoadingAd = false
+            hasRetriedAd = false
+            requestedWidth = 0.0
+            onHeightChanged?(0.0)
+            return
+        }
+
         setNeedsLayout()
     }
 
@@ -40,7 +61,8 @@ final class BottomBannerAdView: UIView, BannerViewDelegate {
     }
 
     private func requestAdIfNeeded() {
-        guard let rootViewController,
+        guard isBannerEnabled,
+              let rootViewController,
               let adUnitID else { return }
 
         let availableWidth = rootViewController.view.bounds
@@ -77,7 +99,8 @@ final class BottomBannerAdView: UIView, BannerViewDelegate {
     }
 
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        guard bannerView === self.bannerView,
+        guard isBannerEnabled,
+              bannerView === self.bannerView,
               bannerView.superview == nil else { return }
 
         isLoadingAd = false
