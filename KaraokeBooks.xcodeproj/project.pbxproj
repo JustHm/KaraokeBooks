@@ -10,7 +10,6 @@
 		22112D71304D252F005DD618 /* FavoriteRouletteReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D70304D252F005DD618 /* FavoriteRouletteReactor.swift */; };
 		222C1B68304422D2003D8C86 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 222C1B67304422D2003D8C86 /* GoogleMobileAds */; };
 		222C1B6A304473B1003D8C86 /* BottomBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */; };
-		F10000000000000000000001 /* InlineBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* InlineBannerAdView.swift */; };
 		222C1B6C304473B1003D8C86 /* NativeAdCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */; };
 		222C1B6E304473B1003D8C86 /* NativeAdPlacementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */; };
 		222C1B70304473B1003D8C86 /* NativeAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */; };
@@ -61,6 +60,7 @@
 		D30000000000000000000001 /* RankChartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30000000000000000000002 /* RankChartRepository.swift */; };
 		E60000000000000000000003 /* FavoriteRouletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000002 /* FavoriteRouletteViewController.swift */; };
 		E60000000000000000000005 /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000004 /* SongDetailView.swift */; };
+		F10000000000000000000001 /* InlineBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* InlineBannerAdView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +76,6 @@
 /* Begin PBXFileReference section */
 		22112D70304D252F005DD618 /* FavoriteRouletteReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouletteReactor.swift; sourceTree = "<group>"; };
 		222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBannerAdView.swift; sourceTree = "<group>"; };
-		F10000000000000000000002 /* InlineBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineBannerAdView.swift; sourceTree = "<group>"; };
 		222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdCardView.swift; sourceTree = "<group>"; };
 		222C1B6D304473B1003D8C86 /* NativeAdPlacementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdPlacementController.swift; sourceTree = "<group>"; };
 		222C1B6F304473B1003D8C86 /* NativeAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdTableViewCell.swift; sourceTree = "<group>"; };
@@ -125,6 +124,7 @@
 		E60000000000000000000001 /* SongModel-v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SongModel-v2.xcdatamodel"; sourceTree = "<group>"; };
 		E60000000000000000000002 /* FavoriteRouletteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouletteViewController.swift; sourceTree = "<group>"; };
 		E60000000000000000000004 /* SongDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailView.swift; sourceTree = "<group>"; };
+		F10000000000000000000002 /* InlineBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineBannerAdView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -698,7 +698,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -731,7 +731,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = personal.KaraokeBooks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
