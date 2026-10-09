@@ -61,6 +61,18 @@ struct SongDetailView: View {
             }
         }
         .background(Color(uiColor: .customForeground ?? .systemBackground).ignoresSafeArea())
+        .onAppear { draft = state.memo ?? "" }
+        .onChange(of: state.memo) { memo in
+            if !isEditing { draft = memo ?? "" }
+        }
+        .onChange(of: state.isStar) { isStar in
+            if !isStar { finishEditing() }
+        }
+        .onChange(of: editorFocused) { focused in
+            guard focused, state.isStar, !isEditing else { return }
+            isEditing = true
+            onEditingChanged(true)
+        }
         .onChange(of: state.memoSaveRevision) { _ in finishEditing() }
     }
 
@@ -81,21 +93,6 @@ struct SongDetailView: View {
                     .font(.subheadline.weight(.semibold))
                     .frame(minHeight: 44)
                     .accessibilityIdentifier("memo.save")
-            } else {
-                Button {
-                    draft = state.memo ?? ""
-                    isEditing = true
-                    onEditingChanged(true)
-                } label: {
-                    Image(systemName: "square.and.pencil")
-                        .font(.subheadline.weight(.medium))
-                        .frame(minWidth: 44, minHeight: 44)
-                        .contentShape(Rectangle())
-                }
-                .frame(minHeight: 44)
-                .accessibilityLabel(String(localized: "memo.edit"))
-                .disabled(!state.isStar)
-                .accessibilityIdentifier("memo.edit")
             }
         }
         .tint(.pink)
@@ -106,27 +103,46 @@ struct SongDetailView: View {
             Label("나만의 메모", systemImage: "note.text")
                 .font(.subheadline.weight(.semibold))
                 .foregroundColor(secondary)
-            if isEditing {
-                TextEditor(text: $draft)
-                    .font(.body)
-                    .focused($editorFocused)
-                    .frame(height: 200)
-                    .padding(8)
-                    .background(Color(uiColor: .customBackground ?? .secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .accessibilityLabel("나만의 메모 입력")
-                    .accessibilityIdentifier("memo.input")
-            } else {
-                Text(state.memo ?? (state.isStar
-                                    ? String(localized: "memo.placeholder")
-                                    : String(localized: "memo.favoriteRequired")))
-                .font(.caption)
-                .foregroundColor(state.memo == nil ? secondary : Color(uiColor: .customPrimaryText ?? .label))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(16)
+            if state.isStar {
+                ZStack(alignment: .topLeading) {
+                    memoInput
+                        .frame(height: isEditing ? 200 : 80)
+                        .accessibilityLabel("나만의 메모 입력")
+                        .accessibilityIdentifier("memo.input")
+                    if draft.isEmpty {
+                        Text(String(localized: "memo.placeholder"))
+                            .font(.body)
+                            .foregroundColor(secondary)
+                            .padding(.horizontal, 5)
+                            .padding(.top, 8)
+                            .allowsHitTesting(false)
+                            .accessibilityHidden(true)
+                    }
+                }
+                .padding(8)
                 .background(Color(uiColor: .customBackground ?? .secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
+            } else {
+                Text(String(localized: "memo.favoriteRequired"))
+                    .font(.caption)
+                    .foregroundColor(secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(16)
+                    .background(Color(uiColor: .customBackground ?? .secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+        }
+    }
+
+    @ViewBuilder private var memoInput: some View {
+        if #available(iOS 16.0, *) {
+            TextEditor(text: $draft)
+                .font(.body)
+                .focused($editorFocused)
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
+        } else {
+            ClearMemoTextEditor(text: $draft, isFocused: $editorFocused)
         }
     }
 
@@ -168,9 +184,45 @@ struct SongDetailView: View {
     }
 
     private func finishEditing() {
+        draft = state.memo ?? ""
         editorFocused = false
         isEditing = false
         onEditingChanged(false)
+    }
+}
+
+/// Keep the memo's own background visible on iOS 15 as well.
+private struct ClearMemoTextEditor: UIViewRepresentable {
+    @Binding var text: String
+    var isFocused: FocusState<Bool>.Binding
+
+    func makeUIView(context: Context) -> UITextView {
+        let view = UITextView()
+        view.backgroundColor = .clear
+        view.font = .preferredFont(forTextStyle: .body)
+        view.adjustsFontForContentSizeCategory = true
+        view.delegate = context.coordinator
+        return view
+    }
+
+    func updateUIView(_ view: UITextView, context: Context) {
+        context.coordinator.parent = self
+        if view.text != text { view.text = text }
+        if isFocused.wrappedValue, !view.isFirstResponder {
+            view.becomeFirstResponder()
+        } else if !isFocused.wrappedValue, view.isFirstResponder {
+            view.resignFirstResponder()
+        }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
+
+    final class Coordinator: NSObject, UITextViewDelegate {
+        var parent: ClearMemoTextEditor
+        init(parent: ClearMemoTextEditor) { self.parent = parent }
+        func textViewDidChange(_ textView: UITextView) { parent.text = textView.text }
+        func textViewDidBeginEditing(_ textView: UITextView) { parent.isFocused.wrappedValue = true }
+        func textViewDidEndEditing(_ textView: UITextView) { parent.isFocused.wrappedValue = false }
     }
 }
 
