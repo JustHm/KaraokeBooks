@@ -12,6 +12,8 @@ struct UserDefaultsManager {
     enum Key: String {
         case kyFavorite
         case tjFavorite
+        case damFavorite
+        case joysoundFavorite
     }
     func getFavoriteSong(brand: BrandType) -> [Song] {
         let key = getKeytoBrand(brand: brand)
@@ -59,6 +61,10 @@ struct UserDefaultsManager {
             return Key.tjFavorite
         case .kumyoung:
             return Key.kyFavorite
+        case .dam:
+            return Key.damFavorite
+        case .joysound:
+            return Key.joysoundFavorite
         }
     }
 }

@@ -100,8 +100,8 @@ final class FavoriteSongReactor: Reactor {
     }
 
     private func loadPages(startingWith brand: BrandType) -> Observable<Mutation> {
-        let opposite: BrandType = brand == .tj ? .kumyoung : .tj
-        return .concat(loadPage(brand), loadPage(opposite))
+        let brands = [brand] + BrandType.allCases.filter { $0 != brand }
+        return Observable.concat(brands.map { loadPage($0) })
     }
 
     private func loadPage(_ brand: BrandType) -> Observable<Mutation> {

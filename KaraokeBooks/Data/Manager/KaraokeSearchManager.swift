@@ -60,10 +60,10 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
         guard let url = searchURL.rankingURL(brand: brand, date: date) else {
             throw KaraokeError.invalidURL
         }
-        let dataTask = AF.request(url, method: .get).serializingDecodable([Song].self)
+        let dataTask = AF.request(url, method: .get).serializingDecodable(RankSongsResponse.self)
         switch await dataTask.result {
         case .success(let data):
-            return data
+            return data.songs
         case let .failure(error):
             throw networkError(for: error, fallback: .rankLoadFailed)
         }

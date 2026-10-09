@@ -51,9 +51,9 @@ class HomeReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .brandType(brand):
-            return .concat(.just(.changeBrand(brand)), loadPair(brand: brand, date: currentState.dateType))
+            return .concat(.just(.changeBrand(brand)), loadCharts(brand: brand, date: currentState.dateType))
         case let .rankDateType(date):
-            return .concat(.just(.changeDate(date)), loadPair(brand: currentState.brandType, date: date))
+            return .concat(.just(.changeDate(date)), loadCharts(brand: currentState.brandType, date: date))
         case let .songDetail(song):
             return .concat(.just(.moveToDetail(song)), .just(.moveToDetail(nil)))
         }
@@ -85,14 +85,10 @@ class HomeReactor: Reactor {
         SongDetailReactor(song: song)
     }
 
-    private func loadPair(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
-        let opposite: BrandType = brand == .tj ? .kumyoung : .tj
-        // The visible chart always subscribes first. The repository shares in-flight
-        // requests and caches both pages; a failed prefetch only affects its own page.
-        return .concat(loadChart(brand: brand, date: date), Observable.deferred { [weak self] in
-            guard let self else { return .empty() }
-            return self.loadChart(brand: opposite, date: date)
-        })
+    private func loadCharts(brand: BrandType, date: RankDateType) -> Observable<Mutation> {
+        let brands = [brand] + BrandType.allCases.filter { $0 != brand }
+        // Load the visible chart first, then warm the other brand pages.
+        return Observable.concat(brands.map { loadChart(brand: $0, date: date) })
     }
 
     private func loadChart(brand: BrandType, date: RankDateType) -> Observable<Mutation> {

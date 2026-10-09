@@ -10,24 +10,22 @@ import Foundation
 enum BrandType: String, CaseIterable, Codable {
     case tj
     case kumyoung
-    //case joysound, dam, uga
+    case dam
+    case joysound
     var name: String {
         switch self {
         case .tj:
             return "TJ"
         case .kumyoung:
             return "KY"
+        case .dam:
+            return "DAM"
+        case .joysound:
+            return "JOYSOUND"
         }
     }
     
     static func currentByName(name: String) -> Self? {
-        switch name {
-        case BrandType.tj.name:
-            return BrandType.tj
-        case BrandType.kumyoung.name:
-            return BrandType.kumyoung
-        default:
-            return nil
-        }
+        allCases.first { $0.name == name }
     }
 }

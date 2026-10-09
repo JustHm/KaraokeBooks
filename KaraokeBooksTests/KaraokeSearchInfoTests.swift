@@ -47,4 +47,30 @@ final class KaraokeSearchInfoTests: XCTestCase {
             ]
         )
     }
+
+    func testJapaneseBrandsDecodeAndKeepHyphenatedSongNumbers() throws {
+        for brand in [BrandType.dam, .joysound] {
+            let json = """
+            {"brand":"\(brand.rawValue)","no":"5535-77","title":"日本語の曲","singer":"歌手","composer":"","lyricist":"","release":"0000-00-00"}
+            """
+            let song = try JSONDecoder().decode(Song.self, from: Data(json.utf8))
+            XCTAssertEqual(song.brand, brand)
+            XCTAssertEqual(song.no, "5535-77")
+            XCTAssertEqual(BrandType.currentByName(name: brand.name), brand)
+            let url = try XCTUnwrap(searchInfo.searchURL(brand: brand, query: song.title, searchType: .title, page: 1))
+            let components = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false))
+            XCTAssertTrue(components.queryItems?.contains(URLQueryItem(name: "brand", value: brand.rawValue)) == true)
+        }
+    }
+
+    func testRankResponseSkipsOnlyEmptyArrayPlaceholders() throws {
+        let json = """
+        [[],{"brand":"dam","no":"5277-09","title":"怪獣の花唄","singer":"Vaundy","composer":"","lyricist":"","release":"2020-07-07"},[]]
+        """
+        let response = try JSONDecoder().decode(RankSongsResponse.self, from: Data(json.utf8))
+        XCTAssertEqual(response.songs.map(\.no), ["5277-09"])
+        XCTAssertThrowsError(try JSONDecoder().decode(RankSongsResponse.self, from: Data("[{}]".utf8)))
+        XCTAssertThrowsError(try JSONDecoder().decode(RankSongsResponse.self, from: Data("[[1]]".utf8)))
+    }
+
 }

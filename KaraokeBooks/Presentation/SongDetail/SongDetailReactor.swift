@@ -20,15 +20,22 @@ final class SongDetailReactor: Reactor {
                 path = "/@KARAOKEKY/search"
             case .tj:
                 path = "/user/ziller/search"
+            case .dam, .joysound:
+                path = "/results"
             }
 
             var components = URLComponents()
             components.scheme = "https"
             components.host = "www.youtube.com"
             components.path = path
-            components.queryItems = [
-                URLQueryItem(name: "query", value: String(song.no))
-            ]
+            switch song.brand {
+            case .tj, .kumyoung:
+                components.queryItems = [URLQueryItem(name: "query", value: song.no)]
+            case .dam, .joysound:
+                components.queryItems = [
+                    URLQueryItem(name: "search_query", value: "\(song.title) \(song.singer) カラオケ")
+                ]
+            }
             return components.url
         }
     }

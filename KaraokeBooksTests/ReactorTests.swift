@@ -28,8 +28,8 @@ final class ReactorTests: XCTestCase {
         reactor.action.onNext(.rankDateType(.weekly))
         wait(for: [expectation], timeout: 1.0)
 
-        XCTAssertEqual(service.requestedRankDates, [.weekly, .weekly])
-        XCTAssertEqual(service.requestedRankKeys, ["tj.weekly", "kumyoung.weekly"])
+        XCTAssertEqual(service.requestedRankDates, Array(repeating: .weekly, count: 4))
+        XCTAssertEqual(service.requestedRankKeys, ["tj.weekly", "kumyoung.weekly", "dam.weekly", "joysound.weekly"])
     }
 
     func testRankChartRepositoryReusesCachedChartForSameBrandAndDate() {
