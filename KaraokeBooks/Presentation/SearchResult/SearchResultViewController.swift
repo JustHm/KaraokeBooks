@@ -26,14 +26,6 @@ final class SearchResultViewController: UIViewController, View, UITableViewDataS
         searchBar.searchBarStyle = .minimal
         return searchBar
     }()
-    private lazy var filterTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(localized: "search.filter")
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .secondaryLabel
-        return label
-    }()
     private lazy var filterButton: UIButton = {
         let button = UIButton(type: .system)
         var configuration = UIButton.Configuration.plain()
@@ -233,7 +225,7 @@ extension SearchResultViewController {
     func setupViews() {
         view.backgroundColor = .customBackground
         
-        [searchBar, filterTitleLabel, filterButton, searchResultTableView, bannerContainerView, warningText, loadIndicator].forEach {
+        [searchBar, filterButton, searchResultTableView, bannerContainerView, warningText, loadIndicator].forEach {
             view.addSubview($0)
         }
         searchBar.snp.makeConstraints {
@@ -244,11 +236,6 @@ extension SearchResultViewController {
             $0.top.equalTo(searchBar.snp.bottom).offset(8.0)
             $0.right.equalToSuperview().inset(16.0)
             $0.height.equalTo(40.0)
-        }
-        filterTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(filterButton)
-            $0.right.equalTo(filterButton.snp.left).offset(-12.0)
-            $0.left.greaterThanOrEqualToSuperview().inset(16.0)
         }
         searchResultTableView.snp.makeConstraints {
             $0.left.right.equalToSuperview()

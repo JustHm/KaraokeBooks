@@ -1138,29 +1138,6 @@
         }
       }
     },
-    "search.filter" : {
-      "comment" : "Static label displayed next to the search filter button.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filter"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "絞り込み"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "필터"
-          }
-        }
-      }
-    },
     "search.service" : {
       "comment" : "Inline heading for karaoke-service menu options.",
       "localizations" : {
