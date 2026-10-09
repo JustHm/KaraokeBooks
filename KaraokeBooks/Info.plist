@@ -2,14 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GADNativeAdValidatorEnabled</key>
-	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6311732110812806~8600869384</string>
 	<key>GADBannerAdUnitID</key>
 	<string>ca-app-pub-6311732110812806/8081373792</string>
 	<key>GADNativeAdUnitID</key>
 	<string>ca-app-pub-6311732110812806/6733572452</string>
+	<key>GADNativeAdValidatorEnabled</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
