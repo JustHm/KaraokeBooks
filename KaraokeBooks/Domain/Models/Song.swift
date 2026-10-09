@@ -7,29 +7,6 @@
 
 import Foundation
 
-struct SongsResponse: Decodable, Equatable {
-    let data: [Song]
-    let page: Int
-}
-
-/// Popular charts can contain empty arrays where the provider has no song data.
-struct RankSongsResponse: Decodable {
-    let songs: [Song]
-
-    init(from decoder: Decoder) throws {
-        var container = try decoder.unkeyedContainer()
-        var songs: [Song] = []
-        while !container.isAtEnd {
-            let itemDecoder = try container.superDecoder()
-            if let emptyArray = try? itemDecoder.unkeyedContainer(), emptyArray.isAtEnd {
-                continue
-            }
-            songs.append(try Song(from: itemDecoder))
-        }
-        self.songs = songs
-    }
-}
-
 /// 노래검색 Response Model
 struct Song: Codable, Identifiable, Equatable {
     var id: String { return String(brand.name + no) }
@@ -45,12 +22,5 @@ struct Song: Codable, Identifiable, Equatable {
     
     enum CodingKeys: String, CodingKey {
         case brand, no, title, singer, composer, lyricist, release
-    }
-}
-
-extension SongsResponse {
-    static func == (lhs: SongsResponse, rhs: SongsResponse) -> Bool {
-        if lhs.data == rhs.data && lhs.page == rhs.page { return true }
-        else { return false }
     }
 }

@@ -61,6 +61,22 @@
 		E60000000000000000000003 /* FavoriteRouletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000002 /* FavoriteRouletteViewController.swift */; };
 		E60000000000000000000005 /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60000000000000000000004 /* SongDetailView.swift */; };
 		F10000000000000000000001 /* InlineBannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* InlineBannerAdView.swift */; };
+		CBB469013FA84907BAA54179 /* ContactSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95FAAE0AE347F6A53F863C /* ContactSheetViewController.swift */; };
+		7D7B5A6FF4A047F3851F9612 /* SongDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7300767677A04436ACCC071C /* SongDetailViewModel.swift */; };
+		971EBF95CACA41FFB045AF53 /* ClearMemoTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6648EEE0738D49A8A416A69A /* ClearMemoTextEditor.swift */; };
+		AEC0F11B2BD04F7BBAF8DEFE /* InlineBannerAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC0F19E7C354A9694F5B82D /* InlineBannerAd.swift */; };
+		C309BB2C2BB24F69BED5CC0B /* SongListPageState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAB35CE614D45BEB8814405 /* SongListPageState.swift */; };
+		998BFC4787114D9CA2980808 /* BrandSongPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E6295EFCC64F3A855B9163 /* BrandSongPageViewController.swift */; };
+		84953A31D8194B1E81FFBB2E /* SongsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EA6AAAB1294C93A5B00AEB /* SongsResponse.swift */; };
+		B588EF2677C944028414BD33 /* RankSongsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80EBD32E729740EBA9A0AC89 /* RankSongsResponse.swift */; };
+		85516318DE6B467AB0A63795 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DCC5BD77994504975CB9DB /* NetworkError.swift */; };
+		F2B0AA92E4E34765ABD1A65B /* KaraokeSearchManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2098649FE44E9A86F1EBAF /* KaraokeSearchManagerProtocol.swift */; };
+		8A7DEDA4DE8B405DAEED3C35 /* KaraokeSongSearching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4E802618740E8988024BD /* KaraokeSongSearching.swift */; };
+		4060D0E7A70D4636B840CC3B /* KaraokeSearchManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDA8FC8CCA4289B928B03C /* KaraokeSearchManager+Rx.swift */; };
+		975B065993C14B02A08FB00C /* PersistenceManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7379ED9F40C149ECA0C0A3AE /* PersistenceManager+Rx.swift */; };
+		6154098126BA4FBC82A56CEC /* PersistenceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732935FF78F941D3AA18E278 /* PersistenceError.swift */; };
+		F914EACCE0984C7FB299CD06 /* SearchScopeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9DCED7B4F05B4F06C40 /* SearchScopeType.swift */; };
+		E7380C0BD7F9453CA247741C /* FavoriteMemoAndRouletteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3CF35E9CA2425E9F3DF41D /* FavoriteMemoAndRouletteTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +141,22 @@
 		E60000000000000000000002 /* FavoriteRouletteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRouletteViewController.swift; sourceTree = "<group>"; };
 		E60000000000000000000004 /* SongDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailView.swift; sourceTree = "<group>"; };
 		F10000000000000000000002 /* InlineBannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineBannerAdView.swift; sourceTree = "<group>"; };
+		BE95FAAE0AE347F6A53F863C /* ContactSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactSheetViewController.swift"; sourceTree = "<group>"; };
+		7300767677A04436ACCC071C /* SongDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongDetailViewModel.swift"; sourceTree = "<group>"; };
+		6648EEE0738D49A8A416A69A /* ClearMemoTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClearMemoTextEditor.swift"; sourceTree = "<group>"; };
+		5AC0F19E7C354A9694F5B82D /* InlineBannerAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InlineBannerAd.swift"; sourceTree = "<group>"; };
+		8EAB35CE614D45BEB8814405 /* SongListPageState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongListPageState.swift"; sourceTree = "<group>"; };
+		A8E6295EFCC64F3A855B9163 /* BrandSongPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrandSongPageViewController.swift"; sourceTree = "<group>"; };
+		E7EA6AAAB1294C93A5B00AEB /* SongsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongsResponse.swift"; sourceTree = "<group>"; };
+		80EBD32E729740EBA9A0AC89 /* RankSongsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RankSongsResponse.swift"; sourceTree = "<group>"; };
+		64DCC5BD77994504975CB9DB /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkError.swift"; sourceTree = "<group>"; };
+		1F2098649FE44E9A86F1EBAF /* KaraokeSearchManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KaraokeSearchManagerProtocol.swift"; sourceTree = "<group>"; };
+		7BA4E802618740E8988024BD /* KaraokeSongSearching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KaraokeSongSearching.swift"; sourceTree = "<group>"; };
+		18BDA8FC8CCA4289B928B03C /* KaraokeSearchManager+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KaraokeSearchManager+Rx.swift"; sourceTree = "<group>"; };
+		7379ED9F40C149ECA0C0A3AE /* PersistenceManager+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceManager+Rx.swift"; sourceTree = "<group>"; };
+		732935FF78F941D3AA18E278 /* PersistenceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceError.swift"; sourceTree = "<group>"; };
+		FE69C9DCED7B4F05B4F06C40 /* SearchScopeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchScopeType.swift"; sourceTree = "<group>"; };
+		FC3CF35E9CA2425E9F3DF41D /* FavoriteMemoAndRouletteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMemoAndRouletteTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +187,7 @@
 		2261D7C0299E690A0059222E /* SearchResult */ = {
 			isa = PBXGroup;
 			children = (
+				FE69C9DCED7B4F05B4F06C40 /* SearchScopeType.swift */,
 				2261D7BC299E68BF0059222E /* SearchResultViewController.swift */,
 				2246792A2D115080005408E6 /* SearchResultReactor.swift */,
 			);
@@ -233,6 +266,7 @@
 		22B5014D2993EAA500677964 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				94DDC9C7188949D7AE120AE1 /* Contact */,
 				323C72DA7977A637E78B519E /* Shared */,
 				22B501682995DD0300677964 /* Home */,
 				22B501822998EE6900677964 /* Favorite */,
@@ -245,6 +279,8 @@
 		22B501502993EAC300677964 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				7379ED9F40C149ECA0C0A3AE /* PersistenceManager+Rx.swift */,
+				18BDA8FC8CCA4289B928B03C /* KaraokeSearchManager+Rx.swift */,
 				22B501512993EAD800677964 /* KaraokeSearchInfo.swift */,
 				22B5014E2993EABA00677964 /* KaraokeSearchManager.swift */,
 				D30000000000000000000002 /* RankChartRepository.swift */,
@@ -281,6 +317,7 @@
 		22B5016D2995E2B900677964 /* SongDetail */ = {
 			isa = PBXGroup;
 			children = (
+				7300767677A04436ACCC071C /* SongDetailViewModel.swift */,
 				C6CC459CCCF362042C556918 /* Views */,
 				22B501692995E2AB00677964 /* SongDetailViewController.swift */,
 				22BF3D252D043F6000A7037C /* SongDetailReactor.swift */,
@@ -302,6 +339,9 @@
 		22C277D42D79636300B740C1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B2A8C7E25A454F44A7ACB270 /* Errors */,
+				2A0607956C4C47CD9492A1AD /* Protocols */,
+				66FC9746E47E424494A2E12F /* Models */,
 				22B501502993EAC300677964 /* Manager */,
 			);
 			path = Data;
@@ -320,6 +360,8 @@
 		39302F2DA5E205357BCA7D07 /* SongList */ = {
 			isa = PBXGroup;
 			children = (
+				A8E6295EFCC64F3A855B9163 /* BrandSongPageViewController.swift */,
+				8EAB35CE614D45BEB8814405 /* SongListPageState.swift */,
 				AA0000000000000000000030 /* BrandSongPagerViewController.swift */,
 				222C1B71304473B1003D8C86 /* SongListDisplayItem.swift */,
 				22C277DC2D7966B600B740C1 /* SongTableView.swift */,
@@ -348,6 +390,7 @@
 		6134D9D134A43BACD002F673 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
+				5AC0F19E7C354A9694F5B82D /* InlineBannerAd.swift */,
 				222C1B69304473B1003D8C86 /* BottomBannerAdView.swift */,
 				F10000000000000000000002 /* InlineBannerAdView.swift */,
 				222C1B6B304473B1003D8C86 /* NativeAdCardView.swift */,
@@ -360,6 +403,7 @@
 		AA0000000000000000000004 /* KaraokeBooksTests */ = {
 			isa = PBXGroup;
 			children = (
+				FC3CF35E9CA2425E9F3DF41D /* FavoriteMemoAndRouletteTests.swift */,
 				AA0000000000000000000002 /* KaraokeSearchInfoTests.swift */,
 				AA000000000000000000000E /* SongListDisplayItemTests.swift */,
 				AA0000000000000000000010 /* ReactorTests.swift */,
@@ -370,10 +414,46 @@
 		C6CC459CCCF362042C556918 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6648EEE0738D49A8A416A69A /* ClearMemoTextEditor.swift */,
 				22C277DB2D7966B600B740C1 /* SongInfoStackView.swift */,
 				E60000000000000000000004 /* SongDetailView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		94DDC9C7188949D7AE120AE1 /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				BE95FAAE0AE347F6A53F863C /* ContactSheetViewController.swift */,
+			);
+			path = Contact;
+			sourceTree = "<group>";
+		};
+		66FC9746E47E424494A2E12F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				80EBD32E729740EBA9A0AC89 /* RankSongsResponse.swift */,
+				E7EA6AAAB1294C93A5B00AEB /* SongsResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2A0607956C4C47CD9492A1AD /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7BA4E802618740E8988024BD /* KaraokeSongSearching.swift */,
+				1F2098649FE44E9A86F1EBAF /* KaraokeSearchManagerProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		B2A8C7E25A454F44A7ACB270 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				732935FF78F941D3AA18E278 /* PersistenceError.swift */,
+				64DCC5BD77994504975CB9DB /* NetworkError.swift */,
+			);
+			path = Errors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -487,6 +567,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F914EACCE0984C7FB299CD06 /* SearchScopeType.swift in Sources */,
+				6154098126BA4FBC82A56CEC /* PersistenceError.swift in Sources */,
+				975B065993C14B02A08FB00C /* PersistenceManager+Rx.swift in Sources */,
+				4060D0E7A70D4636B840CC3B /* KaraokeSearchManager+Rx.swift in Sources */,
+				8A7DEDA4DE8B405DAEED3C35 /* KaraokeSongSearching.swift in Sources */,
+				F2B0AA92E4E34765ABD1A65B /* KaraokeSearchManagerProtocol.swift in Sources */,
+				85516318DE6B467AB0A63795 /* NetworkError.swift in Sources */,
+				B588EF2677C944028414BD33 /* RankSongsResponse.swift in Sources */,
+				84953A31D8194B1E81FFBB2E /* SongsResponse.swift in Sources */,
+				998BFC4787114D9CA2980808 /* BrandSongPageViewController.swift in Sources */,
+				C309BB2C2BB24F69BED5CC0B /* SongListPageState.swift in Sources */,
+				AEC0F11B2BD04F7BBAF8DEFE /* InlineBannerAd.swift in Sources */,
+				971EBF95CACA41FFB045AF53 /* ClearMemoTextEditor.swift in Sources */,
+				7D7B5A6FF4A047F3851F9612 /* SongDetailViewModel.swift in Sources */,
+				CBB469013FA84907BAA54179 /* ContactSheetViewController.swift in Sources */,
 				22B501522993EAD800677964 /* KaraokeSearchInfo.swift in Sources */,
 				22A375AC2BE4DD9A00902081 /* SongModel.xcdatamodeld in Sources */,
 				2246792B2D115080005408E6 /* SearchResultReactor.swift in Sources */,
@@ -535,6 +630,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7380C0BD7F9453CA247741C /* FavoriteMemoAndRouletteTests.swift in Sources */,
 				AA0000000000000000000001 /* KaraokeSearchInfoTests.swift in Sources */,
 				AA000000000000000000000F /* SongListDisplayItemTests.swift in Sources */,
 				AA0000000000000000000011 /* ReactorTests.swift in Sources */,

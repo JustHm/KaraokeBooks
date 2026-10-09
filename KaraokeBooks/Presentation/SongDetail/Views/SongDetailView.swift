@@ -8,12 +8,6 @@
 import SwiftUI
 import UIKit
 
-final class SongDetailViewModel: ObservableObject {
-    @Published var state: SongDetailReactor.State
-
-    init(state: SongDetailReactor.State) { self.state = state }
-}
-
 struct SongDetailView: View {
     @ObservedObject var model: SongDetailViewModel
     var onAction: (SongDetailReactor.Action) -> Void = { _ in }
@@ -189,58 +183,6 @@ struct SongDetailView: View {
         isEditing = false
         onEditingChanged(false)
     }
-}
-
-/// Keep the memo's own background visible on iOS 15 as well.
-private struct ClearMemoTextEditor: UIViewRepresentable {
-    @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
-
-    func makeUIView(context: Context) -> UITextView {
-        let view = UITextView()
-        view.backgroundColor = .clear
-        view.font = .preferredFont(forTextStyle: .body)
-        view.adjustsFontForContentSizeCategory = true
-        view.delegate = context.coordinator
-        return view
-    }
-
-    func updateUIView(_ view: UITextView, context: Context) {
-        context.coordinator.parent = self
-        if view.text != text { view.text = text }
-        if isFocused.wrappedValue, !view.isFirstResponder {
-            view.becomeFirstResponder()
-        } else if !isFocused.wrappedValue, view.isFirstResponder {
-            view.resignFirstResponder()
-        }
-    }
-
-    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
-
-    final class Coordinator: NSObject, UITextViewDelegate {
-        var parent: ClearMemoTextEditor
-        init(parent: ClearMemoTextEditor) { self.parent = parent }
-        func textViewDidChange(_ textView: UITextView) { parent.text = textView.text }
-        func textViewDidBeginEditing(_ textView: UITextView) { parent.isFocused.wrappedValue = true }
-        func textViewDidEndEditing(_ textView: UITextView) { parent.isFocused.wrappedValue = false }
-    }
-}
-
-private struct InlineBannerAd: UIViewRepresentable {
-    @Binding var height: CGFloat
-
-    func makeUIView(context: Context) -> InlineBannerAdView {
-        let view = InlineBannerAdView()
-        let height = $height
-        view.onHeightChanged = { newHeight in
-            DispatchQueue.main.async {
-                height.wrappedValue = newHeight
-            }
-        }
-        return view
-    }
-
-    func updateUIView(_ uiView: InlineBannerAdView, context: Context) {}
 }
 
 struct SongDetailView_Previews: PreviewProvider {

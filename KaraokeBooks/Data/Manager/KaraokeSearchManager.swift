@@ -9,49 +9,6 @@ import Foundation
 import Alamofire
 import RxSwift
 
-enum NetworkError: Error {
-    case internetUnavailable
-    case rankLoadFailed
-    case searchFailed
-}
-
-extension NetworkError: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case .internetUnavailable:
-            return String(localized: "error.internetUnavailable")
-        case .rankLoadFailed:
-            return String(localized: "error.rankLoadFailed")
-        case .searchFailed:
-            return String(localized: "error.searchFailed")
-        }
-    }
-}
-
-
-protocol KaraokeSearchManagerProtocol {
-    func rankRequest(brand: BrandType,
-                     date: RankDateType) async throws -> [Song]
-    /// 페이징 없이 검색어에 연관된 모든 노래 반환
-    func searchRequestAll(brand: BrandType,
-                          query: String,
-                          searchType: SearchType) async throws -> [Song]
-    /// 검색어에 연관된 모든 노래 반환 (페이징 있음)
-    func searchReqeust(brand: BrandType,
-                       query: String,
-                       searchType: SearchType,
-                       page: Int) async throws -> [Song]
-    func recentRequest(brand: BrandType,
-                       query: String,
-                       searchType: SearchType,
-                       page: Int) async throws -> [Song]
-}
-
-protocol KaraokeSongSearching {
-    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]>
-    func searchSongsRequest(brand: BrandType, query: String, searchType: SearchType) -> Single<[Song]>
-}
-
 final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtocol {
     static var shared: KaraokeSearchManager = KaraokeSearchManager()
     private let searchURL = KaraokeSearchInfo()
@@ -118,73 +75,6 @@ final class KaraokeSearchManager: ReactiveCompatible, KaraokeSearchManagerProtoc
             throw error //AFError
         }
     }
-}
-
-extension Reactive where Base == KaraokeSearchManager {
-    func rankSongsRequest(brand: BrandType, date: RankDateType) -> Single<[Song]> {
-        return Single.create { single in
-            let task = Task {
-                do {
-                    let response = try await self.base.rankRequest(brand: brand, date: date)
-                    single(.success(response))
-                }
-                catch {
-                    single(.failure(error))
-                }
-            }
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
-    func searchReqeust(brand: BrandType, searchType: SearchType, query: String, page: Int) -> Single<[Song]> {
-        return Single.create { single in
-            let task = Task {
-                do {
-                    let response = try await self.base.searchReqeust(brand: brand, query: query, searchType: searchType, page: page)
-                    single(.success(response))
-                }
-                catch {
-                    single(.failure(error))
-                }
-            }
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
-    func searchReqeustAll(brand: BrandType, searchType: SearchType, query: String) -> Single<[Song]> {
-        return Single.create { single in
-            let task = Task {
-                do {
-                    let response = try await self.base.searchRequestAll(brand: brand, query: query, searchType: searchType)
-                    single(.success(response))
-                }
-                catch {
-                    single(.failure(error))
-                }
-            }
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
-//    func recentRequest(brand: BrandType, query: String, searchType: SearchType, page: Int) -> Single<[Song]> {
-//        return Single.create { single in
-//            let task = Task {
-//                do {
-//                    let response = try await self.base.recentRequest(brand: brand, query: query, searchType: searchType, page: page)
-//                    single(.success(response))
-//                }
-//                catch {
-//                    single(.failure(error))
-//                }
-//            }
-//            return Disposables.create {
-//                task.cancel()
-//            }
-//        }
-//    }
 }
 
 extension KaraokeSearchManager: KaraokeSongSearching {
